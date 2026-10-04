@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultrebo permissions explained - what each one is for</title>
+<meta name="description" content="What each permission in Ultrebo is used for, how to switch it off, and what the app does not do. Accessibility service, screen capture, notifications, internet and install permissions.">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#1a73e8">
+<link rel="canonical" href="https://ultrevo.github.io/Ultrebo/permissions.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ultrebo permissions explained - what each one is for">
+<meta property="og:description" content="What each permission in Ultrebo is used for, how to switch it off, and what the app does not do. Accessibility service, screen capture, notifications, internet and install permissions.">
+<meta property="og:url" content="https://ultrevo.github.io/Ultrebo/permissions.html">
+<meta property="og:site_name" content="Ultrebo">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<nav class="site" aria-label="Site"><a href="./">Home</a><a href="install.html">Install guide</a><a href="permissions.html" aria-current="page">Permissions</a><a href="https://discord.gg/mAKGfaAWWW">Discord</a><a href="https://github.com/Ultrevo/Ultrebo">Source</a></nav>
+<header class="page-title">
+  <h1>Ultrebo permissions explained</h1>
+  <p class="lead">Ultrebo asks for a few sensitive permissions because tapping for you needs them. Here is what each one is used for, how to switch it off, and what Ultrebo does not do.</p>
+</header>
+
+<h2>What each permission is for</h2>
+<table>
+  <thead><tr><th>Permission</th><th>What it is used for</th><th>How to turn it off</th></tr></thead>
+  <tbody>
+    <tr><td class="perm">Accessibility service</td>
+      <td>Android only lets an app tap and swipe on other apps through this service, so every auto-clicker uses it. Ultrebo uses it to perform your macros' taps and swipes and to show its floating RUN / REC bar. It does not request permission to read the content of other apps.</td>
+      <td>Settings &gt; Accessibility &gt; Ultrebo &gt; Off</td></tr>
+    <tr><td class="perm">Screen capture <span class="tag">optional</span></td>
+      <td>Only for image and text steps, so Ultrebo can look at the screen and find your target. Frames are examined in memory on your phone and discarded. The only picture ever saved is the small region you crop yourself.</td>
+      <td>Tap <em>Stop capture</em> in the app, or swipe away the capture notification</td></tr>
+    <tr><td class="perm">Notifications</td>
+      <td>Android requires a visible notice while screen capture is running. It is the only notification Ultrebo shows.</td>
+      <td>Settings &gt; Apps &gt; Ultrebo &gt; Notifications</td></tr>
+    <tr><td class="perm">Internet</td>
+      <td>Used to ask GitHub whether a newer version exists, and to download it if you tap <em>Update now</em>. Nothing about you, your phone or your macros is sent.</td>
+      <td>Switch off <em>Check for updates on launch</em> in the About screen</td></tr>
+    <tr><td class="perm">Install unknown apps <span class="tag">optional</span></td>
+      <td>Only used by the in-app updater to install Ultrebo's own new version. Android only accepts an update signed with the same key as the app you already have.</td>
+      <td>Settings &gt; Apps &gt; Ultrebo &gt; Install unknown apps</td></tr>
+  </tbody>
+</table>
+
+<h2>What Ultrebo does not do</h2>
+<ul>
+  <li>It does not upload your macros, screenshots or cropped images. They stay on your phone.</li>
+  <li>It does not read what is inside other apps through the accessibility service.</li>
+  <li>It has no ads and no accounts at the moment.</li>
+  <li>It does not hide itself or try to avoid detection by games.</li>
+</ul>
+
+<h2>Text recognition and Google ML Kit</h2>
+<p>Finding text on screen uses Google's ML Kit library. The recognition itself runs on your phone with a model bundled in the app, and your screen content is never uploaded. ML Kit may send anonymous usage statistics to Google. If you don't want that, don't use text steps. Image steps don't use ML Kit.</p>
+
+<h2>Check it yourself</h2>
+<ul>
+  <li>The code is public on <a href="https://github.com/Ultrevo/Ultrebo">GitHub</a>, so you can read what it does.</li>
+  <li>The downloadable APK is built by GitHub's build system from that code, and the release page lists its SHA-256 checksum.</li>
+  <li>You can upload the APK to <a href="https://www.virustotal.com">VirusTotal</a> for a second opinion.</li>
+</ul>
+
+<h2>Questions</h2>
+<p>Ask in the <a href="https://discord.gg/mAKGfaAWWW">Discord server</a>, or see the <a href="install.html">install guide</a> for setup help.</p>
+
+<footer>
+  <p class="small">Ultrebo is open-source software under the GPL-3.0 licence, copyright (C) 2026 Ultrevo. Many games forbid
+  automation in their terms of service; you are responsible for how you use this app.</p>
+</footer>
+</div>
+</body>
+</html>

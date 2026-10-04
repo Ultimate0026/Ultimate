@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to install Ultrebo on Android (step by step)</title>
+<meta name="description" content="Step-by-step guide to installing Ultrebo from an APK on Android, switching on the accessibility service, allowing restricted settings, and recording your first macro.">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#1a73e8">
+<link rel="canonical" href="https://ultrevo.github.io/Ultrebo/install.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to install Ultrebo on Android (step by step)">
+<meta property="og:description" content="Step-by-step guide to installing Ultrebo from an APK on Android, switching on the accessibility service, allowing restricted settings, and recording your first macro.">
+<meta property="og:url" content="https://ultrevo.github.io/Ultrebo/install.html">
+<meta property="og:site_name" content="Ultrebo">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<nav class="site" aria-label="Site"><a href="./">Home</a><a href="install.html" aria-current="page">Install guide</a><a href="permissions.html">Permissions</a><a href="https://discord.gg/mAKGfaAWWW">Discord</a><a href="https://github.com/Ultrevo/Ultrebo">Source</a></nav>
+<header class="page-title">
+  <h1>How to install Ultrebo on Android</h1>
+  <p class="lead">Ultrebo is installed from a file (an APK) instead of an app store. It takes about five minutes the first time.</p>
+</header>
+
+<div class="callout"><p>You need an Android phone running Android 8.0 or newer. iPhones can't run it, because iOS doesn't let apps tap other apps.</p></div>
+
+<h2>1. Download the APK</h2>
+<ol class="steps">
+  <li>On your phone, open the <a href="https://github.com/Ultrevo/Ultrebo/releases/latest">latest release page</a>.</li>
+  <li>Scroll to <strong>Assets</strong> and tap <code>Ultrebo-v….apk</code>. The file is about 60 MB.</li>
+  <li>If your browser warns that this type of file can harm your device, that is Android's standard message for any app installed from a file. Choose to keep it.</li>
+</ol>
+
+<h2>2. Allow installing from your browser</h2>
+<p>The first time, Android asks whether your browser (or Files app) may install apps. Tap <strong>Settings</strong>, switch on <strong>Allow from this source</strong>, then go back and tap <strong>Install</strong>. You can switch the setting off again afterwards.</p>
+
+<h2>3. Open Ultrebo and follow the Get started guide</h2>
+<p>When you open the app, a <strong>Get started</strong> card on the home screen walks you through the permissions. It checks each one for you and disappears once the required ones are on.</p>
+<ol class="steps">
+  <li><strong>Accessibility service (required).</strong> Tap <em>Open accessibility settings</em>, find Ultrebo under <em>Installed apps</em> or <em>Downloaded apps</em>, turn it on, and tap <em>Allow</em>. This is what lets Ultrebo perform your taps and swipes.</li>
+  <li><strong>If the switch is greyed out or says "Restricted setting".</strong> On Android 13 and newer, Android blocks apps installed outside the Play Store until you allow it once. Open <em>Settings &gt; Apps &gt; Ultrebo</em>, tap the three dots at the top right, choose <em>Allow restricted settings</em>, and confirm. If you don't see that option, first try switching the service on once so Android shows the restricted message, then come back. The guide has an <em>Open app info</em> button for this.</li>
+  <li><strong>Notifications (Android 13 and newer).</strong> Tap <em>Allow notifications</em>. Android requires a visible notice while screen capture is on.</li>
+  <li><strong>Screen capture (optional).</strong> Only needed for image and text steps. Tap <em>Grant screen capture</em> and accept Android's prompt. Android asks again each time Ultrebo restarts.</li>
+</ol>
+<p>Why each permission is needed is explained on the <a href="permissions.html">permissions page</a>.</p>
+
+<h2>4. Make your first macro</h2>
+<ol class="steps">
+  <li>Tap <strong>New macro</strong>, then open it.</li>
+  <li>Tap <strong>Add step</strong> and choose <strong>Record inputs in the game</strong>. A small floating bar appears on top of your screen.</li>
+  <li>Open your game, press <strong>REC</strong>, play the taps and swipes you want, then press <strong>DONE</strong>.</li>
+  <li>Back in Ultrebo, tap a step to change its position or delay. Use the three dots on a step to test, move or delete it.</li>
+  <li>Press <strong>Start</strong> at the bottom (or <strong>RUN</strong> on the floating bar). Press <strong>STOP</strong> to end it.</li>
+</ol>
+
+<h2>Updating</h2>
+<p>When a newer version exists, Ultrebo shows an <strong>Update available</strong> message. Tap <strong>Update now</strong> and Android asks you to confirm. Your macros stay. You can switch the check off in the app's About screen.</p>
+
+<h2>Common problems</h2>
+<details><summary>The accessibility option is greyed out</summary><p>Allow restricted settings for Ultrebo (step 3 above), then try again.</p></details>
+<details><summary>Taps land in the wrong place</summary><p>Re-record after changing screen rotation or display size. Positions are absolute screen coordinates.</p></details>
+<details><summary>An image is never found</summary><p>Re-crop it, lower the match threshold (try 0.75), and make sure screen capture is on.</p></details>
+<details><summary>The macro stops by itself</summary><p>Android may have switched the accessibility service off, as some battery savers do. Turn it on again and exclude Ultrebo from battery optimisation.</p></details>
+<details><summary>I'm stuck</summary><p>Join the <a href="https://discord.gg/mAKGfaAWWW">Discord server</a> and open a support ticket. Say your phone model and Android version.</p></details>
+
+<footer>
+  <p class="small">Ultrebo is open-source software under the GPL-3.0 licence, copyright (C) 2026 Ultrevo. Many games forbid
+  automation in their terms of service; you are responsible for how you use this app.</p>
+</footer>
+</div>
+</body>
+</html>
