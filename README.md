@@ -1,5 +1,7 @@
 # Ultrebo
 
+**Website:** https://ultrevo.github.io/Ultrebo/  -  **Discord:** https://discord.gg/mAKGfaAWWW
+
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
 
 An Android app that **records your taps and swipes, lets you edit every step, and replays them in a
