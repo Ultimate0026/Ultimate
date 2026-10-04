@@ -63,7 +63,7 @@ data class Step(
     /** Sequence mode: how long to keep looking for the image. 0 = look once. */
     val timeoutMs: Long = 5000,
     val repeat: Int = 1,
-    /** Image steps: watch the screen in the background for the whole run instead of running in order. */
+    /** Set on rules: they watch the screen in the background for the whole run instead of running in order. */
     val watch: Boolean = false,
     /** What a watcher does when it sees its image. */
     val onSeen: WatchAction = WatchAction.CONTINUE,
@@ -80,6 +80,23 @@ data class Step(
     val tapsTarget: Boolean get() = type == StepType.TAP_IMAGE || type == StepType.TAP_TEXT
 
     fun title(): String = name.ifBlank { type.label }
+
+    /** How a rule reads in the Rules list: what it looks for, then what it does. */
+    fun ruleSummary(): String {
+        if (isImage && templateFile == null) return "no image picked"
+        if (isText && text.isBlank()) return "no text entered"
+        val target = if (isImage) "an image" else "\"$text\""
+        val tap = if (tapOnSeen) "tap it, then " else ""
+        return "When $target appears: $tap${onSeen.label.lowercase()}"
+    }
+
+    /** What the per-step Test button should run: a rule is tested as a plain find-and-tap (or find-only) step. */
+    fun testable(): Step = when {
+        !watch -> this
+        isImage -> copy(type = if (tapOnSeen) StepType.TAP_IMAGE else StepType.WAIT_IMAGE, watch = false)
+        isText -> copy(type = if (tapOnSeen) StepType.TAP_TEXT else StepType.WAIT_TEXT, watch = false)
+        else -> this
+    }
 
     fun summary(): String = when (type) {
         StepType.TAP -> "($x, $y)"
@@ -110,10 +127,31 @@ data class Macro(
     /** How often image steps look at the screen (reactive idle wait / sequence polling). */
     val scanIntervalMs: Long = 1000,
     val steps: List<Step> = emptyList(),
+    /**
+     * Always-watching detections. They run in the background for the whole run; when several are on
+     * screen at once, the one with the lowest priority number is handled first.
+     */
+    val rules: List<Step> = emptyList(),
 ) {
     /** Steps in execution order: priority ascending, ties keep list order. */
     fun ordered(): List<Step> =
         steps.withIndex().sortedWith(compareBy({ it.value.priority }, { it.index })).map { it.value }
 
     fun nextPriority(): Int = (steps.maxOfOrNull { it.priority } ?: 0) + 10
+
+    /** Rules in the order they win: priority ascending, ties keep list order. */
+    fun orderedRules(): List<Step> =
+        rules.withIndex().sortedWith(compareBy({ it.value.priority }, { it.index })).map { it.value }
+
+    fun nextRulePriority(): Int = (rules.maxOfOrNull { it.priority } ?: 0) + 10
+
+    /** Older macros marked image/text steps "always watching" inside the step list; those are rules now. */
+    fun migrated(): Macro {
+        val moved = steps.filter { it.watch && it.needsScreen }
+        if (moved.isEmpty()) return this
+        return copy(
+            steps = steps.filterNot { it.watch && it.needsScreen },
+            rules = rules + moved.map { it.copy(repeat = 1) },
+        )
+    }
 }

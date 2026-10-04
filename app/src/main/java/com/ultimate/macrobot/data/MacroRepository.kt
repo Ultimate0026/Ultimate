@@ -52,7 +52,7 @@ class MacroRepository(context: Context) {
 
     @Synchronized
     fun delete(id: String) {
-        _macros.value.firstOrNull { it.id == id }?.steps?.forEach { s ->
+        _macros.value.firstOrNull { it.id == id }?.let { it.steps + it.rules }?.forEach { s ->
             s.templateFile?.let { File(templatesDir, it).delete() }
         }
         _macros.value = _macros.value.filter { it.id != id }
@@ -63,7 +63,7 @@ class MacroRepository(context: Context) {
     fun templatePath(name: String): File = File(templatesDir, name)
 
     private fun load(): List<Macro> = try {
-        if (file.exists()) json.decodeFromString<List<Macro>>(file.readText()) else emptyList()
+        if (file.exists()) json.decodeFromString<List<Macro>>(file.readText()).map { it.migrated() } else emptyList()
     } catch (e: Exception) {
         emptyList()
     }

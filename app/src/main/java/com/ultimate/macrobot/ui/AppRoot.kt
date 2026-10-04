@@ -223,7 +223,11 @@ private fun HomeScreen(
                     ) {
                         Column(Modifier.weight(1f)) {
                             Text(m.name, style = MaterialTheme.typography.titleMedium)
-                            Text("${m.steps.size} steps - ${m.mode.label}")
+                            Text(
+                                "${m.steps.size} steps" +
+                                    (if (m.rules.isNotEmpty()) ", ${m.rules.size} rule" + (if (m.rules.size == 1) "" else "s") else "") +
+                                    " - ${m.mode.label}",
+                            )
                         }
                         IconButton(onClick = { pendingDelete = m }) {
                             Icon(Icons.Default.Delete, contentDescription = "Delete macro")

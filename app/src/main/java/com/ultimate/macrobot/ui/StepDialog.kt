@@ -77,16 +77,21 @@ fun StepDialog(
     onDismiss: () -> Unit,
     onSave: (Step) -> Unit,
     onPickImage: (Step) -> Unit,
+    rule: Boolean = false,
 ) {
     var step by remember { mutableStateOf(initial) }
     var threshold by remember { mutableStateOf(initial.threshold.toString()) }
     var advanced by remember { mutableStateOf(false) }
 
-    fun current(): Step = step.copy(threshold = threshold.toFloatOrNull()?.coerceIn(0.1f, 1f) ?: step.threshold)
+    fun current(): Step = step.copy(
+        threshold = threshold.toFloatOrNull()?.coerceIn(0.1f, 1f) ?: step.threshold,
+        watch = rule && step.needsScreen, // a rule always watches; a plain step never does
+        repeat = if (rule) 1 else step.repeat,
+    )
 
     val kind = kindOf(step)
     val finds = step.needsScreen
-    val isWatcher = finds && step.watch
+    val isWatcher = finds && rule
     val tapsSomething = when {
         kind == Kind.TAP || kind == Kind.SWIPE -> true
         isWatcher -> step.tapOnSeen
@@ -95,7 +100,7 @@ fun StepDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Edit step") },
+        title = { Text(if (rule) "Edit rule" else "Edit step") },
         text = {
             Column(
                 Modifier.verticalScroll(rememberScrollState()),
@@ -110,9 +115,10 @@ fun StepDialog(
                 )
 
                 // --- What the step does
-                Text("What it does", style = MaterialTheme.typography.titleSmall)
+                Text(if (rule) "What it looks for" else "What it does", style = MaterialTheme.typography.titleSmall)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Kind.entries.forEach { k ->
+                    // A rule only ever watches for a picture or for text.
+                    Kind.entries.filter { !rule || it == Kind.IMAGE || it == Kind.TEXT }.forEach { k ->
                         FilterChip(
                             selected = kind == k,
                             onClick = {
@@ -175,7 +181,7 @@ fun StepDialog(
 
                 // --- Image / text options
                 if (finds) {
-                    if (!step.watch) {
+                    if (!rule) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text("Tap it when found", Modifier.weight(1f))
                             Switch(
@@ -186,19 +192,13 @@ fun StepDialog(
                     }
 
                     HorizontalDivider()
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f)) {
-                            Text("Pop-up watcher", style = MaterialTheme.typography.titleSmall)
-                            Text(
-                                "Keeps checking in the background for the whole run, even while other " +
-                                    "steps are tapping. Good for pop-ups like \"I'm here\".",
-                                style = MaterialTheme.typography.bodySmall,
-                            )
-                        }
-                        Switch(checked = step.watch, onCheckedChange = { step = step.copy(watch = it) })
-                    }
-                    if (step.watch) {
-                        Text("When it appears:")
+                    if (rule) {
+                        Text("When it appears", style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            "Checked in the background for the whole run, even while the steps are tapping. " +
+                                "If two rules are on screen at once, the one with the lower priority number goes first.",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             WatchAction.entries.forEach { action ->
                                 FilterChip(
@@ -221,6 +221,11 @@ fun StepDialog(
                     else "Wait afterwards (ms)",
                     step.delayAfterMs, Modifier.fillMaxWidth(),
                 ) { step = step.copy(delayAfterMs = it.coerceAtLeast(0)) }
+                if (rule) {
+                    NumField("Priority (low goes first)", step.priority.toLong(), Modifier.fillMaxWidth()) {
+                        step = step.copy(priority = it.toInt())
+                    }
+                }
 
                 // --- Advanced
                 TextButton(onClick = { advanced = !advanced }) {
@@ -247,7 +252,7 @@ fun StepDialog(
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                             modifier = Modifier.fillMaxWidth(),
                         )
-                        if (!step.watch) {
+                        if (!rule) {
                             NumField("Look for up to (ms, sequence mode)", step.timeoutMs, Modifier.fillMaxWidth()) {
                                 step = step.copy(timeoutMs = it.coerceAtLeast(0))
                             }

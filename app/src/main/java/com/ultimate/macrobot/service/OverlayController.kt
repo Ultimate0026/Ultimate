@@ -308,9 +308,12 @@ class OverlayController(private val service: MacroAccessibilityService) {
         FileOutputStream(File(repo.templatesDir, name)).use {
             Bitmap.createBitmap(frame, l, t, w, h).compress(Bitmap.CompressFormat.PNG, 100, it)
         }
-        val old = repo.get(macroId)?.steps?.firstOrNull { it.id == stepId }?.templateFile
+        val old = repo.get(macroId)?.let { (it.steps + it.rules).firstOrNull { s -> s.id == stepId } }?.templateFile
         repo.update(macroId) { m ->
-            m.copy(steps = m.steps.map { if (it.id == stepId) it.copy(templateFile = name) else it })
+            m.copy(
+                steps = m.steps.map { if (it.id == stepId) it.copy(templateFile = name) else it },
+                rules = m.rules.map { if (it.id == stepId) it.copy(templateFile = name) else it },
+            )
         }
         old?.let { File(repo.templatesDir, it).delete() }
         return name

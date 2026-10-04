@@ -65,14 +65,16 @@ object MacroRunner {
     /** Starts the active macro. Returns an error message, or null when started. */
     fun start(context: Context): String? {
         val macro = MacroBotApp.repo.active() ?: return "Open a macro first."
-        val enabled = macro.steps.filter { it.enabled }
-        if (enabled.isEmpty()) return "This macro has no enabled steps."
+        val steps = macro.steps.filter { it.enabled }
+        val rules = macro.rules.filter { it.enabled && it.needsScreen }
+        if (steps.isEmpty() && rules.isEmpty()) return "This macro has no enabled steps or rules."
         if (MacroAccessibilityService.instance == null) return "Enable the Ultrebo accessibility service first."
+        val enabled = steps + rules
         if (enabled.any { it.needsScreen }) {
             if (enabled.any { it.isImage } && !ImageMatcher.ensureLoaded()) return "Image recognition failed to load."
-            if (ScreenCaptureService.instance?.isReady != true) return "Grant screen capture first (needed for image and text steps)."
-            if (enabled.any { it.isImage && it.templateFile == null }) return "An image step has no image picked."
-            if (enabled.any { it.isText && it.text.isBlank() }) return "A text step has no text entered."
+            if (ScreenCaptureService.instance?.isReady != true) return "Grant screen capture first (needed for image and text steps and rules)."
+            if (enabled.any { it.isImage && it.templateFile == null }) return "An image step or rule has no image picked."
+            if (enabled.any { it.isText && it.text.isBlank() }) return "A text step or rule has no text entered."
         }
         stop()
         scanMs = macro.scanIntervalMs.coerceAtLeast(MIN_SCAN_MS)
@@ -111,9 +113,9 @@ object MacroRunner {
     }
 
     private suspend fun run(macro: Macro) = coroutineScope {
-        val enabled = macro.ordered().filter { it.enabled }
-        val watchers = enabled.filter { it.needsScreen && it.watch }
-        val mainSteps = enabled.filterNot { it.needsScreen && it.watch }
+        val mainSteps = macro.ordered().filter { it.enabled }
+        // Highest priority first: when several rules are on screen at once, the first in this list wins.
+        val watchers = macro.orderedRules().filter { it.enabled && it.needsScreen }
 
         val mainRef = AtomicReference<Job>()
         fun startMain() { mainRef.set(launch { runMain(macro, mainSteps) }) }

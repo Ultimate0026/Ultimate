@@ -15,7 +15,7 @@ game tasks such as tower-defense farming, but it works over any app.
   the highest-priority step whose condition is met).
 - **Image recognition**: `Tap image` and `Wait for image` steps using OpenCV template matching.
 - **Text recognition**: `Tap text` and `Wait for text` steps - just type the words to look for (on-device OCR).
-- **Always-watching** image/text steps that react to pop-ups while your macro runs.
+- **Rules**: always-watching image/text detections that react to pop-ups while your macro runs. Several can run at once; the highest priority wins.
 - **Floating RUN / REC / CROP bar** that stays on top of your game.
 - **Private**: no accounts, no analytics. Macros and screenshots stay on your phone. The only network use is an optional "is there a newer release?" check on GitHub.
 
@@ -86,25 +86,27 @@ tapping whenever a target appears. *Check screen for images every (ms)* controls
 `10000` checks every 10 seconds, which is much easier on the battery and CPU than the default 1 second.
 The phone's screen has to stay on and Ultrebo's accessibility service has to stay enabled.
 
-### Watchers: handling pop-ups while the macro runs
+### Rules: handling pop-ups while the macro runs
 
-Turn on **Always watching** for an image step and it checks the screen in the background for the whole
-run, even while your other steps are tapping. When its image appears (say an "I'm here" button):
+Open a macro's **Rules** tab and tap **Add rule**. A rule looks for a picture or for words and checks the screen
+in the background for the whole run, even while your other steps are tapping. When its target appears (say an "I'm here" button):
 
-- **Pause, then carry on** - the main macro pauses between taps, the watcher taps the image, waits the
+- **Pause, then carry on** - the main macro pauses between taps, the rule taps the target (if you left that on), waits the
   time you set, and the macro continues where it left off.
-- **Restart macro from the start** - the macro is stopped, the watcher (optionally) taps the image,
+- **Restart macro from the start** - the macro is stopped, the rule (optionally) taps the target,
   waits, then the macro starts again from step 1.
 
-A macro with only watchers just sits and watches until you press STOP. Watchers need screen capture on.
+You can have as many rules as you like in one macro. **If two rules are on screen at the same moment, the one nearer the top
+of the list (lower priority number) is handled first**; use the menu on a rule to move it up or down. The other one is handled
+right after, if it is still showing. A macro with only rules just sits and watches until you press STOP. Rules need screen capture on.
+Macros made with an older version, where a step was marked "always watching", are converted into rules automatically.
 
 ### Text steps
 
 Tap **Add step > Find text on screen**, type the words to find (for example `I'm here`), and use the *Tap it when found* switch to choose whether it taps or only waits.
 It reads the screen with on-device OCR, so no picture needs to be cropped. Capital letters, spaces and
 punctuation are ignored. *Match strictness* controls how many misread letters are forgiven (lower = more
-forgiving). Text steps support everything image steps do, including **Always watching** and the two
-pop-up actions. Reads Latin letters and numbers only (English and similar), and is slower than image
+forgiving). Rules can watch for text just like they watch for pictures. Reads Latin letters and numbers only (English and similar), and is slower than image
 matching, so use a longer check interval (1-3 seconds) if the phone gets warm.
 
 ### Image steps
