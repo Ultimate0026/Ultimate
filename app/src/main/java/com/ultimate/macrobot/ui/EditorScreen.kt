@@ -53,6 +53,7 @@ import com.ultimate.macrobot.engine.PendingTemplate
 import com.ultimate.macrobot.model.Macro
 import com.ultimate.macrobot.model.RunMode
 import com.ultimate.macrobot.model.Step
+import com.ultimate.macrobot.model.StepType
 import com.ultimate.macrobot.service.MacroAccessibilityService
 import com.ultimate.macrobot.service.ScreenCaptureService
 
@@ -189,15 +190,22 @@ fun EditorScreen(
             }
 
             item {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
                         "Steps (${macro.steps.size}) - runs top to bottom",
                         style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.weight(1f),
                     )
-                    Button(onClick = { editing = Step(priority = macro.nextPriority()) }) {
-                        Icon(Icons.Default.Add, contentDescription = null)
-                        Text("Add step")
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Button(onClick = { editing = Step(priority = macro.nextPriority()) }) {
+                            Icon(Icons.Default.Add, contentDescription = null)
+                            Text("Tap / swipe")
+                        }
+                        Button(onClick = {
+                            editing = Step(type = StepType.TAP_IMAGE, priority = macro.nextPriority())
+                        }) {
+                            Icon(Icons.Default.Add, contentDescription = null)
+                            Text("Image step")
+                        }
                     }
                 }
             }

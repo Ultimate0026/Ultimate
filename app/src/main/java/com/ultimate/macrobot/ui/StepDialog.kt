@@ -3,6 +3,8 @@ package com.ultimate.macrobot.ui
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
@@ -40,6 +42,7 @@ fun NumField(label: String, value: Long, modifier: Modifier = Modifier, onValue:
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun StepDialog(
     initial: Step,
@@ -67,7 +70,7 @@ fun StepDialog(
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
-                Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     StepType.entries.forEach { type ->
                         FilterChip(
                             selected = step.type == type,
@@ -76,6 +79,15 @@ fun StepDialog(
                         )
                     }
                 }
+                Text(
+                    when (step.type) {
+                        StepType.TAP -> "Taps one fixed spot on the screen."
+                        StepType.SWIPE -> "Drags from one spot to another."
+                        StepType.WAIT_IMAGE -> "Waits until a picture you choose is on screen. Does not tap."
+                        StepType.TAP_IMAGE -> "Looks for a picture you choose and taps it wherever it appears."
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                )
 
                 if (!step.needsImage) {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -97,6 +109,14 @@ fun StepDialog(
                 }
 
                 if (step.needsImage) {
+                    Text(
+                        "How to pick the picture:\n" +
+                            "1. Press the button below (MacroBot goes to the background).\n" +
+                            "2. Open your game and press CROP on the floating bar.\n" +
+                            "3. Drag a box around the button or icon to look for.\n" +
+                            "4. Come back here - a thumbnail shows on the step.",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
                     OutlinedButton(onClick = { onPickImage(current()) }, modifier = Modifier.fillMaxWidth()) {
                         Text(if (step.templateFile == null) "Pick image from screen" else "Re-pick image from screen")
                     }

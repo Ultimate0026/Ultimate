@@ -55,7 +55,7 @@ The phone's screen has to stay on and MacroBot's accessibility service has to st
 
 ### Image steps
 
-1. Add a **Tap image** or **Wait for image** step, press *Pick image from screen*.
+1. In a macro, tap **Image step** (or **Tap / swipe** and pick *Tap image* / *Wait for image* as the type), then press *Pick image from screen*.
 2. Switch to your game, press **CROP**, and drag a box around the target (a button or icon).
 3. Reopen MacroBot - a thumbnail appears on the step. Raise the match threshold if it taps the wrong
    thing, lower it if it misses.
