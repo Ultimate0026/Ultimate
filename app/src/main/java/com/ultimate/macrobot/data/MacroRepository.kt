@@ -22,6 +22,10 @@ class MacroRepository(context: Context) {
     private val _activeId = MutableStateFlow(prefs.getString("active", null))
     val activeId: StateFlow<String?> = _activeId
 
+    var updateChecksEnabled: Boolean
+        get() = prefs.getBoolean("update_checks", true)
+        set(value) { prefs.edit().putBoolean("update_checks", value).apply() }
+
     fun setActive(id: String?) {
         _activeId.value = id
         prefs.edit().putString("active", id).apply()

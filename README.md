@@ -13,7 +13,7 @@ game tasks such as tower-defense farming, but it works over any app.
   the highest-priority step whose condition is met).
 - **Image recognition**: `Tap image` and `Wait for image` steps using OpenCV template matching.
 - **Floating RUN / REC / CROP bar** that stays on top of your game.
-- **Private**: no internet permission, no accounts, no analytics. Macros stay on your phone.
+- **Private**: no accounts, no analytics. Macros and screenshots stay on your phone. The only network use is an optional "is there a newer release?" check on GitHub.
 
 > **Android only.** iOS does not let an app tap or read other apps.
 >
@@ -76,9 +76,18 @@ on (matching is done at screen resolution); avoid regions with animated or chang
 
 ## Privacy
 
-MacroBot declares no `INTERNET` permission, so it cannot send anything off your phone. Macros and cropped
-images are stored in the app's private storage. Screen capture is only used for matching images and a
-captured frame is never saved except the region you crop.
+Macros and cropped images are stored in the app's private storage and never uploaded. Screen capture is
+only used for matching images, and a captured frame is never saved except the region you crop.
+
+The app has the `INTERNET` permission for exactly one thing: on launch it asks GitHub's public API for the
+latest release of this repo and compares version numbers. Nothing about you, your phone or your macros is
+sent. Turn it off with the **Check for updates on launch** switch on the home screen.
+
+### Updating
+
+When a newer release exists, a popup offers **Download**, which opens the release page; tap the `.apk` to
+install over the current version. This works only if every release is signed with the same key (see
+*Releasing* below).
 
 ## Building from source
 

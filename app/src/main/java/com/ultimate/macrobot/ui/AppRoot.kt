@@ -1,6 +1,7 @@
 package com.ultimate.macrobot.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -20,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,6 +34,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,16 +48,41 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.ultimate.macrobot.BuildConfig
 import com.ultimate.macrobot.MacroBotApp
+import com.ultimate.macrobot.data.UpdateChecker
 import com.ultimate.macrobot.model.Macro
 import com.ultimate.macrobot.service.MacroAccessibilityService
 import com.ultimate.macrobot.service.ScreenCaptureService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 @Composable
 fun AppRoot(onGrantCapture: () -> Unit, onSendToBackground: () -> Unit) {
     val repo = MacroBotApp.repo
+    val context = LocalContext.current
     var editingId by rememberSaveable { mutableStateOf<String?>(null) }
     BackHandler(enabled = editingId != null) { editingId = null }
+
+    var update by remember { mutableStateOf<UpdateChecker.Update?>(null) }
+    LaunchedEffect(Unit) {
+        if (repo.updateChecksEnabled) {
+            update = withContext(Dispatchers.IO) { UpdateChecker.check(BuildConfig.VERSION_NAME) }
+        }
+    }
+    update?.let { u ->
+        AlertDialog(
+            onDismissRequest = { update = null },
+            title = { Text("Update available") },
+            text = { Text("MacroBot ${u.version} is out (you have ${BuildConfig.VERSION_NAME}). Download opens the release page; tap the .apk there to install it over the current version.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(u.url)))
+                    update = null
+                }) { Text("Download") }
+            },
+            dismissButton = { TextButton(onClick = { update = null }) { Text("Later") } },
+        )
+    }
 
     val id = editingId
     if (id == null) {
@@ -185,10 +213,18 @@ private fun AboutCard() {
             Text("About", style = MaterialTheme.typography.titleMedium)
             Text(
                 "MacroBot ${BuildConfig.VERSION_NAME} - records and replays taps and swipes, and can " +
-                    "react to images on screen. Everything stays on your device: the app has no " +
-                    "internet permission and collects nothing.",
+                    "react to images on screen. Your macros and screenshots never leave your device. " +
+                    "The only network use is an optional check on GitHub for a newer release.",
                 style = MaterialTheme.typography.bodySmall,
             )
+            var checks by remember { mutableStateOf(MacroBotApp.repo.updateChecksEnabled) }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("Check for updates on launch", Modifier.weight(1f))
+                Switch(checked = checks, onCheckedChange = {
+                    checks = it
+                    MacroBotApp.repo.updateChecksEnabled = it
+                })
+            }
             Text(
                 "Responsible use: many games forbid automation in their terms of service and may " +
                     "suspend accounts that use it. You are responsible for how you use this app.",
