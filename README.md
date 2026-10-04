@@ -1,6 +1,6 @@
 # Ultrebo
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
 
 An Android app that **records your taps and swipes, lets you edit every step, and replays them in a
 loop**. It can also look for things on screen (image recognition) and tap them. Built for repetitive
@@ -176,4 +176,7 @@ debug key, so users would have to uninstall before moving to a properly signed b
 
 ## License
 
-[MIT](LICENSE)
+[GPL-3.0](LICENSE), copyright (C) 2026 Ultrevo. Anyone may use, study and modify this app, but copies and
+modified versions must stay open source under the same licence and keep the copyright notice. See
+[NOTICE](NOTICE) for the extra permission covering Google ML Kit. Releases v0.1.0 to v0.1.2 were published
+under the MIT License and remain available under those terms.

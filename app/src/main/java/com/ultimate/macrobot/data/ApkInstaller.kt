@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-only
+// Copyright (C) 2026 Ultrevo. See LICENSE and NOTICE.
+
 package com.ultimate.macrobot.data
 
 import android.app.PendingIntent

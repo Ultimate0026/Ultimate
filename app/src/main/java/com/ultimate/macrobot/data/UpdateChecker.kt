@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-only
+// Copyright (C) 2026 Ultrevo. See LICENSE and NOTICE.
+
 package com.ultimate.macrobot.data
 
 import com.ultimate.macrobot.model.Versions
@@ -15,11 +18,11 @@ import java.net.URL
  * The only data sent is the request itself; nothing about the user or device is included.
  */
 object UpdateChecker {
-    private const val API_URL = "https://api.github.com/repos/Ultimate0026/Ultimate/releases/latest"
+    private const val API_URL = "https://api.github.com/repos/Ultrevo/Ultrebo/releases/latest"
     private const val PAGE_PREFIX = "https://github.com/"
 
     /** Downloads are only accepted from this repo's release assets. */
-    const val APK_PREFIX = "https://github.com/Ultimate0026/Ultimate/releases/download/"
+    const val APK_PREFIX = "https://github.com/Ultrevo/Ultrebo/releases/download/"
 
     data class Update(
         val version: String,

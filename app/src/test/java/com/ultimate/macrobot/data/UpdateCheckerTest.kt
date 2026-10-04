@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-only
+// Copyright (C) 2026 Ultrevo. See LICENSE and NOTICE.
+
 package com.ultimate.macrobot.data
 
 import org.junit.Assert.assertEquals
@@ -9,7 +12,7 @@ class UpdateCheckerTest {
     private val sha = "0b307de37bc8783868b737dd3aca7e58af1e2507f5c2d38e9555fec70a7008e8"
 
     private fun release(tag: String, apkUrl: String = "${UpdateChecker.APK_PREFIX}$tag/MacroBot-$tag.apk") = """
-        {"tag_name":"$tag","html_url":"https://github.com/Ultimate0026/Ultimate/releases/tag/$tag",
+        {"tag_name":"$tag","html_url":"https://github.com/Ultrevo/Ultrebo/releases/tag/$tag",
          "assets":[{"name":"MacroBot-$tag.apk","browser_download_url":"$apkUrl","size":1234,"digest":"sha256:$sha"}]}
     """.trimIndent()
 
@@ -37,7 +40,7 @@ class UpdateCheckerTest {
 
     @Test
     fun releaseWithoutApkStillOffersThePage() {
-        val body = """{"tag_name":"v0.2.0","html_url":"https://github.com/Ultimate0026/Ultimate/releases/tag/v0.2.0","assets":[]}"""
+        val body = """{"tag_name":"v0.2.0","html_url":"https://github.com/Ultrevo/Ultrebo/releases/tag/v0.2.0","assets":[]}"""
         val u = UpdateChecker.parseRelease(body, "0.1.0")
         assertNotNull(u)
         assertNull(u!!.apkUrl)
