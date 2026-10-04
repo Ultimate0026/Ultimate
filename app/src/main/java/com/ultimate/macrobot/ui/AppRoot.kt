@@ -3,6 +3,9 @@
 
 package com.ultimate.macrobot.ui
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -33,6 +36,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -231,6 +236,8 @@ private fun HomeScreen(
     }
 }
 
+private const val DONATE_ETH = "0x108484e1744Fd6ED22288411B9596390E76CD5b2"
+
 @Composable
 private fun AboutDialog(onDismiss: () -> Unit) {
     val context = LocalContext.current
@@ -238,7 +245,7 @@ private fun AboutDialog(onDismiss: () -> Unit) {
         onDismissRequest = onDismiss,
         title = { Text("About Ultrebo ${BuildConfig.VERSION_NAME}") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(
                     "Records and replays taps and swipes, and can react to images and text on screen. " +
                         "Your macros and screenshots never leave your device.",
@@ -259,6 +266,17 @@ private fun AboutDialog(onDismiss: () -> Unit) {
                 TextButton(onClick = {
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/mAKGfaAWWW")))
                 }) { Text("Join the Discord for help") }
+                Text(
+                    "Ultrebo is free. If it helps you, you can optionally support it with crypto on the Ethereum " +
+                        "network (ETH, or USDT/USDC on Ethereum):",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                Text(DONATE_ETH, style = MaterialTheme.typography.bodySmall)
+                OutlinedButton(onClick = {
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    clipboard.setPrimaryClip(ClipData.newPlainText("Ultrebo ETH address", DONATE_ETH))
+                    Toast.makeText(context, "ETH address copied", Toast.LENGTH_SHORT).show()
+                }) { Text("Copy ETH address") }
                 Text(
                     "Responsible use: many games forbid automation in their terms of service and may " +
                         "suspend accounts that use it. You are responsible for how you use this app.",
