@@ -233,6 +233,7 @@ private fun HomeScreen(
 
 @Composable
 private fun AboutDialog(onDismiss: () -> Unit) {
+    val context = LocalContext.current
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("About Ultrebo ${BuildConfig.VERSION_NAME}") },
@@ -255,6 +256,9 @@ private fun AboutDialog(onDismiss: () -> Unit) {
                         MacroBotApp.repo.updateChecksEnabled = it
                     })
                 }
+                TextButton(onClick = {
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/mAKGfaAWWW")))
+                }) { Text("Join the Discord for help") }
                 Text(
                     "Responsible use: many games forbid automation in their terms of service and may " +
                         "suspend accounts that use it. You are responsible for how you use this app.",

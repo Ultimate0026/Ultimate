@@ -4,6 +4,8 @@ about: Something doesn't work as expected
 labels: bug
 ---
 
+Need quick help? Ask in the [Discord server](https://discord.gg/mAKGfaAWWW).
+
 **What happened?**
 
 **What did you expect?**

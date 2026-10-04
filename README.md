@@ -48,6 +48,11 @@ Ultrebo asks for a few sensitive permissions because tapping for you needs them.
 | **Internet** | Asking GitHub if a newer release exists (can be turned off) and downloading it if you tap Update. Google ML Kit, used for text recognition, runs on the phone but may send anonymous usage statistics. |
 | **Install unknown apps** (optional) | Only for the in-app updater, to install Ultrebo's own update. Android rejects updates signed with a different key. |
 
+## Community and support
+
+Questions, bug reports or ideas? Join the [Discord server](https://discord.gg/mAKGfaAWWW) and open a support ticket there, or open an
+[issue](../../issues) on GitHub.
+
 ## Quick start
 
 1. **New macro**, open it.
