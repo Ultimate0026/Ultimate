@@ -79,6 +79,16 @@ tapping. When its target appears (say an "I'm here" button) it can:
 If two rules are on screen at the same moment, **the one nearer the top of the list goes first**; the other is handled right after if it's still showing. Move a
 rule with its ⋮ menu. A macro with only rules just sits and watches until you press STOP. Rules need screen capture on.
 
+### Sharing rules with other players
+
+Set your rules up once, then share them. On the **Rules** tab tap **Export rules** and choose where to save: that makes one
+`.ultrebo-rules` file with the pictures inside. Send it to anyone (for example in Discord). They open their own macro's Rules tab, tap
+**Import rules** and pick the file, and the rules are added at the bottom of their list.
+
+- **Text rules** work on any phone. **Picture rules** match best on the same phone screen size, so they may need to pick a picture again.
+- Rule packs from the computer version can't be used on a phone, and the other way round.
+- **Only import rule packs from people you trust, and check what each rule does:** rules tap things on your screen.
+
 ## Troubleshooting
 
 | Problem | Fix |

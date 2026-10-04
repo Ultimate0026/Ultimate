@@ -3,8 +3,11 @@
 
 package com.ultimate.macrobot.ui
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -58,7 +61,10 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.ultimate.macrobot.BuildConfig
 import com.ultimate.macrobot.MacroBotApp
+import com.ultimate.macrobot.data.RulePack
+import com.ultimate.macrobot.data.RulePackException
 import com.ultimate.macrobot.engine.MacroRunner
 import com.ultimate.macrobot.engine.PendingTemplate
 import com.ultimate.macrobot.model.Macro
@@ -67,6 +73,9 @@ import com.ultimate.macrobot.model.Step
 import com.ultimate.macrobot.model.StepType
 import com.ultimate.macrobot.service.MacroAccessibilityService
 import com.ultimate.macrobot.service.ScreenCaptureService
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,6 +136,65 @@ fun EditorScreen(
         val moved = list.removeAt(i)
         list.add(j, moved)
         m.copy(rules = list.mapIndexed { idx, r -> r.copy(priority = (idx + 1) * 10) })
+    }
+
+    val exportLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/octet-stream"),
+    ) { uri ->
+        val current = repo.get(macroId)
+        if (uri != null && current != null) {
+            try {
+                val count = context.contentResolver.openOutputStream(uri)?.use { out ->
+                    RulePack.write(
+                        current.orderedRules(),
+                        current.name,
+                        BuildConfig.VERSION_NAME,
+                        { file -> runCatching { repo.templatePath(file).readBytes() }.getOrNull() },
+                        out,
+                    )
+                } ?: throw RulePackException("Could not open the file for writing.")
+                toast("Saved $count rule" + (if (count == 1) "" else "s") + ". Send that file to other players.")
+            } catch (e: RulePackException) {
+                toast(e.message ?: "Could not export the rules.")
+            } catch (e: Exception) {
+                toast("Could not save the file: ${e.message}")
+            }
+        }
+    }
+
+    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) {
+            val saved = mutableListOf<File>()
+            try {
+                val (_, imported) = context.contentResolver.openInputStream(uri)?.use { input ->
+                    RulePack.read(input, ::cleanPng)
+                } ?: throw RulePackException("Could not open the file.")
+                val first = (repo.get(macroId)?.nextRulePriority() ?: 10)
+                val rules = imported.mapIndexed { i, item ->
+                    var rule = item.rule.copy(priority = first + i * 10)
+                    val bytes = item.png
+                    if (bytes != null) {
+                        val name = "${UUID.randomUUID()}.png"
+                        val file = File(repo.templatesDir, name)
+                        file.writeBytes(bytes)
+                        saved.add(file)
+                        rule = rule.copy(templateFile = name)
+                    }
+                    rule
+                }
+                change { m -> m.copy(rules = m.rules + rules) }
+                toast(
+                    "Added ${rules.size} rule" + (if (rules.size == 1) "" else "s") +
+                        " at the bottom. Check what each rule does (they tap things on your screen) and test them.",
+                )
+            } catch (e: RulePackException) {
+                saved.forEach { it.delete() }
+                toast(e.message ?: "Could not import the rules.")
+            } catch (e: Exception) {
+                saved.forEach { it.delete() }
+                toast("Could not read the file: ${e.message}")
+            }
+        }
     }
 
     /** Saves the draft, then sends the user to their game to crop the picture (for a step or a rule). */
@@ -222,6 +290,16 @@ fun EditorScreen(
                     onTest = { MacroRunner.testStep(it.testable()) },
                     onEdit = { editingRule = it },
                     onDelete = { rule -> change { m -> m.copy(rules = m.rules.filter { it.id != rule.id }) } },
+                    onImport = { importLauncher.launch(arrayOf("*/*")) },
+                    onExport = {
+                        if (macro.rules.none { it.needsScreen }) {
+                            toast("This macro has no rules to share yet.")
+                        } else {
+                            val safe = macro.name.filter { it.isLetterOrDigit() || it == ' ' || it == '-' || it == '_' }
+                                .trim().ifEmpty { "rules" }
+                            exportLauncher.launch(safe + RulePack.EXTENSION)
+                        }
+                    },
                 )
             } else if (tab == 0) {
                 StepsTab(
@@ -325,6 +403,8 @@ private fun RulesTab(
     onTest: (Step) -> Unit,
     onEdit: (Step) -> Unit,
     onDelete: (Step) -> Unit,
+    onImport: () -> Unit,
+    onExport: () -> Unit,
 ) {
     val ordered = macro.orderedRules()
     LazyColumn(
@@ -344,6 +424,10 @@ private fun RulesTab(
                             "the same time, the one nearer the top is handled first. Use the menu to move a rule up or down.",
                         style = MaterialTheme.typography.bodySmall,
                     )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(onClick = onImport, modifier = Modifier.weight(1f)) { Text("Import rules") }
+                        OutlinedButton(onClick = onExport, modifier = Modifier.weight(1f)) { Text("Export rules") }
+                    }
                 }
             }
         }
@@ -517,4 +601,16 @@ private fun SettingsTab(macro: Macro, onChange: ((Macro) -> Macro) -> Unit) {
             style = MaterialTheme.typography.bodySmall,
         )
     }
+}
+
+/** Re-encodes a picture from a rule pack as a PNG, or returns null when it isn't a usable image. */
+private fun cleanPng(bytes: ByteArray): ByteArray? {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
+    if (bounds.outWidth < 4 || bounds.outHeight < 4 || bounds.outWidth > 4000 || bounds.outHeight > 4000) return null
+    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size) ?: return null
+    val out = ByteArrayOutputStream()
+    val ok = bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+    bitmap.recycle()
+    return if (ok) out.toByteArray() else null
 }
