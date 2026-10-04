@@ -22,8 +22,8 @@
   "@type": "SoftwareApplication",
   "name": "Ultrebo",
   "applicationCategory": "UtilitiesApplication",
-  "operatingSystem": "Android 8.0 or newer",
-  "description": "Records and replays taps and swipes on Android, and can find images and text on screen.",
+  "operatingSystem": "Android 8.0 or newer, Windows 10 or newer, macOS",
+  "description": "Records and replays taps and clicks on Android, Windows and macOS, and can find images and text on screen.",
   "url": "https://ultrevo.github.io/Ultrebo/",
   "downloadUrl": "https://github.com/Ultrevo/Ultrebo/releases/latest",
   "license": "https://www.gnu.org/licenses/gpl-3.0.html",
@@ -31,144 +31,78 @@
 }
 </script>
 <link rel="stylesheet" href="style.css?v=4">
-<style>
-  /* Screenshot gallery: swipeable row on phones, three side-by-side cards on wider screens. */
-  .shots { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory;
-           padding: 4px 0 12px; margin-top: 12px; -webkit-overflow-scrolling: touch; }
-  .shots figure { flex: 0 0 min(250px, 72%); scroll-snap-align: start; margin: 0;
-                  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 10px; }
-  .shots img { width: 100%; height: auto; display: block; border-radius: 10px; }
-  .shots figcaption { font-size: .9rem; color: var(--text); margin: 10px 4px 4px; line-height: 1.4; }
-  @media (min-width: 720px) {
-    .shots { display: grid; grid-template-columns: repeat(3, 1fr); overflow: visible; }
-    .shots figure { flex: none; }
-  }
-  .shot-single { max-width: 260px; margin: 12px 0 20px; }
-  .shot-single img { width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid var(--border); }
-  .shot-single figcaption { font-size: .9rem; color: var(--muted); margin-top: 8px; }
-</style>
 
 </head>
 <body>
 <div class="wrap">
-<nav class="site" aria-label="Site"><a href="./" aria-current="page">Home</a><a href="pc.html">Computer version</a><a href="install.html">Phone install guide</a><a href="permissions.html">Permissions</a><a href="https://discord.gg/mAKGfaAWWW">Discord</a><a href="https://github.com/Ultrevo/Ultrebo">Source</a></nav>
+<nav class="site" aria-label="Site"><a href="./" aria-current="page">Home</a><a href="pc.html">PC</a><a href="mobile.html">Mobile</a><a href="install.html">Install</a><a href="permissions.html">Permissions</a><a href="https://discord.gg/mAKGfaAWWW">Discord</a><a href="https://github.com/Ultrevo/Ultrebo">Source</a></nav>
 
 <header class="hero">
   <h1>Ultrebo</h1>
-  <p class="lead">Record your taps and swipes, replay them on a loop, and let your phone react when a button
-  or some text shows up on screen. Built for repetitive game tasks like tower-defense farming.</p>
-  <div class="buttons">
-    <a class="btn primary" href="https://github.com/Ultrevo/Ultrebo/releases/latest">Download the APK</a>
-    <a class="btn secondary" href="https://github.com/Ultrevo/Ultrebo">View the source code</a>
-    <a class="btn secondary" href="https://discord.gg/mAKGfaAWWW">Join the Discord</a>
-  </div>
-  <p class="small">Android 8.0 or newer. Not available for iPhone, because iOS does not let apps tap other apps.</p>
-  <p class="small"><strong>On a computer?</strong> There is also a version for Windows and Mac: <a href="pc.html">Ultrebo for computer</a>.</p>
+  <p class="lead">Record your taps and clicks, replay them on a loop, and let your device react when a button
+  or some text shows up on screen. Built for repetitive game tasks like tower-defense farming. Free and open source.</p>
 </header>
+
+<section>
+  <h2>Choose your device</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Ultrebo for PC</h3>
+      <p>Windows 10 and 11, and macOS. Records mouse clicks, drags, scrolling and key presses, with hotkeys that work inside games.</p>
+      <div class="buttons">
+        <a class="btn primary" href="pc.html">Learn more</a>
+        <a class="btn secondary" href="https://github.com/Ultrevo/Ultrebo-pc/releases/latest">Download</a>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Ultrebo for Mobile</h3>
+      <p>Android 8.0 or newer. Records taps and swipes over any app, with a floating bar on top of your game. Not available for iPhone.</p>
+      <div class="buttons">
+        <a class="btn primary" href="mobile.html">Learn more</a>
+        <a class="btn secondary" href="https://github.com/Ultrevo/Ultrebo/releases/latest">Download</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section>
   <h2>What it does</h2>
   <div class="grid">
-    <div class="card"><h3>Record</h3><p>Play normally with a small floating bar on top. Ultrebo saves each tap and swipe with the pauses between them.</p></div>
-    <div class="card"><h3>Edit every step</h3><p>Change positions, delays, repeats and order. Test a single step. Switch steps on and off.</p></div>
-    <div class="card"><h3>Find images</h3><p>Crop a button or icon from your screen and Ultrebo taps it whenever it appears.</p></div>
-    <div class="card"><h3>Find text</h3><p>Type the words to look for (like "I'm here") and it taps them when they show up.</p></div>
-    <div class="card"><h3>Rules</h3><p>Always-watching detections that check the screen while your macro runs. Pause and carry on, or restart the macro, when a pop-up appears. Add as many as you like; if two show at once, the one nearest the top goes first.</p></div>
-    <div class="card"><h3>You choose how often</h3><p>Set how often it looks at the screen, from several times a second to every few seconds, to save battery.</p></div>
+    <div class="card"><h3>Record</h3><p>Play normally. Ultrebo saves each tap or click with the pauses between them.</p></div>
+    <div class="card"><h3>Edit every step</h3><p>Change positions, waits, repeats and order. Test a single step. Switch steps on and off.</p></div>
+    <div class="card"><h3>Find images</h3><p>Pick a button or icon from your screen and Ultrebo taps or clicks it whenever it appears.</p></div>
+    <div class="card"><h3>Find text</h3><p>Type the words to look for (like "I'm here") and it reacts when they show up. Text is read on your own device.</p></div>
+    <div class="card"><h3>Rules</h3><p>Always-watching detections that check the screen while your macro runs. Pause and carry on, or restart the macro, when a pop-up appears. If two show at once, the one nearest the top goes first.</p></div>
+    <div class="card"><h3>Share your rules</h3><p>Export your rules as one file and send it to other players so they don't have to set everything up themselves.</p></div>
   </div>
 </section>
 
 <section>
-  <h2>A look inside</h2>
-  <div class="shots">
-    <figure>
-      <img src="img/add-step.webp" width="540" height="1095" loading="lazy"
-           alt="Ultrebo's Add step menu listing four options: record inputs in the game, tap or swipe, find a picture on screen, and find text on screen">
-      <figcaption>Add steps by recording in the game, typing a position, or finding a picture or text.</figcaption>
-    </figure>
-    <figure>
-      <img src="img/settings.webp" width="540" height="1095" loading="lazy"
-           alt="Ultrebo's macro settings screen with run mode, loop count, pause between loops and how often to check the screen">
-      <figcaption>Choose how the macro runs, and how often it looks at the screen.</figcaption>
-    </figure>
-    <figure>
-      <img src="img/about.webp" width="540" height="1095" loading="lazy"
-           alt="Ultrebo's About screen with its privacy summary, the update-check switch and a link to the Discord server">
-      <figcaption>Privacy, the update-check switch and help, all in one place.</figcaption>
-    </figure>
-  </div>
-</section>
-
-<section id="permissions">
-  <h2>Why each permission?</h2>
-  <p>Ultrebo asks for a few sensitive permissions because tapping for you needs them. Here is exactly what each one
-  is used for, and nothing else. See <a href="permissions.html">permissions explained in detail</a>.</p>
-  <table>
-    <thead><tr><th>Permission</th><th>What it is used for</th></tr></thead>
-    <tbody>
-      <tr><td class="perm">Accessibility service</td>
-        <td>This is how every auto-clicker app taps for you. Ultrebo uses it only to perform the taps and swipes
-        in your macros and to show its floating RUN / REC bar. It does not ask for permission to read the content of other apps.</td></tr>
-      <tr><td class="perm">Screen capture <span class="tag">optional</span></td>
-        <td>Only needed for image and text steps, so Ultrebo can look at the screen and find your target. Frames are
-        checked in memory on your phone and thrown away. The only picture ever saved is the small region you crop yourself.
-        Android asks you again each time the app restarts.</td></tr>
-      <tr><td class="perm">Notifications</td>
-        <td>Android requires a visible notice while screen capture is on. That is the only notification Ultrebo shows.</td></tr>
-      <tr><td class="perm">Internet</td>
-        <td>Used to ask GitHub whether a newer version exists, and to download it if you tap Update. You can turn the check off.
-        The text-recognition library (Google ML Kit) runs on your phone, but it may send anonymous usage statistics to Google,
-        never your screen content.</td></tr>
-      <tr><td class="perm">Install unknown apps <span class="tag">optional</span></td>
-        <td>Only used by the in-app updater, to install Ultrebo's own new version. Android only accepts an update
-        signed with the same key as the app you have.</td></tr>
-    </tbody>
-  </table>
-  <p class="small" style="margin-top:12px">Your macros and cropped images are stored privately on your phone and are never uploaded.
-  There are no ads and no accounts at the moment.</p>
-</section>
-
-<section>
-  <h2>Check it yourself</h2>
+  <h2>Free, open and private</h2>
   <ul>
-    <li><strong>The code is public.</strong> Read every line on <a href="https://github.com/Ultrevo/Ultrebo">GitHub</a>.</li>
-    <li><strong>Built in the open.</strong> The downloadable APK is built by GitHub's own build system from that code, and the release page lists its SHA-256 checksum.</li>
-    <li><strong>Scan it.</strong> Upload the APK to <a href="https://www.virustotal.com">VirusTotal</a> if you want a second opinion.</li>
+    <li><strong>No accounts, no ads, no tracking.</strong> Your macros and screenshots stay on your device and are never uploaded.</li>
+    <li><strong>The code is public.</strong> Read every line on GitHub: <a href="https://github.com/Ultrevo/Ultrebo">Android</a> and <a href="https://github.com/Ultrevo/Ultrebo-pc">PC</a>. The downloads are built by GitHub's own build system from that code.</li>
+    <li><strong>Every permission is explained.</strong> See <a href="permissions.html">why the Android app needs each one</a>.</li>
   </ul>
 </section>
 
 <section>
-  <h2>Install</h2>
-  <p>The short version is below. For step-by-step help, see the <a href="install.html">full install guide</a>.</p>
-  <ol>
-    <li>On your phone, open the <a href="https://github.com/Ultrevo/Ultrebo/releases/latest">latest release</a> and download <code>Ultrebo-….apk</code>.</li>
-    <li>Tap the file and allow "Install unknown apps" for your browser or Files app when Android asks.</li>
-    <li>Open Ultrebo. The <strong>Get started</strong> guide walks you through the permissions and disappears once they are on.</li>
-    <li>If Android says a setting is "restricted", the guide shows how to allow it (Android blocks apps installed outside the Play Store until you do).</li>
-  </ol>
-</section>
-
-<section>
   <h2>Questions</h2>
-  <details><summary>Is it safe?</summary>
-    <p>Everything it does is described above and in the open-source code. It has no ads or accounts and does not upload your macros or screenshots. As with any app, only install it if you are comfortable with that.</p></details>
   <details><summary>Could I get banned from a game for using it?</summary>
     <p>Possibly. Many games forbid automation in their rules and may suspend accounts that use it. Ultrebo does not hide itself or avoid detection. You are responsible for how you use it.</p></details>
-  <details><summary>Why does it need the accessibility service?</summary>
-    <p>It is the only official way an Android app can tap and swipe on other apps. Every auto-clicker uses it.</p></details>
-  <details><summary>Does it need root?</summary>
-    <p>No.</p></details>
-  <details><summary>Is it on the Play Store?</summary>
+  <details><summary>Is it safe?</summary>
+    <p>Everything it does is described on these pages and in the open-source code. It has no ads or accounts and does not upload your macros or screenshots. As with any program, only install it if you are comfortable with that.</p></details>
+  <details><summary>Is it on the Play Store or an app store?</summary>
     <p>No. Apps that automate taps are very restricted there, so Ultrebo is distributed from GitHub.</p></details>
   <details><summary>Something is broken. Where do I report it?</summary>
-    <p>Join the <a href="https://discord.gg/mAKGfaAWWW">Discord server</a> and open a support ticket, or open an issue on <a href="https://github.com/Ultrevo/Ultrebo/issues">GitHub</a>. Say your phone model and Android version.</p></details>
+    <p>Join the <a href="https://discord.gg/mAKGfaAWWW">Discord server</a> and open a support ticket, or open an issue on GitHub. Say your device and what you did.</p></details>
 </section>
 
 <footer>
   <p class="small"><strong>Support Ultrebo (optional).</strong> It's free. If it helps you, you can chip in on the Ethereum network (ETH, or USDT/USDC on Ethereum):
   <code style="word-break:break-all">0x108484e1744Fd6ED22288411B9596390E76CD5b2</code></p>
   <p class="small">Ultrebo is open-source software under the GPL-3.0 licence, copyright (C) 2026 Ultrevo. Many games forbid automation in their terms of service;
-  you are responsible for how you use this app. Not affiliated with Roblox or any game publisher.</p>
+  you are responsible for how you use it. Not affiliated with Roblox or any game publisher.</p>
 </footer>
 
 </div>
