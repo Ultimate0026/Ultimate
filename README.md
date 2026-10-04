@@ -1,206 +1,132 @@
 # Ultrebo
 
-**Website:** https://ultrevo.github.io/Ultrebo/  -  **Discord:** https://discord.gg/mAKGfaAWWW
-
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
 
-An Android app that **records your taps and swipes, lets you edit every step, and replays them in a
-loop**. It can also look for things on screen (image recognition) and tap them. Built for repetitive
-game tasks such as tower-defense farming, but it works over any app.
+**Website:** https://ultrevo.github.io/Ultrebo/  -  **Discord:** https://discord.gg/mAKGfaAWWW  -  **Computer version:** https://github.com/Ultrevo/Ultrebo-pc
 
-- **Record** inputs over any app; delays between them are captured automatically.
-- **Edit each step**: position, press/swipe time, delay, repeat count, on/off, test-run.
-- **Order is priority**: steps run from the top of the list down; move a step with the menu. There are no numbers to manage.
-- **Two run modes**: *Sequence* (everything in list order, looped) and *Reactive* (each cycle, run only
-  the first step in the list whose condition is met).
-- **Image recognition**: `Tap image` and `Wait for image` steps using OpenCV template matching.
-- **Text recognition**: `Tap text` and `Wait for text` steps - just type the words to look for (on-device OCR).
-- **Rules**: always-watching image/text detections that react to pop-ups while your macro runs. Several can run at once; the one nearest the top wins.
-- **Floating RUN / REC / CROP bar** that stays on top of your game.
-- **Private**: no accounts, no analytics. Macros and screenshots stay on your phone. The only network use is an optional "is there a newer release?" check on GitHub.
+An Android app that **records your taps and swipes, lets you edit every step, and replays them in a loop**.
+It can also look for pictures and words on your screen and react to them. Built for repetitive game tasks such
+as tower-defense farming, but it works over any app.
 
-> **Android only.** iOS does not let an app tap or read other apps.
+- **Record** your taps and swipes over any app; the pauses between them are captured for you.
+- **Edit every step:** position, press time, wait, repeat, on/off, and a test button for each one.
+- **The list order is the run order.** Move a step up or down from its ⋮ menu.
+- **Two run modes.** *Sequence* runs every step in order, looped. *Reactive* runs only the first step whose condition is met.
+- **Find a picture.** Crop a button or icon from your screen and Ultrebo taps it whenever it appears.
+- **Find text.** Type the words to look for, such as `I'm here`. Text is read on your phone.
+- **Rules.** Always-watching detections that handle pop-ups while your macro runs. Add as many as you like.
+- **A floating RUN / REC / CROP bar** that stays on top of your game.
+- **Private.** No accounts, no ads, no tracking. Your macros and screenshots stay on your phone.
+
+> **Android only.** iOS doesn't let an app tap or read other apps.
 >
-> **Use responsibly.** Many games, including Roblox experiences, forbid automation in their terms of
-> service and may suspend accounts that use it. You are responsible for how you use this app.
+> **Use responsibly.** Many games, including Roblox experiences, forbid automation in their terms of service and may
+> suspend accounts that use it. You are responsible for how you use this app.
 
 ## Install
 
-1. Open the [latest release](../../releases/latest) on your phone and download `Ultrebo-*.apk`.
-2. Tap the file and allow "Install unknown apps" for your browser/Files app when Android asks.
-3. Open Ultrebo. A **Get started** guide on the home screen walks you through the permissions it needs:
-   1. **Accessibility service** - needed to perform taps. The guide opens the right settings page. On
-      Android 13+ you may first need **Allow restricted settings** (the guide has a button for that too).
-   2. **Notifications** (Android 13+) - for the small "screen capture is on" notification.
-   3. **Screen capture** (optional) - only for image and text steps; grant it from the guide or the home screen.
+1. On your phone, open the [latest release](../../releases/latest) and download `Ultrebo-*.apk`.
+2. Tap the file. If Android asks, allow your browser or Files app to install apps.
+3. Open Ultrebo. The **Get started** guide on the home screen takes you through the permissions it needs and
+   disappears once they're on:
+   1. **Accessibility service** (needed to tap). The guide opens the right settings page. On Android 13 and newer you may
+      first need **Allow restricted settings**; the guide has a button for that.
+   2. **Notifications** (Android 13+), for the small "screen capture is on" notice.
+   3. **Screen capture** (optional), only for picture and text steps.
 
-   The guide checks each permission itself and disappears once the required ones are on.
-
-Requires Android 8.0 (API 26) or newer.
-
-## Why each permission?
-
-Ultrebo asks for a few sensitive permissions because tapping for you needs them. Each one is used for exactly this and nothing else:
-
-| Permission | What it is used for |
-| --- | --- |
-| **Accessibility service** | How every auto-clicker taps for you. Used only to perform your macros' taps and swipes and to show the floating RUN / REC bar. It does not request permission to read other apps' content. |
-| **Screen capture** (optional) | Only for image and text steps. Frames are checked in memory on your phone and discarded; the only image saved is the region you crop. Android asks again each time the app restarts. |
-| **Notifications** | Android requires a visible notice while screen capture is on. |
-| **Internet** | Asking GitHub if a newer release exists (can be turned off) and downloading it if you tap Update. Google ML Kit, used for text recognition, runs on the phone but may send anonymous usage statistics. |
-| **Install unknown apps** (optional) | Only for the in-app updater, to install Ultrebo's own update. Android rejects updates signed with a different key. |
-
-## Community and support
-
-Questions, bug reports or ideas? Join the [Discord server](https://discord.gg/mAKGfaAWWW) and open a support ticket there, or open an
-[issue](../../issues) on GitHub.
-
-## Support Ultrebo
-
-Ultrebo is free. If it saves you time you can optionally chip in, on the **Ethereum network** (ETH, or USDT/USDC on Ethereum):
-
-```
-0x108484e1744Fd6ED22288411B9596390E76CD5b2
-```
-
-Double-check the address and the network before sending; crypto payments can't be reversed. There is no obligation, and nothing is locked behind it.
+Requires Android 8.0 or newer. After the first install, Ultrebo offers to update itself when a new version is out.
 
 ## Quick start
 
-1. **New macro**, open it.
-2. Tap **Add step > Record inputs in the game** (or **Floating controls**), switch to your game, press **REC**, play the inputs you want, press **DONE**.
-3. Back in Ultrebo, tap a step to edit it (position, delays, repeat...). Use the ⋮ menu on a step to test, move or delete it.
-4. Press **Start** at the bottom (or **RUN** on the floating bar). **STOP** ends it. Closing the bar (X) also stops it.
+1. Tap **New macro** and open it.
+2. Tap **Add step > Record inputs in the game**, switch to your game, press **REC**, play the taps you want, then press **DONE**.
+3. Tap a step to change it. Use the ⋮ menu on a step to test it, move it or delete it.
+4. Press **Start** (or **RUN** on the floating bar). **STOP** ends it.
 
 ### Run modes
 
-| Mode | Behaviour |
+| Mode | What it does |
 | --- | --- |
-| **Sequence** | Runs every enabled step once per loop, from the top of the list down. Loops N times or forever, with a delay between loops. |
-| **Reactive** | Each cycle, runs only the first step in the list whose condition is met, then starts over. Tap/Swipe steps are always met, so put them at the bottom to act as a fallback. A visible *Wait for image* step holds back every step below it. |
+| **Sequence** | Runs every enabled step once per loop, from the top of the list down. Loops a set number of times or forever, with a pause between loops. |
+| **Reactive** | Each cycle, runs only the first step in the list whose condition is met, then starts over. Tap and swipe steps are always met, so put them at the bottom to act as a fallback. A *Wait for picture* step that is visible holds back every step below it. |
 
-### Always-on image watching
+*Look at the screen every* (in the macro's Settings tab) sets how often picture and text steps check the screen. A longer wait, such as
+`10000` (10 seconds), is much easier on the battery.
 
-Set a macro to **Reactive** mode with *Tap image* steps and it keeps watching the screen until you press STOP,
-tapping whenever a target appears. *Check screen for images every (ms)* controls how often it looks:
-`10000` checks every 10 seconds, which is much easier on the battery and CPU than the default 1 second.
-The phone's screen has to stay on and Ultrebo's accessibility service has to stay enabled.
+### Find a picture
 
-### Rules: handling pop-ups while the macro runs
+1. Tap **Add step > Find a picture on screen**, then **Pick image from screen**.
+2. Switch to your game, press **CROP** on the floating bar and drag a box around the button or icon.
+3. Open Ultrebo again. A thumbnail shows on the step.
 
-Open a macro's **Rules** tab and tap **Add rule**. A rule looks for a picture or for words and checks the screen
-in the background for the whole run, even while your other steps are tapping. When its target appears (say an "I'm here" button):
+Crop tightly around something distinctive, use the same phone and orientation you'll run it on, and avoid areas with changing numbers. Raise the match
+threshold if it taps the wrong thing; lower it if it misses.
 
-- **Pause, then carry on** - the main macro pauses between taps, the rule taps the target (if you left that on), waits the
-  time you set, and the macro continues where it left off.
-- **Restart macro from the start** - the macro is stopped, the rule (optionally) taps the target,
-  waits, then the macro starts again from step 1.
+### Find text
 
-You can have as many rules as you like in one macro. **If two rules are on screen at the same moment, the one nearer the top
-of the list is handled first**; use the menu on a rule to move it up or down. The other one is handled
-right after, if it is still showing. A macro with only rules just sits and watches until you press STOP. Rules need screen capture on.
-Macros made with an older version, where a step was marked "always watching", are converted into rules automatically.
+Tap **Add step > Find text on screen** and type the words (for example `I'm here`). Capital letters, spaces and punctuation are ignored.
+*Match strictness* controls how many misread letters are forgiven. It reads Latin letters and numbers (English and similar) and is
+slower than picture matching, so use a longer check interval (1 to 3 seconds) if your phone gets warm.
 
-### Text steps
+### Rules
 
-Tap **Add step > Find text on screen**, type the words to find (for example `I'm here`), and use the *Tap it when found* switch to choose whether it taps or only waits.
-It reads the screen with on-device OCR, so no picture needs to be cropped. Capital letters, spaces and
-punctuation are ignored. *Match strictness* controls how many misread letters are forgiven (lower = more
-forgiving). Rules can watch for text just like they watch for pictures. Reads Latin letters and numbers only (English and similar), and is slower than image
-matching, so use a longer check interval (1-3 seconds) if the phone gets warm.
+Open a macro's **Rules** tab and tap **Add rule**. A rule looks for a picture or for words in the background for the whole run, even while your steps are
+tapping. When its target appears (say an "I'm here" button) it can:
 
-### Image steps
+- **Pause, then carry on:** the macro pauses between taps, the rule taps the target (if you left that on), waits the time you set, and the macro continues.
+- **Restart macro from the start:** the macro stops, the rule (optionally) taps the target, waits, then the macro starts again from step 1.
 
-1. In a macro, tap **Add step > Find a picture on screen**, then press *Pick image from screen*.
-2. Switch to your game, press **CROP**, and drag a box around the target (a button or icon).
-3. Reopen Ultrebo - a thumbnail appears on the step. Raise the match threshold if it taps the wrong
-   thing, lower it if it misses.
-
-Tips: crop tightly around something distinctive; capture on the same phone and orientation you will run
-on (matching is done at screen resolution); avoid regions with animated or changing numbers.
+If two rules are on screen at the same moment, **the one nearer the top of the list goes first**; the other is handled right after if it's still showing. Move a
+rule with its ⋮ menu. A macro with only rules just sits and watches until you press STOP. Rules need screen capture on.
 
 ## Troubleshooting
 
 | Problem | Fix |
 | --- | --- |
-| Accessibility option is greyed out | Settings > Apps > Ultrebo > ⋮ > *Allow restricted settings*, then retry. |
-| Taps land in the wrong place | Re-record after changing screen rotation or display size; coordinates are absolute. |
-| Image is never found | Re-crop it, lower the threshold (try 0.75), and make sure screen capture is ON. |
-| Image taps the wrong thing | Crop a more distinctive area and raise the threshold (0.9+). |
-| Macro stops by itself | Android may have turned the accessibility service off (battery savers do this). Re-enable it and exclude Ultrebo from battery optimisation. |
-| Games detect and block it | Some games block gestures from accessibility services. Nothing here works around that. |
+| Accessibility option is greyed out | Settings > Apps > Ultrebo > ⋮ > *Allow restricted settings*, then try again. |
+| Taps land in the wrong place | Re-record after changing screen rotation or display size; positions are absolute. |
+| A picture is never found | Crop it again, lower the threshold (try 0.75) and make sure screen capture is on. |
+| It taps the wrong thing | Crop a more distinctive area and raise the threshold (0.9 or more). |
+| The macro stops by itself | Battery savers can switch the accessibility service off. Turn it back on and exclude Ultrebo from battery optimisation. |
+| A game blocks it | Some games block taps from accessibility services. Nothing here works around that. |
 
-## Privacy
+Still stuck? Join the [Discord server](https://discord.gg/mAKGfaAWWW) and open a support ticket, or open an [issue](../../issues).
 
-Macros and cropped images are stored in the app's private storage and never uploaded. Screen capture is
-only used for matching images, and a captured frame is never saved except the region you crop.
+## Permissions and privacy
 
-The app has the `INTERNET` permission for two things:
+Each sensitive permission is used for exactly one thing:
 
-1. On launch it asks GitHub's public API for the latest release of this repo and compares version numbers.
-   Nothing about you, your phone or your macros is sent. Turn it off with the **Check for updates on
-   launch** switch on the home screen.
-2. Text recognition uses Google's [ML Kit](https://developers.google.com/ml-kit) library. Recognition itself
-   runs entirely on your phone with a model bundled in the app, and your screen content is never uploaded.
-   ML Kit may, however, send anonymous usage/performance statistics to Google. If you don't want that,
-   don't use text steps (image steps don't use ML Kit).
+| Permission | What it's used for |
+| --- | --- |
+| **Accessibility service** | Performing your macros' taps and swipes and showing the floating bar. It doesn't read other apps' content. |
+| **Screen capture** (optional) | Only for picture and text steps. Frames are checked in memory and thrown away; the only image saved is the box you crop. Android asks again each time the app restarts. |
+| **Notifications** | Android requires a visible notice while screen capture is on. |
+| **Internet** | Checking GitHub for a newer release (you can turn this off) and downloading it if you tap Update. |
+| **Install unknown apps** (optional) | Only so the in-app updater can install Ultrebo's own update. Android rejects anything signed with a different key. |
 
-### Updating
+Macros and cropped images are stored in the app's private storage and never uploaded. On launch the app asks GitHub's public API for the latest release
+and compares version numbers; nothing about you, your phone or your macros is sent. Switch it off with **Check for updates on launch** in About.
 
-When a newer release exists, a popup offers **Update now**. It downloads the APK from this repo's GitHub
-release (checked against the SHA-256 GitHub publishes) and hands it to Android's installer, which updates
-Ultrebo in place - your macros and settings are kept. Android still asks you to confirm, and the first
-time it asks you to allow Ultrebo to "install unknown apps". A **Release page** button is there as a manual
-fallback.
+Text recognition uses Google's [ML Kit](https://developers.google.com/ml-kit), which runs on your phone with a model bundled in the app.
+Your screen content is never uploaded, but ML Kit may send anonymous usage statistics to Google. If you don't want that, don't use text steps or text rules.
 
-This only works if every release is signed with the same key (see *Releasing* below). Android may switch
-off the accessibility service after an update; the **Get started** guide reappears if so.
+Updates download from this repo's GitHub release, are checked against its SHA-256, and are installed by Android's own installer, which keeps your macros and settings.
+Android may switch the accessibility service off after an update; the **Get started** guide reappears if so.
 
-Because of this, the app declares the `REQUEST_INSTALL_PACKAGES` permission. It is only used for this
-self-update and can only ever install an update to Ultrebo itself (Android rejects anything signed with a
-different key).
+## Support Ultrebo
 
-## Building from source
+Ultrebo is free. If it saves you time you can optionally chip in on the **Ethereum network** (ETH, or USDT/USDC on Ethereum):
 
 ```
-./gradlew testDebugUnitTest assembleDebug
-```
-Open the folder in Android Studio, or let GitHub Actions build it: every push uploads a
-`Ultrebo-debug-apk` artifact (sign-in required to download).
-
-```
-app/src/main/java/com/ultimate/macrobot/
-  model/    Macro, Step, enums (JSON-serialised)
-  data/     MacroRepository (macros.json + template PNGs)
-  engine/   MacroRunner (sequence/reactive loop), ImageMatcher (OpenCV)
-  service/  MacroAccessibilityService (gestures + overlays), OverlayController, ScreenCaptureService
-  ui/       Compose screens: Home, Editor, StepDialog
+0x108484e1744Fd6ED22288411B9596390E76CD5b2
 ```
 
-## Releasing (maintainers)
+Double-check the address and network before sending; crypto payments can't be reversed. There's no obligation, and nothing is locked behind it.
 
-1. On GitHub: **Releases > Draft a new release**, create a tag such as `v1.0.0`, **Publish**.
-2. The *Release APK* workflow builds the app and attaches `Ultrebo-v1.0.0.apk` to that release.
+## License and credits
 
-**Signing:** Android only installs an update over an existing install if both APKs have the same signing
-key. Create a key once and store it as repository secrets (Settings > Secrets and variables > Actions):
+[GPL-3.0](LICENSE), copyright (C) 2026 Ultrevo. Anyone may use, study and modify this app, but copies and modified versions must stay open source under
+the same licence and keep the copyright notice. See [NOTICE](NOTICE) for the extra permission covering Google ML Kit. Releases v0.1.0 to v0.1.2 were
+published under the MIT License and remain available under those terms.
 
-```
-keytool -genkeypair -v -keystore release.keystore -alias macrobot -keyalg RSA -keysize 4096 -validity 36500
-base64 -w0 release.keystore      # paste as KEYSTORE_BASE64
-```
-Secrets: `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`. Keep the keystore and passwords
-backed up and **never commit them**. Without the secrets the workflow still builds, but signs with the
-debug key, so users would have to uninstall before moving to a properly signed build.
-
-## License
-
-[GPL-3.0](LICENSE), copyright (C) 2026 Ultrevo. Anyone may use, study and modify this app, but copies and
-modified versions must stay open source under the same licence and keep the copyright notice. See
-[NOTICE](NOTICE) for the extra permission covering Google ML Kit. Releases v0.1.0 to v0.1.2 were published
-under the MIT License and remain available under those terms.
-
-## Credits
-
-Ultrebo is designed, directed, tested and maintained by Ultrevo. Much of the code was written with the help of an
-AI assistant (Claude, by Anthropic).
+Ultrebo is designed, directed, tested and maintained by Ultrevo. Much of the code was written with the help of an AI assistant (Claude, by Anthropic).
