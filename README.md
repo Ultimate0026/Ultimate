@@ -46,6 +46,13 @@ Requires Android 8.0 (API 26) or newer.
 | **Sequence** | Runs every enabled step once per loop, lowest priority number first. Loops N times or forever, with a delay between loops. |
 | **Reactive** | Each cycle, runs only the first step (lowest priority number) whose condition is met, then starts over. Tap/Swipe steps are always met, so give them the highest number to act as a fallback. A visible *Wait for image* step holds back every step below it. |
 
+### Always-on image watching
+
+Set a macro to **Reactive** mode with *Tap image* steps and it keeps watching the screen until you press STOP,
+tapping whenever a target appears. *Check screen for images every (ms)* controls how often it looks:
+`10000` checks every 10 seconds, which is much easier on the battery and CPU than the default 1 second.
+The phone's screen has to stay on and MacroBot's accessibility service has to stay enabled.
+
 ### Image steps
 
 1. Add a **Tap image** or **Wait for image** step, press *Pick image from screen*.

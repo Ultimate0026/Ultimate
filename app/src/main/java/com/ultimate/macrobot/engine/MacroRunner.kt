@@ -25,11 +25,14 @@ data class PendingTemplate(val macroId: String, val stepId: String)
 
 /** Runs macros and holds the global run/record state shown in the app and the floating bubble. */
 object MacroRunner {
-    private const val POLL_MS = 250L
-    private const val IDLE_REACTIVE_MS = 300L
+    private const val MIN_SCAN_MS = 100L
+    private const val DEFAULT_SCAN_MS = 250L
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var job: Job? = null
+
+    /** Pause between screen checks; set from the running macro. */
+    @Volatile private var scanMs = DEFAULT_SCAN_MS
 
     private val _running = MutableStateFlow(false)
     val running: StateFlow<Boolean> = _running
@@ -57,6 +60,7 @@ object MacroRunner {
             if (enabled.any { it.needsImage && it.templateFile == null }) return "An image step has no image picked."
         }
         stop()
+        scanMs = macro.scanIntervalMs.coerceAtLeast(MIN_SCAN_MS)
         _running.value = true
         job = scope.launch {
             try {
@@ -78,6 +82,7 @@ object MacroRunner {
     /** Runs a single step once (the per-step test button). */
     fun testStep(step: Step) {
         if (_running.value) return
+        scanMs = DEFAULT_SCAN_MS
         _running.value = true
         job = scope.launch {
             try {
@@ -166,7 +171,7 @@ object MacroRunner {
                 }
             }
             _status.value = "Waiting..."
-            delay(IDLE_REACTIVE_MS)
+            delay(scanMs)
         } finally {
             frame?.release()
         }
@@ -183,8 +188,9 @@ object MacroRunner {
             } finally {
                 frame.release()
             }
-            if (System.currentTimeMillis() >= deadline) return null
-            delay(POLL_MS)
+            val remaining = deadline - System.currentTimeMillis()
+            if (remaining <= 0) return null
+            delay(minOf(scanMs, remaining))
         }
     }
 
@@ -193,7 +199,7 @@ object MacroRunner {
             currentCoroutineContext().ensureActive()
             val bmp = ScreenCaptureService.instance?.capture()
             if (bmp != null) return ImageMatcher.Frame(bmp)
-            delay(POLL_MS)
+            delay(DEFAULT_SCAN_MS)
         }
     }
 

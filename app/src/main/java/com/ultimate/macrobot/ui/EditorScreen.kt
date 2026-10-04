@@ -143,6 +143,14 @@ fun EditorScreen(
                                 "Delay between loops (ms)", macro.loopDelayMs, Modifier.weight(1f),
                             ) { v -> change { it.copy(loopDelayMs = v.coerceAtLeast(0)) } }
                         }
+                        NumField(
+                            "Check screen for images every (ms)", macro.scanIntervalMs, Modifier.fillMaxWidth(),
+                        ) { v -> change { it.copy(scanIntervalMs = v.coerceAtLeast(100)) } }
+                        Text(
+                            "Image steps look at the screen this often. Higher = easier on battery " +
+                                "(10000 = every 10 seconds). Reactive mode keeps watching until stopped.",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
                     }
                 }
             }

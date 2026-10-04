@@ -71,6 +71,8 @@ data class Macro(
     /** Number of loops (sequence) or cycles (reactive). 0 = run until stopped. */
     val loops: Int = 0,
     val loopDelayMs: Long = 1000,
+    /** How often image steps look at the screen (reactive idle wait / sequence polling). */
+    val scanIntervalMs: Long = 1000,
     val steps: List<Step> = emptyList(),
 ) {
     /** Steps in execution order: priority ascending, ties keep list order. */
