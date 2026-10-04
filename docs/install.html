@@ -14,7 +14,24 @@
 <meta property="og:description" content="Step-by-step guide to installing Ultrebo from an APK on Android, switching on the accessibility service, allowing restricted settings, and recording your first macro.">
 <meta property="og:url" content="https://ultrevo.github.io/Ultrebo/install.html">
 <meta property="og:site_name" content="Ultrebo">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
+<style>
+  /* Screenshot gallery: swipeable row on phones, three side-by-side cards on wider screens. */
+  .shots { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory;
+           padding: 4px 0 12px; margin-top: 12px; -webkit-overflow-scrolling: touch; }
+  .shots figure { flex: 0 0 min(250px, 72%); scroll-snap-align: start; margin: 0;
+                  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 10px; }
+  .shots img { width: 100%; height: auto; display: block; border-radius: 10px; }
+  .shots figcaption { font-size: .9rem; color: var(--text); margin: 10px 4px 4px; line-height: 1.4; }
+  @media (min-width: 720px) {
+    .shots { display: grid; grid-template-columns: repeat(3, 1fr); overflow: visible; }
+    .shots figure { flex: none; }
+  }
+  .shot-single { max-width: 260px; margin: 12px 0 20px; }
+  .shot-single img { width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid var(--border); }
+  .shot-single figcaption { font-size: .9rem; color: var(--muted); margin-top: 8px; }
+</style>
+
 </head>
 <body>
 <div class="wrap">
