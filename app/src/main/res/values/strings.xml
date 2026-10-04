@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MacroBot</string>
+    <string name="accessibility_description">Lets MacroBot perform the taps and swipes of your macros and show its floating controls. It does not read screen content.</string>
+</resources>
