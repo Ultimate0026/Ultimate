@@ -62,6 +62,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.2")
     // Template matching for image recognition (bundles native libs).
     implementation("org.opencv:opencv:4.9.0")
+    // On-device text recognition (OCR) for text steps; the Latin model is bundled in the app.
+    implementation("com.google.mlkit:text-recognition:16.0.1")
+    implementation("com.google.android.gms:play-services-tasks:18.2.0")
 
     testImplementation("junit:junit:4.13.2")
 }

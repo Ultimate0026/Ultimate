@@ -9,6 +9,8 @@ enum class StepType(val label: String) {
     SWIPE("Swipe"),
     WAIT_IMAGE("Wait for image"),
     TAP_IMAGE("Tap image"),
+    WAIT_TEXT("Wait for text"),
+    TAP_TEXT("Tap text"),
 }
 
 @Serializable
@@ -51,6 +53,8 @@ data class Step(
     val enabled: Boolean = true,
     /** File name inside the templates folder (image steps). */
     val templateFile: String? = null,
+    /** Text steps: the words to look for on screen. */
+    val text: String = "",
     /** Minimum match score, 0..1 (image steps). */
     val threshold: Float = 0.85f,
     /** Sequence mode: how long to keep looking for the image. 0 = look once. */
@@ -63,7 +67,14 @@ data class Step(
     /** Watchers: tap the image when it is seen. */
     val tapOnSeen: Boolean = true,
 ) {
-    val needsImage: Boolean get() = type == StepType.WAIT_IMAGE || type == StepType.TAP_IMAGE
+    val isImage: Boolean get() = type == StepType.WAIT_IMAGE || type == StepType.TAP_IMAGE
+    val isText: Boolean get() = type == StepType.WAIT_TEXT || type == StepType.TAP_TEXT
+
+    /** Needs the screen to be captured (image or text recognition). */
+    val needsScreen: Boolean get() = isImage || isText
+
+    /** Taps what it finds (as opposed to only waiting for it). */
+    val tapsTarget: Boolean get() = type == StepType.TAP_IMAGE || type == StepType.TAP_TEXT
 
     fun title(): String = name.ifBlank { type.label }
 
@@ -75,6 +86,12 @@ data class Step(
                 templateFile == null -> "no image picked"
                 watch -> "always watching - ${onSeen.label.lowercase()}"
                 else -> "match >= ${"%.2f".format(threshold)}"
+            }
+        StepType.WAIT_TEXT, StepType.TAP_TEXT ->
+            when {
+                text.isBlank() -> "no text entered"
+                watch -> "\"$text\" - always watching - ${onSeen.label.lowercase()}"
+                else -> "\"$text\""
             }
     }
 }

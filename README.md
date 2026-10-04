@@ -12,6 +12,8 @@ game tasks such as tower-defense farming, but it works over any app.
 - **Two run modes**: *Sequence* (everything in priority order, looped) and *Reactive* (each cycle, run only
   the highest-priority step whose condition is met).
 - **Image recognition**: `Tap image` and `Wait for image` steps using OpenCV template matching.
+- **Text recognition**: `Tap text` and `Wait for text` steps - just type the words to look for (on-device OCR).
+- **Always-watching** image/text steps that react to pop-ups while your macro runs.
 - **Floating RUN / REC / CROP bar** that stays on top of your game.
 - **Private**: no accounts, no analytics. Macros and screenshots stay on your phone. The only network use is an optional "is there a newer release?" check on GitHub.
 
@@ -65,6 +67,15 @@ run, even while your other steps are tapping. When its image appears (say an "I'
 
 A macro with only watchers just sits and watches until you press STOP. Watchers need screen capture on.
 
+### Text steps
+
+Tap **Text step**, type the words to find (for example `I'm here`), and choose *Tap text* or *Wait for text*.
+It reads the screen with on-device OCR, so no picture needs to be cropped. Capital letters, spaces and
+punctuation are ignored. *Match strictness* controls how many misread letters are forgiven (lower = more
+forgiving). Text steps support everything image steps do, including **Always watching** and the two
+pop-up actions. Reads Latin letters and numbers only (English and similar), and is slower than image
+matching, so use a longer check interval (1-3 seconds) if the phone gets warm.
+
 ### Image steps
 
 1. In a macro, tap **Image step** (or **Tap / swipe** and pick *Tap image* / *Wait for image* as the type), then press *Pick image from screen*.
@@ -91,9 +102,15 @@ on (matching is done at screen resolution); avoid regions with animated or chang
 Macros and cropped images are stored in the app's private storage and never uploaded. Screen capture is
 only used for matching images, and a captured frame is never saved except the region you crop.
 
-The app has the `INTERNET` permission for exactly one thing: on launch it asks GitHub's public API for the
-latest release of this repo and compares version numbers. Nothing about you, your phone or your macros is
-sent. Turn it off with the **Check for updates on launch** switch on the home screen.
+The app has the `INTERNET` permission for two things:
+
+1. On launch it asks GitHub's public API for the latest release of this repo and compares version numbers.
+   Nothing about you, your phone or your macros is sent. Turn it off with the **Check for updates on
+   launch** switch on the home screen.
+2. Text recognition uses Google's [ML Kit](https://developers.google.com/ml-kit) library. Recognition itself
+   runs entirely on your phone with a model bundled in the app, and your screen content is never uploaded.
+   ML Kit may, however, send anonymous usage/performance statistics to Google. If you don't want that,
+   don't use text steps (image steps don't use ML Kit).
 
 ### Updating
 

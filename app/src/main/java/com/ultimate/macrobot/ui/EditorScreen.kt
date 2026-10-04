@@ -5,6 +5,8 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -57,7 +59,7 @@ import com.ultimate.macrobot.model.StepType
 import com.ultimate.macrobot.service.MacroAccessibilityService
 import com.ultimate.macrobot.service.ScreenCaptureService
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun EditorScreen(
     macroId: String,
@@ -195,7 +197,10 @@ fun EditorScreen(
                         "Steps (${macro.steps.size}) - runs top to bottom",
                         style = MaterialTheme.typography.titleMedium,
                     )
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
                         Button(onClick = { editing = Step(priority = macro.nextPriority()) }) {
                             Icon(Icons.Default.Add, contentDescription = null)
                             Text("Tap / swipe")
@@ -205,6 +210,12 @@ fun EditorScreen(
                         }) {
                             Icon(Icons.Default.Add, contentDescription = null)
                             Text("Image step")
+                        }
+                        Button(onClick = {
+                            editing = Step(type = StepType.TAP_TEXT, priority = macro.nextPriority())
+                        }) {
+                            Icon(Icons.Default.Add, contentDescription = null)
+                            Text("Text step")
                         }
                     }
                 }

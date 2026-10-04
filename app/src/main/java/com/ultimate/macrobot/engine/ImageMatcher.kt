@@ -23,17 +23,26 @@ object ImageMatcher {
         return loaded
     }
 
-    /** One screenshot, converted to grayscale at most once per scale. Call [release] when done. */
-    class Frame(bitmap: Bitmap) {
-        private val full = Mat().also {
-            val rgba = Mat()
-            Utils.bitmapToMat(bitmap, rgba)
-            Imgproc.cvtColor(rgba, it, Imgproc.COLOR_RGBA2GRAY)
-            rgba.release()
+    /**
+     * One screenshot, shared by all steps checked against it: grayscale is built at most once per
+     * scale, and OCR runs at most once. Call [release] when done.
+     */
+    class Frame(val bitmap: Bitmap) {
+        private val fullLazy = lazy {
+            Mat().also {
+                val rgba = Mat()
+                Utils.bitmapToMat(bitmap, rgba)
+                Imgproc.cvtColor(rgba, it, Imgproc.COLOR_RGBA2GRAY)
+                rgba.release()
+            }
         }
         private var half: Mat? = null
 
+        /** Words on screen, found by OCR (computed on first use). */
+        val text: List<List<OcrWord>> by lazy { TextReader.read(bitmap) }
+
         fun gray(scale: Double): Mat {
+            val full = fullLazy.value
             if (scale >= 1.0) return full
             return half ?: Mat().also {
                 Imgproc.resize(full, it, Size(), scale, scale, Imgproc.INTER_AREA)
@@ -42,7 +51,7 @@ object ImageMatcher {
         }
 
         fun release() {
-            full.release()
+            if (fullLazy.isInitialized()) fullLazy.value.release()
             half?.release()
         }
     }

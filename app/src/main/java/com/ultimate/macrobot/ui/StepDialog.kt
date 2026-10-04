@@ -88,11 +88,13 @@ fun StepDialog(
                         StepType.SWIPE -> "Drags from one spot to another."
                         StepType.WAIT_IMAGE -> "Waits until a picture you choose is on screen. Does not tap."
                         StepType.TAP_IMAGE -> "Looks for a picture you choose and taps it wherever it appears."
+                        StepType.WAIT_TEXT -> "Waits until the words you type appear on screen. Does not tap."
+                        StepType.TAP_TEXT -> "Looks for the words you type and taps them wherever they appear."
                     },
                     style = MaterialTheme.typography.bodySmall,
                 )
 
-                if (!step.needsImage) {
+                if (!step.needsScreen) {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         NumField("X", step.x.toLong(), Modifier.weight(1f)) { step = step.copy(x = it.toInt()) }
                         NumField("Y", step.y.toLong(), Modifier.weight(1f)) { step = step.copy(y = it.toInt()) }
@@ -104,29 +106,49 @@ fun StepDialog(
                         NumField("End Y", step.y2.toLong(), Modifier.weight(1f)) { step = step.copy(y2 = it.toInt()) }
                     }
                 }
-                if (step.type == StepType.TAP || step.type == StepType.SWIPE || step.type == StepType.TAP_IMAGE) {
+                if (step.type == StepType.TAP || step.type == StepType.SWIPE || step.tapsTarget) {
                     NumField(
                         if (step.type == StepType.SWIPE) "Swipe time (ms)" else "Press time (ms)",
                         step.durationMs, Modifier.fillMaxWidth(),
                     ) { step = step.copy(durationMs = it.coerceAtLeast(1)) }
                 }
 
-                if (step.needsImage) {
-                    Text(
-                        "How to pick the picture:\n" +
-                            "1. Press the button below (MacroBot goes to the background).\n" +
-                            "2. Open your game and press CROP on the floating bar.\n" +
-                            "3. Drag a box around the button or icon to look for.\n" +
-                            "4. Come back here - a thumbnail shows on the step.",
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                    OutlinedButton(onClick = { onPickImage(current()) }, modifier = Modifier.fillMaxWidth()) {
-                        Text(if (step.templateFile == null) "Pick image from screen" else "Re-pick image from screen")
+                if (step.needsScreen) {
+                    if (step.isImage) {
+                        Text(
+                            "How to pick the picture:\n" +
+                                "1. Press the button below (MacroBot goes to the background).\n" +
+                                "2. Open your game and press CROP on the floating bar.\n" +
+                                "3. Drag a box around the button or icon to look for.\n" +
+                                "4. Come back here - a thumbnail shows on the step.",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                        OutlinedButton(onClick = { onPickImage(current()) }, modifier = Modifier.fillMaxWidth()) {
+                            Text(if (step.templateFile == null) "Pick image from screen" else "Re-pick image from screen")
+                        }
+                    } else {
+                        OutlinedTextField(
+                            value = step.text,
+                            onValueChange = { step = step.copy(text = it) },
+                            label = { Text("Text to look for") },
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Text(
+                            "Capital letters, spaces and punctuation are ignored. Works for Latin letters " +
+                                "and numbers (English and similar). Pick a distinctive word or phrase.",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
                     }
                     OutlinedTextField(
                         value = threshold,
                         onValueChange = { threshold = it },
-                        label = { Text("Match threshold (0.1 - 1.0)") },
+                        label = {
+                            Text(
+                                if (step.isText) "Match strictness (0.1 - 1.0, lower forgives misreads)"
+                                else "Match threshold (0.1 - 1.0)",
+                            )
+                        },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         modifier = Modifier.fillMaxWidth(),
@@ -155,7 +177,7 @@ fun StepDialog(
                             }
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("Tap the image when seen", Modifier.weight(1f))
+                            Text(if (step.isText) "Tap the text when seen" else "Tap the image when seen", Modifier.weight(1f))
                             Switch(checked = step.tapOnSeen, onCheckedChange = { step = step.copy(tapOnSeen = it) })
                         }
                     } else {
@@ -165,7 +187,7 @@ fun StepDialog(
                     }
                 }
 
-                val isWatcher = step.needsImage && step.watch
+                val isWatcher = step.needsScreen && step.watch
                 NumField(
                     if (isWatcher) "Wait after it appears, before the macro continues/restarts (ms)" else "Delay after (ms)",
                     step.delayAfterMs, Modifier.fillMaxWidth(),

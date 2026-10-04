@@ -213,8 +213,9 @@ private fun AboutCard() {
             Text("About", style = MaterialTheme.typography.titleMedium)
             Text(
                 "MacroBot ${BuildConfig.VERSION_NAME} - records and replays taps and swipes, and can " +
-                    "react to images on screen. Your macros and screenshots never leave your device. " +
-                    "The only network use is an optional check on GitHub for a newer release.",
+                    "react to images and text on screen. Your macros and screenshots never leave your device. " +
+                    "The app checks GitHub for newer releases (optional), and the text-recognition " +
+                    "library (Google ML Kit) may send anonymous usage statistics, never your screen content.",
                 style = MaterialTheme.typography.bodySmall,
             )
             var checks by remember { mutableStateOf(MacroBotApp.repo.updateChecksEnabled) }

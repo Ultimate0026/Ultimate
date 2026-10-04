@@ -65,10 +65,11 @@ object MacroRunner {
         val enabled = macro.steps.filter { it.enabled }
         if (enabled.isEmpty()) return "This macro has no enabled steps."
         if (MacroAccessibilityService.instance == null) return "Enable the MacroBot accessibility service first."
-        if (enabled.any { it.needsImage }) {
-            if (!ImageMatcher.ensureLoaded()) return "Image recognition failed to load."
-            if (ScreenCaptureService.instance?.isReady != true) return "Grant screen capture first (needed for image steps)."
-            if (enabled.any { it.needsImage && it.templateFile == null }) return "An image step has no image picked."
+        if (enabled.any { it.needsScreen }) {
+            if (enabled.any { it.isImage } && !ImageMatcher.ensureLoaded()) return "Image recognition failed to load."
+            if (ScreenCaptureService.instance?.isReady != true) return "Grant screen capture first (needed for image and text steps)."
+            if (enabled.any { it.isImage && it.templateFile == null }) return "An image step has no image picked."
+            if (enabled.any { it.isText && it.text.isBlank() }) return "A text step has no text entered."
         }
         stop()
         scanMs = macro.scanIntervalMs.coerceAtLeast(MIN_SCAN_MS)
@@ -97,7 +98,7 @@ object MacroRunner {
         _running.value = true
         job = scope.launch {
             try {
-                if (step.needsImage && ScreenCaptureService.instance?.isReady != true) return@launch
+                if (step.needsScreen && ScreenCaptureService.instance?.isReady != true) return@launch
                 runSequenceStep(step)
             } finally {
                 _running.value = false
@@ -108,8 +109,8 @@ object MacroRunner {
 
     private suspend fun run(macro: Macro) = coroutineScope {
         val enabled = macro.ordered().filter { it.enabled }
-        val watchers = enabled.filter { it.needsImage && it.watch }
-        val mainSteps = enabled.filterNot { it.needsImage && it.watch }
+        val watchers = enabled.filter { it.needsScreen && it.watch }
+        val mainSteps = enabled.filterNot { it.needsScreen && it.watch }
 
         val mainRef = AtomicReference<Job>()
         fun startMain() { mainRef.set(launch { runMain(macro, mainSteps) }) }
@@ -165,13 +166,12 @@ object MacroRunner {
         while (true) {
             delay(scanMs)
             val frame = captureFrame()
-            var hit: Pair<Step, ImageMatcher.Match>? = null
+            var hit: Pair<Step, Target>? = null
             try {
                 val now = System.currentTimeMillis()
                 for (w in watchers) {
                     if (now - (lastSeen[w.id] ?: 0L) < WATCH_COOLDOWN_MS) continue
-                    val file = w.templateFile?.let { MacroBotApp.repo.templatePath(it) } ?: continue
-                    val match = ImageMatcher.find(frame, file, w.threshold) ?: continue
+                    val match = findTarget(frame, w) ?: continue
                     hit = w to match
                     break
                 }
@@ -199,9 +199,9 @@ object MacroRunner {
                 performLocked(step, step.x, step.y)
                 delay(step.delayAfterMs)
             }
-            StepType.WAIT_IMAGE, StepType.TAP_IMAGE -> {
-                val match = waitForImage(step) ?: return // not found in time: skip the step
-                if (step.type == StepType.TAP_IMAGE) {
+            StepType.WAIT_IMAGE, StepType.TAP_IMAGE, StepType.WAIT_TEXT, StepType.TAP_TEXT -> {
+                val match = waitForTarget(step) ?: return // not found in time: skip the step
+                if (step.tapsTarget) {
                     repeat(times) {
                         performLocked(step, match.x, match.y)
                         delay(step.delayAfterMs)
@@ -214,7 +214,7 @@ object MacroRunner {
     }
 
     private suspend fun runReactiveCycle(steps: List<Step>) {
-        val needsFrame = steps.any { it.needsImage }
+        val needsFrame = steps.any { it.needsScreen }
         val frame = if (needsFrame) captureFrame() else null
         try {
             for (step in steps) {
@@ -226,16 +226,11 @@ object MacroRunner {
                         delay(step.delayAfterMs)
                         return
                     }
-                    StepType.WAIT_IMAGE, StepType.TAP_IMAGE -> {
-                        val file = step.templateFile?.let { MacroBotApp.repo.templatePath(it) }
-                        val match = if (frame != null && file != null) {
-                            ImageMatcher.find(frame, file, step.threshold)
-                        } else {
-                            null
-                        }
+                    StepType.WAIT_IMAGE, StepType.TAP_IMAGE, StepType.WAIT_TEXT, StepType.TAP_TEXT -> {
+                        val match = if (frame != null) findTarget(frame, step) else null
                         if (match != null) {
                             _status.value = step.title()
-                            if (step.type == StepType.TAP_IMAGE) {
+                            if (step.tapsTarget) {
                                 repeat(step.repeat.coerceAtLeast(1)) {
                                     performLocked(step, match.x, match.y)
                                     delay(step.delayAfterMs)
@@ -255,14 +250,26 @@ object MacroRunner {
         }
     }
 
-    private suspend fun waitForImage(step: Step): ImageMatcher.Match? {
-        val file = step.templateFile?.let { MacroBotApp.repo.templatePath(it) } ?: return null
+    /** Where an image or text step's target is on this frame, or null when it is not visible. */
+    private data class Target(val x: Int, val y: Int)
+
+    private fun findTarget(frame: ImageMatcher.Frame, step: Step): Target? = when {
+        step.isImage -> {
+            val file = step.templateFile?.let { MacroBotApp.repo.templatePath(it) }
+            if (file == null) null else ImageMatcher.find(frame, file, step.threshold)?.let { Target(it.x, it.y) }
+        }
+        step.isText ->
+            TextMatcher.find(frame.text, step.text, step.threshold.toDouble())?.let { Target(it.x, it.y) }
+        else -> null
+    }
+
+    private suspend fun waitForTarget(step: Step): Target? {
         val deadline = System.currentTimeMillis() + step.timeoutMs
         while (true) {
             currentCoroutineContext().ensureActive()
             val frame = captureFrame()
             try {
-                ImageMatcher.find(frame, file, step.threshold)?.let { return it }
+                findTarget(frame, step)?.let { return it }
             } finally {
                 frame.release()
             }
