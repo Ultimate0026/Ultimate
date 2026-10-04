@@ -1,6 +1,5 @@
 # MacroBot
 
-[![CI](https://github.com/Ultimate0026/Ultimate/actions/workflows/ci.yml/badge.svg)](https://github.com/Ultimate0026/Ultimate/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 An Android app that **records your taps and swipes, lets you edit every step, and replays them in a
