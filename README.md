@@ -55,6 +55,16 @@ Ultrebo asks for a few sensitive permissions because tapping for you needs them.
 Questions, bug reports or ideas? Join the [Discord server](https://discord.gg/mAKGfaAWWW) and open a support ticket there, or open an
 [issue](../../issues) on GitHub.
 
+## Support Ultrebo
+
+Ultrebo is free. If it saves you time you can optionally chip in, on the **Ethereum network** (ETH, or USDT/USDC on Ethereum):
+
+```
+0x108484e1744Fd6ED22288411B9596390E76CD5b2
+```
+
+Double-check the address and the network before sending; crypto payments can't be reversed. There is no obligation, and nothing is locked behind it.
+
 ## Quick start
 
 1. **New macro**, open it.
