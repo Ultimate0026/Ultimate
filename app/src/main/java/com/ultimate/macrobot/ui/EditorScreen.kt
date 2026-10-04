@@ -212,7 +212,7 @@ fun EditorScreen(
                             Text("Image step")
                         }
                         Button(onClick = {
-                            editing = Step(type = StepType.TAP_TEXT, priority = macro.nextPriority())
+                            editing = Step(type = StepType.TAP_TEXT, threshold = 0.8f, priority = macro.nextPriority())
                         }) {
                             Icon(Icons.Default.Add, contentDescription = null)
                             Text("Text step")
