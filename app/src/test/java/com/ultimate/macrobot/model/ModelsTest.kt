@@ -41,4 +41,13 @@ class ModelsTest {
         assertEquals(500L, macro.steps.single().delayAfterMs)
         assertEquals(5, macro.steps.single().x)
     }
+
+    @Test
+    fun watcherSettingsDefaultOffForOldFiles() {
+        val json = Json { ignoreUnknownKeys = true }
+        val step = json.decodeFromString<Macro>("""{"steps":[{"type":"TAP_IMAGE"}]}""").steps.single()
+        assertEquals(false, step.watch)
+        assertEquals(WatchAction.CONTINUE, step.onSeen)
+        assertEquals(true, step.tapOnSeen)
+    }
 }

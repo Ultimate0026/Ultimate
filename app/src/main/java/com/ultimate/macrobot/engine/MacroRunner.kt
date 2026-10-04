@@ -6,11 +6,18 @@ import com.ultimate.macrobot.model.Macro
 import com.ultimate.macrobot.model.RunMode
 import com.ultimate.macrobot.model.Step
 import com.ultimate.macrobot.model.StepType
+import com.ultimate.macrobot.model.WatchAction
 import com.ultimate.macrobot.service.MacroAccessibilityService
 import com.ultimate.macrobot.service.ScreenCaptureService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
@@ -27,6 +34,10 @@ data class PendingTemplate(val macroId: String, val stepId: String)
 object MacroRunner {
     private const val MIN_SCAN_MS = 100L
     private const val DEFAULT_SCAN_MS = 250L
+    private const val WATCH_COOLDOWN_MS = 1500L
+
+    /** Only one thing touches the screen at a time: the main macro or a watcher. */
+    private val actionLock = Mutex()
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var job: Job? = null
@@ -95,8 +106,35 @@ object MacroRunner {
         }
     }
 
-    private suspend fun run(macro: Macro) {
-        val steps = macro.ordered().filter { it.enabled }
+    private suspend fun run(macro: Macro) = coroutineScope {
+        val enabled = macro.ordered().filter { it.enabled }
+        val watchers = enabled.filter { it.needsImage && it.watch }
+        val mainSteps = enabled.filterNot { it.needsImage && it.watch }
+
+        val mainRef = AtomicReference<Job>()
+        fun startMain() { mainRef.set(launch { runMain(macro, mainSteps) }) }
+        startMain()
+
+        val watcher = if (watchers.isEmpty()) null else launch {
+            watchLoop(
+                watchers,
+                stopMain = { mainRef.get().cancelAndJoin() },
+                startMain = { startMain() },
+            )
+        }
+
+        // Wait for the main macro to finish; a restart swaps in a fresh job, so keep following it.
+        while (true) {
+            val current = mainRef.get()
+            current.join()
+            if (current === mainRef.get() && !current.isCancelled) break
+            delay(50)
+        }
+        watcher?.cancel()
+    }
+
+    private suspend fun runMain(macro: Macro, steps: List<Step>) {
+        if (steps.isEmpty()) awaitCancellation() // watchers only: keep running until stopped
         var round = 0
         while (currentCoroutineContext().isActive && (macro.loops == 0 || round < macro.loops)) {
             round++
@@ -113,19 +151,59 @@ object MacroRunner {
         }
     }
 
+    /**
+     * Background loop for "always watching" image steps. When one is seen it takes the action lock
+     * (so the main macro pauses between gestures), optionally taps, then either lets the main macro
+     * carry on after the step's wait, or restarts it from the beginning.
+     */
+    private suspend fun watchLoop(
+        watchers: List<Step>,
+        stopMain: suspend () -> Unit,
+        startMain: () -> Unit,
+    ) {
+        val lastSeen = HashMap<String, Long>()
+        while (true) {
+            delay(scanMs)
+            val frame = captureFrame()
+            var hit: Pair<Step, ImageMatcher.Match>? = null
+            try {
+                val now = System.currentTimeMillis()
+                for (w in watchers) {
+                    if (now - (lastSeen[w.id] ?: 0L) < WATCH_COOLDOWN_MS) continue
+                    val file = w.templateFile?.let { MacroBotApp.repo.templatePath(it) } ?: continue
+                    val match = ImageMatcher.find(frame, file, w.threshold) ?: continue
+                    hit = w to match
+                    break
+                }
+            } finally {
+                frame.release()
+            }
+            val (step, match) = hit ?: continue
+
+            _status.value = "Watcher: ${step.title()}"
+            actionLock.withLock {
+                if (step.tapOnSeen) perform(step, match.x, match.y)
+                if (step.onSeen == WatchAction.RESTART) stopMain()
+                delay(step.delayAfterMs)
+            }
+            if (step.onSeen == WatchAction.RESTART) startMain()
+            lastSeen[step.id] = System.currentTimeMillis()
+        }
+    }
+
     private suspend fun runSequenceStep(step: Step) {
         _status.value = step.title()
         val times = step.repeat.coerceAtLeast(1)
         when (step.type) {
             StepType.TAP, StepType.SWIPE -> repeat(times) {
-                perform(step, step.x, step.y)
+                performLocked(step, step.x, step.y)
                 delay(step.delayAfterMs)
             }
             StepType.WAIT_IMAGE, StepType.TAP_IMAGE -> {
                 val match = waitForImage(step) ?: return // not found in time: skip the step
                 if (step.type == StepType.TAP_IMAGE) {
                     repeat(times) {
-                        perform(step, match.x, match.y)
+                        performLocked(step, match.x, match.y)
                         delay(step.delayAfterMs)
                     }
                 } else {
@@ -144,7 +222,7 @@ object MacroRunner {
                 when (step.type) {
                     StepType.TAP, StepType.SWIPE -> {
                         _status.value = step.title()
-                        perform(step, step.x, step.y)
+                        performLocked(step, step.x, step.y)
                         delay(step.delayAfterMs)
                         return
                     }
@@ -159,7 +237,7 @@ object MacroRunner {
                             _status.value = step.title()
                             if (step.type == StepType.TAP_IMAGE) {
                                 repeat(step.repeat.coerceAtLeast(1)) {
-                                    perform(step, match.x, match.y)
+                                    performLocked(step, match.x, match.y)
                                     delay(step.delayAfterMs)
                                 }
                             } else {
@@ -202,6 +280,9 @@ object MacroRunner {
             delay(DEFAULT_SCAN_MS)
         }
     }
+
+    private suspend fun performLocked(step: Step, x: Int, y: Int) =
+        actionLock.withLock { perform(step, x, y) }
 
     private suspend fun perform(step: Step, x: Int, y: Int) {
         val svc = MacroAccessibilityService.instance

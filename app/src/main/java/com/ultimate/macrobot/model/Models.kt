@@ -27,6 +27,12 @@ enum class RunMode(val label: String, val help: String) {
 }
 
 @Serializable
+enum class WatchAction(val label: String) {
+    CONTINUE("Pause, then carry on"),
+    RESTART("Restart macro from the start"),
+}
+
+@Serializable
 data class Step(
     val id: String = UUID.randomUUID().toString(),
     val name: String = "",
@@ -50,6 +56,12 @@ data class Step(
     /** Sequence mode: how long to keep looking for the image. 0 = look once. */
     val timeoutMs: Long = 5000,
     val repeat: Int = 1,
+    /** Image steps: watch the screen in the background for the whole run instead of running in order. */
+    val watch: Boolean = false,
+    /** What a watcher does when it sees its image. */
+    val onSeen: WatchAction = WatchAction.CONTINUE,
+    /** Watchers: tap the image when it is seen. */
+    val tapOnSeen: Boolean = true,
 ) {
     val needsImage: Boolean get() = type == StepType.WAIT_IMAGE || type == StepType.TAP_IMAGE
 
@@ -59,7 +71,11 @@ data class Step(
         StepType.TAP -> "($x, $y)"
         StepType.SWIPE -> "($x, $y) -> ($x2, $y2)"
         StepType.WAIT_IMAGE, StepType.TAP_IMAGE ->
-            if (templateFile == null) "no image picked" else "match >= ${"%.2f".format(threshold)}"
+            when {
+                templateFile == null -> "no image picked"
+                watch -> "always watching - ${onSeen.label.lowercase()}"
+                else -> "match >= ${"%.2f".format(threshold)}"
+            }
     }
 }
 

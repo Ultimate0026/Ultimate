@@ -15,6 +15,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -22,11 +23,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.ultimate.macrobot.model.Step
 import com.ultimate.macrobot.model.StepType
+import com.ultimate.macrobot.model.WatchAction
 
 /** Whole-number field that reports a value only when the text parses. */
 @Composable
@@ -128,20 +131,55 @@ fun StepDialog(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         modifier = Modifier.fillMaxWidth(),
                     )
-                    NumField("Look for up to (ms, sequence mode)", step.timeoutMs, Modifier.fillMaxWidth()) {
-                        step = step.copy(timeoutMs = it.coerceAtLeast(0))
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f)) {
+                            Text("Always watching")
+                            Text(
+                                "Checks the screen in the background for the whole run, even while " +
+                                    "your other steps are tapping. Use it for pop-ups like \"I'm here\".",
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                        Switch(checked = step.watch, onCheckedChange = { step = step.copy(watch = it) })
+                    }
+                    if (step.watch) {
+                        Text("When it appears:")
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            WatchAction.entries.forEach { action ->
+                                FilterChip(
+                                    selected = step.onSeen == action,
+                                    onClick = { step = step.copy(onSeen = action) },
+                                    label = { Text(action.label) },
+                                )
+                            }
+                        }
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("Tap the image when seen", Modifier.weight(1f))
+                            Switch(checked = step.tapOnSeen, onCheckedChange = { step = step.copy(tapOnSeen = it) })
+                        }
+                    } else {
+                        NumField("Look for up to (ms, sequence mode)", step.timeoutMs, Modifier.fillMaxWidth()) {
+                            step = step.copy(timeoutMs = it.coerceAtLeast(0))
+                        }
                     }
                 }
 
-                NumField("Delay after (ms)", step.delayAfterMs, Modifier.fillMaxWidth()) {
+                val isWatcher = step.needsImage && step.watch
+                NumField(
+                    if (isWatcher) "Wait after it appears, before the macro continues/restarts (ms)" else "Delay after (ms)",
+                    step.delayAfterMs, Modifier.fillMaxWidth(),
+                ) {
                     step = step.copy(delayAfterMs = it.coerceAtLeast(0))
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    NumField("Priority (low runs first)", step.priority.toLong(), Modifier.weight(1f)) {
-                        step = step.copy(priority = it.toInt())
-                    }
-                    NumField("Repeat", step.repeat.toLong(), Modifier.weight(1f)) {
-                        step = step.copy(repeat = it.toInt().coerceAtLeast(1))
+                if (!isWatcher) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        NumField("Priority (low runs first)", step.priority.toLong(), Modifier.weight(1f)) {
+                            step = step.copy(priority = it.toInt())
+                        }
+                        NumField("Repeat", step.repeat.toLong(), Modifier.weight(1f)) {
+                            step = step.copy(repeat = it.toInt().coerceAtLeast(1))
+                        }
                     }
                 }
                 Text(

@@ -53,6 +53,18 @@ tapping whenever a target appears. *Check screen for images every (ms)* controls
 `10000` checks every 10 seconds, which is much easier on the battery and CPU than the default 1 second.
 The phone's screen has to stay on and MacroBot's accessibility service has to stay enabled.
 
+### Watchers: handling pop-ups while the macro runs
+
+Turn on **Always watching** for an image step and it checks the screen in the background for the whole
+run, even while your other steps are tapping. When its image appears (say an "I'm here" button):
+
+- **Pause, then carry on** - the main macro pauses between taps, the watcher taps the image, waits the
+  time you set, and the macro continues where it left off.
+- **Restart macro from the start** - the macro is stopped, the watcher (optionally) taps the image,
+  waits, then the macro starts again from step 1.
+
+A macro with only watchers just sits and watches until you press STOP. Watchers need screen capture on.
+
 ### Image steps
 
 1. In a macro, tap **Image step** (or **Tap / swipe** and pick *Tap image* / *Wait for image* as the type), then press *Pick image from screen*.
