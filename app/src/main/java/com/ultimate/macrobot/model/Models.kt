@@ -20,12 +20,12 @@ enum class StepType(val label: String) {
 enum class RunMode(val label: String, val help: String) {
     SEQUENCE(
         "Sequence",
-        "Runs every step once per loop, from lowest priority number to highest.",
+        "Runs every step once per loop, from the top of the list to the bottom.",
     ),
     REACTIVE(
         "Reactive",
-        "Each cycle, runs only the first step (lowest priority number) whose condition is met, " +
-            "then starts over. Tap/Swipe steps are always met, so give them the highest number " +
+        "Each cycle, runs only the first step in the list whose condition is met, " +
+            "then starts over. Tap/Swipe steps are always met, so put them at the bottom " +
             "to act as a fallback. A \"Wait for image\" step that is visible holds back every " +
             "step below it.",
     ),

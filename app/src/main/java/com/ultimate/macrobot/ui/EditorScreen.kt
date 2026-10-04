@@ -392,7 +392,7 @@ private fun StepsTab(
         } else {
             item {
                 Text(
-                    "Runs top to bottom. Tap a step to edit it.",
+                    "Runs top to bottom. Use the menu on a step to move it up or down. Tap a step to edit it.",
                     style = MaterialTheme.typography.bodySmall,
                 )
             }

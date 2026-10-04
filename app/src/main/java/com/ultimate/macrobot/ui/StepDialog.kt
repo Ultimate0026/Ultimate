@@ -196,7 +196,7 @@ fun StepDialog(
                         Text("When it appears", style = MaterialTheme.typography.titleSmall)
                         Text(
                             "Checked in the background for the whole run, even while the steps are tapping. " +
-                                "If two rules are on screen at once, the one with the lower priority number goes first.",
+                                "If two rules are on screen at once, the one higher in the Rules list goes first.",
                             style = MaterialTheme.typography.bodySmall,
                         )
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -221,11 +221,6 @@ fun StepDialog(
                     else "Wait afterwards (ms)",
                     step.delayAfterMs, Modifier.fillMaxWidth(),
                 ) { step = step.copy(delayAfterMs = it.coerceAtLeast(0)) }
-                if (rule) {
-                    NumField("Priority (low goes first)", step.priority.toLong(), Modifier.fillMaxWidth()) {
-                        step = step.copy(priority = it.toInt())
-                    }
-                }
 
                 // --- Advanced
                 TextButton(onClick = { advanced = !advanced }) {
@@ -259,18 +254,9 @@ fun StepDialog(
                         }
                     }
                     if (!isWatcher) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            NumField("Priority (low runs first)", step.priority.toLong(), Modifier.weight(1f)) {
-                                step = step.copy(priority = it.toInt())
-                            }
-                            NumField("Repeat", step.repeat.toLong(), Modifier.weight(1f)) {
-                                step = step.copy(repeat = it.toInt().coerceAtLeast(1))
-                            }
+                        NumField("Repeat", step.repeat.toLong(), Modifier.fillMaxWidth()) {
+                            step = step.copy(repeat = it.toInt().coerceAtLeast(1))
                         }
-                        Text(
-                            "Priority decides order: 10 runs before 20. Equal numbers keep list order.",
-                            style = MaterialTheme.typography.bodySmall,
-                        )
                     }
                 }
             }

@@ -9,13 +9,13 @@ loop**. It can also look for things on screen (image recognition) and tap them. 
 game tasks such as tower-defense farming, but it works over any app.
 
 - **Record** inputs over any app; delays between them are captured automatically.
-- **Edit each step**: position, press/swipe time, delay, repeat count, priority, on/off, test-run.
-- **Priority order**: lower number runs first; reorder with the arrows.
-- **Two run modes**: *Sequence* (everything in priority order, looped) and *Reactive* (each cycle, run only
-  the highest-priority step whose condition is met).
+- **Edit each step**: position, press/swipe time, delay, repeat count, on/off, test-run.
+- **Order is priority**: steps run from the top of the list down; move a step with the menu. There are no numbers to manage.
+- **Two run modes**: *Sequence* (everything in list order, looped) and *Reactive* (each cycle, run only
+  the first step in the list whose condition is met).
 - **Image recognition**: `Tap image` and `Wait for image` steps using OpenCV template matching.
 - **Text recognition**: `Tap text` and `Wait for text` steps - just type the words to look for (on-device OCR).
-- **Rules**: always-watching image/text detections that react to pop-ups while your macro runs. Several can run at once; the highest priority wins.
+- **Rules**: always-watching image/text detections that react to pop-ups while your macro runs. Several can run at once; the one nearest the top wins.
 - **Floating RUN / REC / CROP bar** that stays on top of your game.
 - **Private**: no accounts, no analytics. Macros and screenshots stay on your phone. The only network use is an optional "is there a newer release?" check on GitHub.
 
@@ -69,15 +69,15 @@ Double-check the address and the network before sending; crypto payments can't b
 
 1. **New macro**, open it.
 2. Tap **Add step > Record inputs in the game** (or **Floating controls**), switch to your game, press **REC**, play the inputs you want, press **DONE**.
-3. Back in Ultrebo, tap a step to edit it (position, delays, priority, repeat...). Use the ⋮ menu on a step to test, move or delete it.
+3. Back in Ultrebo, tap a step to edit it (position, delays, repeat...). Use the ⋮ menu on a step to test, move or delete it.
 4. Press **Start** at the bottom (or **RUN** on the floating bar). **STOP** ends it. Closing the bar (X) also stops it.
 
 ### Run modes
 
 | Mode | Behaviour |
 | --- | --- |
-| **Sequence** | Runs every enabled step once per loop, lowest priority number first. Loops N times or forever, with a delay between loops. |
-| **Reactive** | Each cycle, runs only the first step (lowest priority number) whose condition is met, then starts over. Tap/Swipe steps are always met, so give them the highest number to act as a fallback. A visible *Wait for image* step holds back every step below it. |
+| **Sequence** | Runs every enabled step once per loop, from the top of the list down. Loops N times or forever, with a delay between loops. |
+| **Reactive** | Each cycle, runs only the first step in the list whose condition is met, then starts over. Tap/Swipe steps are always met, so put them at the bottom to act as a fallback. A visible *Wait for image* step holds back every step below it. |
 
 ### Always-on image watching
 
@@ -97,7 +97,7 @@ in the background for the whole run, even while your other steps are tapping. Wh
   waits, then the macro starts again from step 1.
 
 You can have as many rules as you like in one macro. **If two rules are on screen at the same moment, the one nearer the top
-of the list (lower priority number) is handled first**; use the menu on a rule to move it up or down. The other one is handled
+of the list is handled first**; use the menu on a rule to move it up or down. The other one is handled
 right after, if it is still showing. A macro with only rules just sits and watches until you press STOP. Rules need screen capture on.
 Macros made with an older version, where a step was marked "always watching", are converted into rules automatically.
 
