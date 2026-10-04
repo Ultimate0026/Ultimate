@@ -79,6 +79,14 @@ tapping. When its target appears (say an "I'm here" button) it can:
 If two rules are on screen at the same moment, **the one nearer the top of the list goes first**; the other is handled right after if it's still showing. Move a
 rule with its ⋮ menu. A macro with only rules just sits and watches until you press STOP. Rules need screen capture on.
 
+### Groups
+
+If several rules are really the same thing, such as three pictures of one pop-up, put them in a **group**: on the Rules tab tap **Groups**, make a group, then pick it in each rule.
+As soon as one rule in a group is found, the whole group stops being checked. By default that lasts until the macro stops. Set a number of seconds
+for a pop-up that comes back now and then, and the group starts looking again after that long. Switch on **Start checking again when the macro restarts** to wake a group up
+whenever the macro restarts: it finishes a loop and starts over (Sequence mode), or a rule set to restart the macro does it. In Reactive mode only a restarting rule counts,
+because a cycle isn't a restart. Rules with no group are unaffected, and groups are shared along with the rules.
+
 ### Sharing rules with other players
 
 Set your rules up once, then share them. On the **Rules** tab tap **Export rules** and choose where to save: that makes one

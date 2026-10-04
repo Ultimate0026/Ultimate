@@ -117,13 +117,15 @@ object MacroRunner {
         // Highest priority first: when several rules are on screen at once, the first in this list wins.
         val watchers = macro.orderedRules().filter { it.enabled && it.needsScreen }
 
+        val gate = GroupGate(macro.groups)
         val mainRef = AtomicReference<Job>()
-        fun startMain() { mainRef.set(launch { runMain(macro, mainSteps) }) }
+        fun startMain() { mainRef.set(launch { runMain(macro, mainSteps, gate) }) }
         startMain()
 
         val watcher = if (watchers.isEmpty()) null else launch {
             watchLoop(
                 watchers,
+                gate,
                 stopMain = { mainRef.get().cancelAndJoin() },
                 startMain = { startMain() },
             )
@@ -139,13 +141,14 @@ object MacroRunner {
         watcher?.cancel()
     }
 
-    private suspend fun runMain(macro: Macro, steps: List<Step>) {
+    private suspend fun runMain(macro: Macro, steps: List<Step>, gate: GroupGate) {
         if (steps.isEmpty()) awaitCancellation() // watchers only: keep running until stopped
         var round = 0
         while (currentCoroutineContext().isActive && (macro.loops == 0 || round < macro.loops)) {
             round++
             when (macro.mode) {
                 RunMode.SEQUENCE -> {
+                    if (round > 1) gate.restarted() // a new loop is a restart: groups set to re-enable wake up
                     for (step in steps) {
                         currentCoroutineContext().ensureActive()
                         runSequenceStep(step)
@@ -164,17 +167,20 @@ object MacroRunner {
      */
     private suspend fun watchLoop(
         watchers: List<Step>,
+        gate: GroupGate,
         stopMain: suspend () -> Unit,
         startMain: () -> Unit,
     ) {
         val lastSeen = HashMap<String, Long>()
         while (true) {
             delay(scanMs)
+            val active = watchers.filterNot { gate.isResting(it.groupId) }
+            if (active.isEmpty()) continue // every group is resting: nothing to look for
             val frame = captureFrame()
             var hit: Pair<Step, Target>? = null
             try {
                 val now = System.currentTimeMillis()
-                for (w in watchers) {
+                for (w in active) {
                     if (now - (lastSeen[w.id] ?: 0L) < WATCH_COOLDOWN_MS) continue
                     val match = findTarget(frame, w) ?: continue
                     hit = w to match
@@ -193,6 +199,9 @@ object MacroRunner {
             }
             if (step.onSeen == WatchAction.RESTART) startMain()
             lastSeen[step.id] = System.currentTimeMillis()
+            val group = gate.found(step.groupId)
+            if (group != null) _status.value = "Group ${group.name}: found, so the group stops looking"
+            if (step.onSeen == WatchAction.RESTART) gate.restarted() // the macro started over
         }
     }
 

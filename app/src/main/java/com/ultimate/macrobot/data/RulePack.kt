@@ -3,6 +3,7 @@
 
 package com.ultimate.macrobot.data
 
+import com.ultimate.macrobot.model.RuleGroup
 import com.ultimate.macrobot.model.Step
 import com.ultimate.macrobot.model.StepType
 import com.ultimate.macrobot.model.WatchAction
@@ -22,6 +23,9 @@ class RulePackException(message: String) : Exception(message)
 /** A rule read from a pack. Its picture (if any) is not saved anywhere yet. */
 class ImportedRule(val rule: Step, val png: ByteArray?)
 
+/** What a pack holds: its name, its rules, and the (new) groups those rules point at. */
+class PackContents(val name: String, val rules: List<ImportedRule>, val groups: List<RuleGroup>)
+
 @Serializable
 data class PackRule(
     val type: String,
@@ -34,6 +38,14 @@ data class PackRule(
     val onSeen: String = "CONTINUE",
     val tapOnSeen: Boolean = true,
     val image: String? = null,
+    val group: String? = null,
+)
+
+@Serializable
+data class PackGroup(
+    val name: String,
+    val pauseS: Int = 0,
+    val resetOnRestart: Boolean = false,
 )
 
 @Serializable
@@ -42,6 +54,7 @@ data class PackManifest(
     val platform: String = "",
     val appVersion: String = "",
     val name: String = "",
+    val groups: List<PackGroup> = emptyList(),
     val rules: List<PackRule> = emptyList(),
 )
 
@@ -65,6 +78,7 @@ object RulePack {
     /** Writes [rules] (picture and text rules only) to [out]. Returns how many were written. */
     fun write(
         rules: List<Step>,
+        groups: List<RuleGroup>,
         name: String,
         appVersion: String,
         readTemplate: (String) -> ByteArray?,
@@ -93,9 +107,12 @@ object RulePack {
                 onSeen = r.onSeen.name,
                 tapOnSeen = r.tapOnSeen,
                 image = member,
+                group = groups.firstOrNull { it.id == r.groupId }?.name,
             )
         }
-        val manifest = PackManifest(FORMAT, PLATFORM, appVersion, name, entries)
+        val used = entries.mapNotNull { it.group }.toSet()
+        val packGroups = groups.filter { it.name in used }.map { PackGroup(it.name, it.pauseS, it.resetOnRestart) }
+        val manifest = PackManifest(FORMAT, PLATFORM, appVersion, name, packGroups, entries)
         ZipOutputStream(out).use { zip ->
             zip.putNextEntry(ZipEntry("rules.json"))
             zip.write(json.encodeToString(manifest).toByteArray(Charsets.UTF_8))
@@ -113,7 +130,7 @@ object RulePack {
      * Reads a pack from [input]. [cleanPng] turns a picture's bytes into a re-encoded PNG, or null when the
      * bytes are not a usable image. Returns the pack's name and its rules; nothing is saved here.
      */
-    fun read(input: InputStream, cleanPng: (ByteArray) -> ByteArray?): Pair<String, List<ImportedRule>> {
+    fun read(input: InputStream, cleanPng: (ByteArray) -> ByteArray?): PackContents {
         val files = readEntries(input)
         val manifestBytes = files["rules.json"] ?: throw RulePackException("This file isn't a rule pack.")
         val manifest = try {
@@ -132,6 +149,16 @@ object RulePack {
             throw RulePackException("This rule pack has too many rules (the limit is $MAX_RULES).")
         }
 
+        val groupsByName = LinkedHashMap<String, RuleGroup>()
+        for (g in manifest.groups) {
+            val groupName = g.name.trim().take(60)
+            if (groupName.isEmpty() || groupsByName.containsKey(groupName.lowercase())) continue
+            groupsByName[groupName.lowercase()] = RuleGroup(
+                name = groupName,
+                pauseS = g.pauseS.coerceIn(0, 86400),
+                resetOnRestart = g.resetOnRestart,
+            )
+        }
         val imported = manifest.rules.map { item ->
             val isImage = when (item.type) {
                 "IMAGE" -> true
@@ -162,10 +189,13 @@ object RulePack {
                 watch = true,
                 onSeen = action,
                 tapOnSeen = item.tapOnSeen,
+                groupId = item.group?.let { groupsByName[it.trim().lowercase()]?.id },
             )
             ImportedRule(rule, png)
         }
-        return manifest.name.trim().take(80) to imported
+        val usedIds = imported.mapNotNull { it.rule.groupId }.toSet()
+        val usedGroups = groupsByName.values.filter { it.id in usedIds }
+        return PackContents(manifest.name.trim().take(80), imported, usedGroups)
     }
 
     /** Reads only `rules.json` and `images/N.png` entries, never more than the size limits allow. */

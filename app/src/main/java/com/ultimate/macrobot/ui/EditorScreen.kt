@@ -97,6 +97,7 @@ fun EditorScreen(
     val status by MacroRunner.status.collectAsState()
     var editing by remember { mutableStateOf<Step?>(null) }
     var editingRule by remember { mutableStateOf<Step?>(null) }
+    var showGroups by remember { mutableStateOf(false) }
     var tab by rememberSaveable { mutableStateOf(0) }
 
     fun toast(msg: String) = Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
@@ -147,6 +148,7 @@ fun EditorScreen(
                 val count = context.contentResolver.openOutputStream(uri)?.use { out ->
                     RulePack.write(
                         current.orderedRules(),
+                        current.groups,
                         current.name,
                         BuildConfig.VERSION_NAME,
                         { file -> runCatching { repo.templatePath(file).readBytes() }.getOrNull() },
@@ -166,11 +168,11 @@ fun EditorScreen(
         if (uri != null) {
             val saved = mutableListOf<File>()
             try {
-                val (_, imported) = context.contentResolver.openInputStream(uri)?.use { input ->
+                val pack = context.contentResolver.openInputStream(uri)?.use { input ->
                     RulePack.read(input, ::cleanPng)
                 } ?: throw RulePackException("Could not open the file.")
                 val first = (repo.get(macroId)?.nextRulePriority() ?: 10)
-                val rules = imported.mapIndexed { i, item ->
+                val rules = pack.rules.mapIndexed { i, item ->
                     var rule = item.rule.copy(priority = first + i * 10)
                     val bytes = item.png
                     if (bytes != null) {
@@ -182,7 +184,7 @@ fun EditorScreen(
                     }
                     rule
                 }
-                change { m -> m.copy(rules = m.rules + rules) }
+                change { m -> m.withImported(pack.groups, rules) }
                 toast(
                     "Added ${rules.size} rule" + (if (rules.size == 1) "" else "s") +
                         " at the bottom. Check what each rule does (they tap things on your screen) and test them.",
@@ -290,6 +292,7 @@ fun EditorScreen(
                     onTest = { MacroRunner.testStep(it.testable()) },
                     onEdit = { editingRule = it },
                     onDelete = { rule -> change { m -> m.copy(rules = m.rules.filter { it.id != rule.id }) } },
+                    onGroups = { showGroups = true },
                     onImport = { importLauncher.launch(arrayOf("*/*")) },
                     onExport = {
                         if (macro.rules.none { it.needsScreen }) {
@@ -332,7 +335,12 @@ fun EditorScreen(
             onSave = { upsertRule(it); editingRule = null },
             onPickImage = { draft -> startImagePick(draft, ::upsertRule) },
             rule = true,
+            groups = macro.groups,
         )
+    }
+
+    if (showGroups) {
+        GroupsDialog(macro = macro, onChange = ::change, onDismiss = { showGroups = false })
     }
 }
 
@@ -403,6 +411,7 @@ private fun RulesTab(
     onTest: (Step) -> Unit,
     onEdit: (Step) -> Unit,
     onDelete: (Step) -> Unit,
+    onGroups: () -> Unit,
     onImport: () -> Unit,
     onExport: () -> Unit,
 ) {
@@ -424,6 +433,9 @@ private fun RulesTab(
                             "the same time, the one nearer the top is handled first. Use the menu to move a rule up or down.",
                         style = MaterialTheme.typography.bodySmall,
                     )
+                    OutlinedButton(onClick = onGroups, modifier = Modifier.fillMaxWidth()) {
+                        Text("Groups (" + macro.groups.size + ")")
+                    }
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         OutlinedButton(onClick = onImport, modifier = Modifier.weight(1f)) { Text("Import rules") }
                         OutlinedButton(onClick = onExport, modifier = Modifier.weight(1f)) { Text("Export rules") }
@@ -435,7 +447,7 @@ private fun RulesTab(
             StepRow(
                 index = ordered.indexOf(rule) + 1,
                 step = rule,
-                detail = rule.ruleSummary(),
+                detail = macro.groupName(rule.groupId).let { if (it.isEmpty()) "" else "[$it] " } + rule.ruleSummary(),
                 onToggle = { onToggle(rule, it) },
                 onUp = { onMove(rule, -1) },
                 onDown = { onMove(rule, 1) },

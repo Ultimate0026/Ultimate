@@ -37,6 +37,19 @@ enum class WatchAction(val label: String) {
     RESTART("Restart macro from the start"),
 }
 
+/**
+ * Rules that share a group stop being checked together: once one of them is found, the rest rest too.
+ * They are checked again when [pauseS] seconds have passed (if it is above 0) or, with [resetOnRestart],
+ * when the macro restarts (it finishes a loop and starts over, or a rule restarts it).
+ */
+@Serializable
+data class RuleGroup(
+    val id: String = UUID.randomUUID().toString(),
+    val name: String = "Group",
+    val pauseS: Int = 0,
+    val resetOnRestart: Boolean = false,
+)
+
 @Serializable
 data class Step(
     val id: String = UUID.randomUUID().toString(),
@@ -69,6 +82,8 @@ data class Step(
     val onSeen: WatchAction = WatchAction.CONTINUE,
     /** Watchers: tap the image when it is seen. */
     val tapOnSeen: Boolean = true,
+    /** Rules: the [RuleGroup] this rule belongs to, if any. */
+    val groupId: String? = null,
 ) {
     val isImage: Boolean get() = type == StepType.WAIT_IMAGE || type == StepType.TAP_IMAGE
     val isText: Boolean get() = type == StepType.WAIT_TEXT || type == StepType.TAP_TEXT
@@ -132,7 +147,35 @@ data class Macro(
      * screen at once, the one with the lowest priority number is handled first.
      */
     val rules: List<Step> = emptyList(),
+    val groups: List<RuleGroup> = emptyList(),
 ) {
+    fun groupName(groupId: String?): String = groups.firstOrNull { it.id == groupId }?.name ?: ""
+
+    /** Brings in groups that came with imported rules (a group with a name you already have is reused) and adds the rules. */
+    fun withImported(newGroups: List<RuleGroup>, newRules: List<Step>): Macro {
+        val merged = groups.toMutableList()
+        val byName = HashMap<String, RuleGroup>()
+        merged.forEach { byName[it.name.lowercase()] = it }
+        val remap = HashMap<String, String>()
+        for (g in newGroups) {
+            val existing = byName[g.name.lowercase()]
+            if (existing == null) {
+                merged.add(g)
+                byName[g.name.lowercase()] = g
+                remap[g.id] = g.id
+            } else {
+                remap[g.id] = existing.id
+            }
+        }
+        val remapped = newRules.map { r -> r.copy(groupId = r.groupId?.let { remap[it] }) }
+        return copy(groups = merged, rules = rules + remapped)
+    }
+
+    fun withoutGroup(groupId: String): Macro = copy(
+        groups = groups.filter { it.id != groupId },
+        rules = rules.map { if (it.groupId == groupId) it.copy(groupId = null) else it },
+    )
+
     /** Steps in execution order: priority ascending, ties keep list order. */
     fun ordered(): List<Step> =
         steps.withIndex().sortedWith(compareBy({ it.value.priority }, { it.index })).map { it.value }
@@ -148,10 +191,13 @@ data class Macro(
     /** Older macros marked image/text steps "always watching" inside the step list; those are rules now. */
     fun migrated(): Macro {
         val moved = steps.filter { it.watch && it.needsScreen }
-        if (moved.isEmpty()) return this
-        return copy(
+        val base = if (moved.isEmpty()) this else copy(
             steps = steps.filterNot { it.watch && it.needsScreen },
             rules = rules + moved.map { it.copy(repeat = 1) },
         )
+        // A rule must not point at a group that no longer exists.
+        val known = base.groups.map { it.id }.toSet()
+        val fixed = base.rules.map { if (it.groupId != null && it.groupId !in known) it.copy(groupId = null) else it }
+        return if (fixed == base.rules) base else base.copy(rules = fixed)
     }
 }

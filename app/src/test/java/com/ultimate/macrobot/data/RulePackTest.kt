@@ -3,6 +3,7 @@
 
 package com.ultimate.macrobot.data
 
+import com.ultimate.macrobot.model.RuleGroup
 import com.ultimate.macrobot.model.Step
 import com.ultimate.macrobot.model.StepType
 import com.ultimate.macrobot.model.WatchAction
@@ -33,9 +34,9 @@ class RulePackTest {
             onSeen = WatchAction.RESTART, delayAfterMs = 900, threshold = 0.7f, tapOnSeen = false,
         )
 
-    private fun pack(rules: List<Step>): ByteArray {
+    private fun pack(rules: List<Step>, groups: List<RuleGroup> = emptyList()): ByteArray {
         val out = ByteArrayOutputStream()
-        RulePack.write(rules, "Tower farm", "0.1.5", { pic }, out)
+        RulePack.write(rules, groups, "Tower farm", "0.1.5", { pic }, out)
         return out.toByteArray()
     }
 
@@ -65,8 +66,11 @@ class RulePackTest {
     @Test
     fun exportThenImportKeepsTheRulesAndMakesNewOnes() {
         val original = listOf(text("AFK", "I'm here", 20), image("Claim", 10))
-        val (name, imported) = RulePack.read(ByteArrayInputStream(pack(original)), clean)
+        val contents = RulePack.read(ByteArrayInputStream(pack(original)), clean)
+        val name = contents.name
+        val imported = contents.rules
         assertEquals("Tower farm", name)
+        assertTrue(contents.groups.isEmpty())
         assertEquals(2, imported.size)
         val afk = imported[0].rule
         assertEquals("AFK", afk.name)
@@ -87,13 +91,13 @@ class RulePackTest {
     fun nothingToShare() {
         val out = ByteArrayOutputStream()
         try {
-            RulePack.write(emptyList(), "x", "0.1.5", { pic }, out)
+            RulePack.write(emptyList(), emptyList(), "x", "0.1.5", { pic }, out)
             fail("expected an error")
         } catch (e: RulePackException) {
             assertTrue(e.message!!.contains("no rules"))
         }
         try {
-            RulePack.write(listOf(image("A", 10)), "x", "0.1.5", { null }, out)
+            RulePack.write(listOf(image("A", 10)), emptyList(), "x", "0.1.5", { null }, out)
             fail("expected an error")
         } catch (e: RulePackException) {
             assertTrue(e.message!!.contains("missing"))
@@ -144,12 +148,41 @@ class RulePackTest {
     }
 
     @Test
+    fun groupsTravelWithTheRulesAndOnlyTheOnesInUse() {
+        val pop = RuleGroup(name = "Pop-ups", pauseS = 30, resetOnRestart = true)
+        val unused = RuleGroup(name = "Not used")
+        val rules = listOf(
+            text("a", "a", 10).copy(groupId = pop.id),
+            text("b", "b", 20).copy(groupId = pop.id),
+            text("c", "c", 30),
+        )
+        val contents = RulePack.read(ByteArrayInputStream(pack(rules, listOf(pop, unused))), clean)
+        assertEquals(listOf("Pop-ups"), contents.groups.map { it.name })
+        val group = contents.groups.single()
+        assertEquals(30, group.pauseS)
+        assertTrue(group.resetOnRestart)
+        assertEquals(listOf(group.id, group.id, null), contents.rules.map { it.rule.groupId })
+        assertNotEquals(pop.id, group.id) // new ids on import
+    }
+
+    @Test
+    fun junkGroupsInAPackAreIgnored() {
+        val body = """{"format":1,"platform":"android","groups":[{"name":"  "},{"name":"Real","pauseS":-4}],
+            "rules":[{"type":"TEXT","text":"a","group":"Real"},{"type":"TEXT","text":"b","group":"Missing"},{"type":"TEXT","text":"c"}]}"""
+        val contents = RulePack.read(ByteArrayInputStream(json(body)), clean)
+        assertEquals(listOf("Real"), contents.groups.map { it.name })
+        assertEquals(0, contents.groups.single().pauseS)
+        assertEquals(listOf(true, false, false), contents.rules.map { it.rule.groupId != null })
+    }
+
+    @Test
     fun hostileNumbersAndFieldsAreCleaned() {
         val body = """{"format":1,"platform":"android","name":"${"n".repeat(500)}","rules":[
             {"type":"TEXT","text":"hi","threshold":99,"delayAfterMs":-5,"durationMs":1000000000,
              "onSeen":"nonsense","name":"${"x".repeat(500)}","enabled":false,"id":"steal-this","templateFile":"../../etc/passwd"}]}"""
-        val (name, imported) = RulePack.read(ByteArrayInputStream(json(body)), clean)
-        val rule = imported.single().rule
+        val contents = RulePack.read(ByteArrayInputStream(json(body)), clean)
+        val name = contents.name
+        val rule = contents.rules.single().rule
         assertEquals(80, name.length)
         assertEquals(1.0f, rule.threshold, 0.0001f)
         assertEquals(0L, rule.delayAfterMs)

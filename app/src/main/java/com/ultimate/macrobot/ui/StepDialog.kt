@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.ultimate.macrobot.model.RuleGroup
 import com.ultimate.macrobot.model.Step
 import com.ultimate.macrobot.model.StepType
 import com.ultimate.macrobot.model.WatchAction
@@ -78,6 +79,7 @@ fun StepDialog(
     onSave: (Step) -> Unit,
     onPickImage: (Step) -> Unit,
     rule: Boolean = false,
+    groups: List<RuleGroup> = emptyList(),
 ) {
     var step by remember { mutableStateOf(initial) }
     var threshold by remember { mutableStateOf(initial.threshold.toString()) }
@@ -211,6 +213,23 @@ fun StepDialog(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text("Tap it when seen", Modifier.weight(1f))
                             Switch(checked = step.tapOnSeen, onCheckedChange = { step = step.copy(tapOnSeen = it) })
+                        }
+                        if (groups.isNotEmpty()) {
+                            Text("Group (when one rule in a group is found, the whole group stops being checked):")
+                            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                FilterChip(
+                                    selected = step.groupId == null,
+                                    onClick = { step = step.copy(groupId = null) },
+                                    label = { Text("No group") },
+                                )
+                                groups.forEach { g ->
+                                    FilterChip(
+                                        selected = step.groupId == g.id,
+                                        onClick = { step = step.copy(groupId = g.id) },
+                                        label = { Text(g.name) },
+                                    )
+                                }
+                            }
                         }
                     }
                     HorizontalDivider()
