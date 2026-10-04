@@ -58,7 +58,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 @Composable
-fun AppRoot(onGrantCapture: () -> Unit, onSendToBackground: () -> Unit) {
+fun AppRoot(
+    onGrantCapture: () -> Unit,
+    onSendToBackground: () -> Unit,
+    onRequestNotifications: () -> Unit,
+) {
     val repo = MacroBotApp.repo
     val context = LocalContext.current
     var editingId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -90,6 +94,7 @@ fun AppRoot(onGrantCapture: () -> Unit, onSendToBackground: () -> Unit) {
         HomeScreen(
             onOpen = { repo.setActive(it); editingId = it },
             onGrantCapture = onGrantCapture,
+            onRequestNotifications = onRequestNotifications,
         )
     } else {
         EditorScreen(
@@ -103,7 +108,11 @@ fun AppRoot(onGrantCapture: () -> Unit, onSendToBackground: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeScreen(onOpen: (String) -> Unit, onGrantCapture: () -> Unit) {
+private fun HomeScreen(
+    onOpen: (String) -> Unit,
+    onGrantCapture: () -> Unit,
+    onRequestNotifications: () -> Unit,
+) {
     val repo = MacroBotApp.repo
     val macros by repo.macros.collectAsState()
     var pendingDelete by remember { mutableStateOf<Macro?>(null) }
@@ -148,7 +157,7 @@ private fun HomeScreen(onOpen: (String) -> Unit, onGrantCapture: () -> Unit) {
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            item { SetupCard(onGrantCapture) }
+            item { SetupSection(onGrantCapture, onRequestNotifications) }
             if (macros.isEmpty()) {
                 item { Text("No macros yet. Create one, then record inputs or add steps by hand.") }
             }
@@ -169,59 +178,6 @@ private fun HomeScreen(onOpen: (String) -> Unit, onGrantCapture: () -> Unit) {
                 }
             }
             item { Spacer(Modifier.height(72.dp)) }
-        }
-    }
-}
-
-@Composable
-fun SetupCard(onGrantCapture: () -> Unit) {
-    val context = LocalContext.current
-    // Service state changes outside Compose, so poll it.
-    val tick by produceState(0) { while (true) { delay(1000); value++ } }
-    val accessibilityOn = tick >= 0 && MacroAccessibilityService.instance != null
-    val captureOn = tick >= 0 && ScreenCaptureService.instance?.isReady == true
-
-    Card(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(
-                if (accessibilityOn) "Ready" else "Setup needed",
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Text(
-                "Accessibility ${if (accessibilityOn) "on" else "off"} - " +
-                    "Screen capture ${if (captureOn) "on" else "off"}",
-                style = MaterialTheme.typography.bodySmall,
-            )
-            if (!accessibilityOn) {
-                Text(
-                    "Turn on MacroBot under Accessibility > Downloaded/Installed apps. If Android says " +
-                        "\"restricted setting\", open Settings > Apps > MacroBot > menu > " +
-                        "Allow restricted settings first.",
-                    style = MaterialTheme.typography.bodySmall,
-                )
-                OutlinedButton(onClick = {
-                    context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                }) { Text("Open accessibility settings") }
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = {
-                    val svc = MacroAccessibilityService.instance
-                    if (svc == null) {
-                        Toast.makeText(context, "Enable the accessibility service first", Toast.LENGTH_SHORT).show()
-                    } else {
-                        svc.overlay.showBubble()
-                    }
-                }) { Text("Floating controls") }
-                if (captureOn) {
-                    OutlinedButton(onClick = { ScreenCaptureService.stop(context) }) { Text("Stop capture") }
-                } else {
-                    OutlinedButton(onClick = onGrantCapture) { Text("Grant screen capture") }
-                }
-            }
-            Text(
-                "Screen capture is only needed for image and text steps.",
-                style = MaterialTheme.typography.bodySmall,
-            )
         }
     }
 }

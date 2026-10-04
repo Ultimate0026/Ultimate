@@ -26,11 +26,13 @@ game tasks such as tower-defense farming, but it works over any app.
 
 1. Open the [latest release](../../releases/latest) on your phone and download `MacroBot-*.apk`.
 2. Tap the file and allow "Install unknown apps" for your browser/Files app when Android asks.
-3. Open MacroBot and follow the **Setup** card:
-   1. **Accessibility service** - needed to perform taps. Settings > Accessibility > MacroBot > On.
-      On Android 13+ you may first need Settings > Apps > MacroBot > ⋮ > **Allow restricted settings**.
-   2. **Screen capture** - only needed for image steps. Tap *Grant screen capture*.
-   3. **Floating controls** - shows the RUN / REC / CROP bar.
+3. Open MacroBot. A **Get started** guide on the home screen walks you through the permissions it needs:
+   1. **Accessibility service** - needed to perform taps. The guide opens the right settings page. On
+      Android 13+ you may first need **Allow restricted settings** (the guide has a button for that too).
+   2. **Notifications** (Android 13+) - for the small "screen capture is on" notification.
+   3. **Screen capture** (optional) - only for image and text steps; grant it from the guide or the home screen.
+
+   The guide checks each permission itself and disappears once the required ones are on.
 
 Requires Android 8.0 (API 26) or newer.
 
