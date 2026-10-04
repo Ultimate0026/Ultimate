@@ -154,6 +154,7 @@ class OverlayController(private val service: MacroAccessibilityService) {
     }
 
     fun hideAll() {
+        MacroRunner.stop()
         stopRecording()
         removePicker()
         MacroRunner.setPendingTemplate(null)

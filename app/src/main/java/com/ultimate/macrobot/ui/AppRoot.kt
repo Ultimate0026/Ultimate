@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -34,12 +36,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.ultimate.macrobot.BuildConfig
 import com.ultimate.macrobot.MacroBotApp
 import com.ultimate.macrobot.model.Macro
 import com.ultimate.macrobot.service.MacroAccessibilityService
@@ -73,6 +77,18 @@ fun AppRoot(onGrantCapture: () -> Unit, onSendToBackground: () -> Unit) {
 private fun HomeScreen(onOpen: (String) -> Unit, onGrantCapture: () -> Unit) {
     val repo = MacroBotApp.repo
     val macros by repo.macros.collectAsState()
+    var pendingDelete by remember { mutableStateOf<Macro?>(null) }
+    pendingDelete?.let { m ->
+        AlertDialog(
+            onDismissRequest = { pendingDelete = null },
+            title = { Text("Delete \"${m.name}\"?") },
+            text = { Text("The macro and its saved images will be removed. This cannot be undone.") },
+            confirmButton = {
+                TextButton(onClick = { repo.delete(m.id); pendingDelete = null }) { Text("Delete") }
+            },
+            dismissButton = { TextButton(onClick = { pendingDelete = null }) { Text("Cancel") } },
+        )
+    }
     Scaffold(
         topBar = { TopAppBar(title = { Text("MacroBot") }) },
         floatingActionButton = {
@@ -106,12 +122,13 @@ private fun HomeScreen(onOpen: (String) -> Unit, onGrantCapture: () -> Unit) {
                             Text(m.name, style = MaterialTheme.typography.titleMedium)
                             Text("${m.steps.size} steps - ${m.mode.label}")
                         }
-                        IconButton(onClick = { repo.delete(m.id) }) {
+                        IconButton(onClick = { pendingDelete = m }) {
                             Icon(Icons.Default.Delete, contentDescription = "Delete macro")
                         }
                     }
                 }
             }
+            item { AboutCard() }
             item { Spacer(Modifier.height(72.dp)) }
         }
     }
@@ -157,6 +174,26 @@ fun SetupCard(onGrantCapture: () -> Unit) {
                     svc.overlay.showBubble()
                 }
             }) { Text("Show floating controls") }
+        }
+    }
+}
+
+@Composable
+private fun AboutCard() {
+    Card(Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text("About", style = MaterialTheme.typography.titleMedium)
+            Text(
+                "MacroBot ${BuildConfig.VERSION_NAME} - records and replays taps and swipes, and can " +
+                    "react to images on screen. Everything stays on your device: the app has no " +
+                    "internet permission and collects nothing.",
+                style = MaterialTheme.typography.bodySmall,
+            )
+            Text(
+                "Responsible use: many games forbid automation in their terms of service and may " +
+                    "suspend accounts that use it. You are responsible for how you use this app.",
+                style = MaterialTheme.typography.bodySmall,
+            )
         }
     }
 }

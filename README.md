@@ -1,50 +1,86 @@
 # MacroBot
 
-Android app that records taps and swipes, lets you edit every step, and replays them in a loop —
-built for repetitive game tasks such as tower-defense farming. It can also look for things on screen
-(image recognition) and tap them.
+[![CI](https://github.com/Ultimate0026/Ultimate/actions/workflows/ci.yml/badge.svg)](https://github.com/Ultimate0026/Ultimate/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-> Android only. iOS does not allow an app to tap or read the screen of another app.
-> Automating a game may be against that game's terms of service — use at your own risk.
+An Android app that **records your taps and swipes, lets you edit every step, and replays them in a
+loop**. It can also look for things on screen (image recognition) and tap them. Built for repetitive
+game tasks such as tower-defense farming, but it works over any app.
 
-## Features
+- **Record** inputs over any app; delays between them are captured automatically.
+- **Edit each step**: position, press/swipe time, delay, repeat count, priority, on/off, test-run.
+- **Priority order**: lower number runs first; reorder with the arrows.
+- **Two run modes**: *Sequence* (everything in priority order, looped) and *Reactive* (each cycle, run only
+  the highest-priority step whose condition is met).
+- **Image recognition**: `Tap image` and `Wait for image` steps using OpenCV template matching.
+- **Floating RUN / REC / CROP bar** that stays on top of your game.
+- **Private**: no internet permission, no accounts, no analytics. Macros stay on your phone.
 
-- **Record** taps and swipes over any app. Inputs are passed through to the game while recording so
-  the game state follows along. Delays between inputs are captured automatically.
-- **Edit each step**: position, press/swipe time, delay after, repeat count, priority, on/off, test-run it.
-- **Priority order**: every step has a priority number (lower runs first). Reorder with the arrows.
-- **Two run modes**
-  - *Sequence*: run all steps in priority order, loop N times or forever.
-  - *Reactive*: every cycle, run only the highest-priority step whose condition is met
-    (e.g. "if the *Start wave* button is visible, tap it", else fall back to a plain tap).
-- **Image recognition** (OpenCV template matching): `Tap image` and `Wait for image` steps.
-  Drag a box on the live screen to capture the template; tune the match threshold per step.
-- **Floating controls** (RUN / REC / CROP) that sit on top of your game.
+> **Android only.** iOS does not let an app tap or read other apps.
+>
+> **Use responsibly.** Many games, including Roblox experiences, forbid automation in their terms of
+> service and may suspend accounts that use it. You are responsible for how you use this app.
 
-## Build
+## Install
 
-CI builds a debug APK on every push: GitHub → Actions → *Build APK* → download the
-`MacroBot-debug-apk` artifact and install it on your phone.
+1. Open the [latest release](../../releases/latest) on your phone and download `MacroBot-*.apk`.
+2. Tap the file and allow "Install unknown apps" for your browser/Files app when Android asks.
+3. Open MacroBot and follow the **Setup** card:
+   1. **Accessibility service** - needed to perform taps. Settings > Accessibility > MacroBot > On.
+      On Android 13+ you may first need Settings > Apps > MacroBot > ⋮ > **Allow restricted settings**.
+   2. **Screen capture** - only needed for image steps. Tap *Grant screen capture*.
+   3. **Floating controls** - shows the RUN / REC / CROP bar.
 
-Locally: open the folder in Android Studio, or run `./gradlew assembleDebug`.
+Requires Android 8.0 (API 26) or newer.
 
-## First-time setup on the phone
+## Quick start
 
-1. Install the APK.
-2. **Accessibility service**: Settings → Accessibility → MacroBot → On.
-   (On Android 13+ for sideloaded apps first do Settings → Apps → MacroBot → ⋮ → *Allow restricted settings*.)
-3. **Screen capture** (only needed for image steps): tap *Grant screen capture* in the app.
-4. Create a macro, tap *Floating controls*, open your game, press **REC**, play, press **DONE**.
-5. Press **RUN** (or *Start* in the app). **STOP** ends it.
+1. **New macro**, open it.
+2. Tap **Floating controls**, switch to your game, press **REC**, play the inputs you want, press **DONE**.
+3. Back in MacroBot, tweak the steps (delays, priority, repeat...). Use the ▶ button on a step to test it.
+4. Press **Start** (or **RUN** on the floating bar). **STOP** ends it. Closing the bar (X) also stops it.
 
-## Image steps
+### Run modes
 
-1. Add a step of type *Tap image* or *Wait for image*, tap *Pick image from screen*.
-2. Open your game, press **CROP** on the floating bar, drag a box around the target (a button, an icon).
-3. Reopen the app; the thumbnail shows on the step. Matching is done at the screen resolution the
-   template was captured at, so capture on the same phone/orientation you will run on.
+| Mode | Behaviour |
+| --- | --- |
+| **Sequence** | Runs every enabled step once per loop, lowest priority number first. Loops N times or forever, with a delay between loops. |
+| **Reactive** | Each cycle, runs only the first step (lowest priority number) whose condition is met, then starts over. Tap/Swipe steps are always met, so give them the highest number to act as a fallback. A visible *Wait for image* step holds back every step below it. |
 
-## Layout
+### Image steps
+
+1. Add a **Tap image** or **Wait for image** step, press *Pick image from screen*.
+2. Switch to your game, press **CROP**, and drag a box around the target (a button or icon).
+3. Reopen MacroBot - a thumbnail appears on the step. Raise the match threshold if it taps the wrong
+   thing, lower it if it misses.
+
+Tips: crop tightly around something distinctive; capture on the same phone and orientation you will run
+on (matching is done at screen resolution); avoid regions with animated or changing numbers.
+
+## Troubleshooting
+
+| Problem | Fix |
+| --- | --- |
+| Accessibility option is greyed out | Settings > Apps > MacroBot > ⋮ > *Allow restricted settings*, then retry. |
+| Taps land in the wrong place | Re-record after changing screen rotation or display size; coordinates are absolute. |
+| Image is never found | Re-crop it, lower the threshold (try 0.75), and make sure screen capture is ON. |
+| Image taps the wrong thing | Crop a more distinctive area and raise the threshold (0.9+). |
+| Macro stops by itself | Android may have turned the accessibility service off (battery savers do this). Re-enable it and exclude MacroBot from battery optimisation. |
+| Games detect and block it | Some games block gestures from accessibility services. Nothing here works around that. |
+
+## Privacy
+
+MacroBot declares no `INTERNET` permission, so it cannot send anything off your phone. Macros and cropped
+images are stored in the app's private storage. Screen capture is only used for matching images and a
+captured frame is never saved except the region you crop.
+
+## Building from source
+
+```
+./gradlew testDebugUnitTest assembleDebug
+```
+Open the folder in Android Studio, or let GitHub Actions build it: every push uploads a
+`MacroBot-debug-apk` artifact (sign-in required to download).
 
 ```
 app/src/main/java/com/ultimate/macrobot/
@@ -54,3 +90,23 @@ app/src/main/java/com/ultimate/macrobot/
   service/  MacroAccessibilityService (gestures + overlays), OverlayController, ScreenCaptureService
   ui/       Compose screens: Home, Editor, StepDialog
 ```
+
+## Releasing (maintainers)
+
+1. On GitHub: **Releases > Draft a new release**, create a tag such as `v1.0.0`, **Publish**.
+2. The *Release APK* workflow builds the app and attaches `MacroBot-v1.0.0.apk` to that release.
+
+**Signing:** Android only installs an update over an existing install if both APKs have the same signing
+key. Create a key once and store it as repository secrets (Settings > Secrets and variables > Actions):
+
+```
+keytool -genkeypair -v -keystore release.keystore -alias macrobot -keyalg RSA -keysize 4096 -validity 36500
+base64 -w0 release.keystore      # paste as KEYSTORE_BASE64
+```
+Secrets: `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`. Keep the keystore and passwords
+backed up and **never commit them**. Without the secrets the workflow still builds, but signs with the
+debug key, so users would have to uninstall before moving to a properly signed build.
+
+## License
+
+[MIT](LICENSE)
