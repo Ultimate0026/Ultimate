@@ -14,6 +14,6 @@ labels: bug
 
 **Phone and Android version** (e.g. Pixel 7, Android 14):
 
-**MacroBot version** (bottom of the home screen):
+**Ultrebo version** (bottom of the home screen):
 
 **Macro mode and step types involved** (Sequence/Reactive, Tap, Tap image, ...):

@@ -64,7 +64,7 @@ object MacroRunner {
         val macro = MacroBotApp.repo.active() ?: return "Open a macro first."
         val enabled = macro.steps.filter { it.enabled }
         if (enabled.isEmpty()) return "This macro has no enabled steps."
-        if (MacroAccessibilityService.instance == null) return "Enable the MacroBot accessibility service first."
+        if (MacroAccessibilityService.instance == null) return "Enable the Ultrebo accessibility service first."
         if (enabled.any { it.needsScreen }) {
             if (enabled.any { it.isImage } && !ImageMatcher.ensureLoaded()) return "Image recognition failed to load."
             if (ScreenCaptureService.instance?.isReady != true) return "Grant screen capture first (needed for image and text steps)."

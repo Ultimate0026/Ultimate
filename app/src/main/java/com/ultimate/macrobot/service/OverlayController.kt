@@ -290,7 +290,7 @@ class OverlayController(private val service: MacroAccessibilityService) {
                 return@launch
             }
             MacroRunner.setPendingTemplate(null)
-            toast("Image saved - reopen MacroBot")
+            toast("Image saved - reopen Ultrebo")
         }
     }
 

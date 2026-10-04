@@ -88,7 +88,7 @@ fun AppRoot(
             title = { Text("Update available") },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("MacroBot ${u.version} is out (you have ${BuildConfig.VERSION_NAME}).")
+                    Text("Ultrebo ${u.version} is out (you have ${BuildConfig.VERSION_NAME}).")
                     if (u.apkUrl != null) {
                         Text(
                             "Update now downloads it and installs it over this app, keeping your macros. " +
@@ -106,7 +106,7 @@ fun AppRoot(
                         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(u.url)))
                         update = null
                     } else if (!context.packageManager.canRequestPackageInstalls()) {
-                        updateError = "First allow MacroBot to install updates on the page that just opened, " +
+                        updateError = "First allow Ultrebo to install updates on the page that just opened, " +
                             "then come back and tap Update now again."
                         context.startActivity(
                             Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:${context.packageName}")),
@@ -178,7 +178,7 @@ private fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("MacroBot") },
+                title = { Text("Ultrebo") },
                 actions = {
                     IconButton(onClick = { showAbout = true }) {
                         Icon(Icons.Default.Info, contentDescription = "About and privacy")
@@ -232,7 +232,7 @@ private fun HomeScreen(
 private fun AboutDialog(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("About MacroBot ${BuildConfig.VERSION_NAME}") },
+        title = { Text("About Ultrebo ${BuildConfig.VERSION_NAME}") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(

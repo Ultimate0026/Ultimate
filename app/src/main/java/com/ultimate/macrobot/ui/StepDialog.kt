@@ -149,7 +149,7 @@ fun StepDialog(
                             Text(if (step.templateFile == null) "Pick image from screen" else "Re-pick image from screen")
                         }
                         Text(
-                            "MacroBot goes to the background. Open your game, press CROP on the floating " +
+                            "Ultrebo goes to the background. Open your game, press CROP on the floating " +
                                 "bar and drag a box around the button or icon. A thumbnail then shows on the step.",
                             style = MaterialTheme.typography.bodySmall,
                         )

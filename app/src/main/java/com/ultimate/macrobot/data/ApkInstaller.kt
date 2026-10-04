@@ -34,14 +34,14 @@ object ApkInstaller {
         try {
             val dir = File(context.cacheDir, "update").apply { mkdirs() }
             dir.listFiles()?.forEach { it.delete() }
-            val file = File(dir, "MacroBot-${update.version}.apk")
+            val file = File(dir, "Ultrebo-${update.version}.apk")
 
             val digest = MessageDigest.getInstance("SHA-256")
             val conn = URL(apkUrl).openConnection() as HttpURLConnection
             try {
                 conn.connectTimeout = 15000
                 conn.readTimeout = 30000
-                conn.setRequestProperty("User-Agent", "MacroBot")
+                conn.setRequestProperty("User-Agent", "Ultrebo")
                 if (conn.responseCode != 200) return@withContext "Download failed (HTTP ${conn.responseCode})."
                 val total = conn.contentLengthLong.takeIf { it > 0 } ?: update.sizeBytes
                 var read = 0L

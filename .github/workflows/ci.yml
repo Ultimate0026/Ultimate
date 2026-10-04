@@ -20,5 +20,5 @@ jobs:
         run: ./gradlew assembleDebug --stacktrace
       - uses: actions/upload-artifact@v4
         with:
-          name: MacroBot-debug-apk
+          name: Ultrebo-debug-apk
           path: app/build/outputs/apk/debug/*.apk

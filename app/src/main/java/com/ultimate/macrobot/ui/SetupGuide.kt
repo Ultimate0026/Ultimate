@@ -37,7 +37,7 @@ import kotlinx.coroutines.delay
 
 /** What is switched on right now. Refreshed every second because Android settings change outside the app. */
 data class SetupState(val accessibility: Boolean, val notifications: Boolean, val capture: Boolean) {
-    /** The permissions MacroBot needs to run at all; screen capture is only for image and text steps. */
+    /** The permissions Ultrebo needs to run at all; screen capture is only for image and text steps. */
     val requiredDone: Boolean get() = accessibility && notifications
 }
 
@@ -94,9 +94,9 @@ private fun TutorialCard(state: SetupState, onGrantCapture: () -> Unit, onReques
 
             TutorialStep(1, "Turn on the accessibility service", state.accessibility, current == 1) {
                 Text(
-                    "This lets MacroBot perform your taps and swipes.\n" +
+                    "This lets Ultrebo perform your taps and swipes.\n" +
                         "1. Tap the button below.\n" +
-                        "2. Open Installed apps (or Downloaded apps) and tap MacroBot.\n" +
+                        "2. Open Installed apps (or Downloaded apps) and tap Ultrebo.\n" +
                         "3. Turn it on and tap Allow.",
                     style = MaterialTheme.typography.bodySmall,
                 )
@@ -125,7 +125,7 @@ private fun TutorialCard(state: SetupState, onGrantCapture: () -> Unit, onReques
             if (needsNotificationPermission) {
                 TutorialStep(2, "Allow notifications", state.notifications, current == 2) {
                     Text(
-                        "MacroBot shows a small notification while screen capture is on. " +
+                        "Ultrebo shows a small notification while screen capture is on. " +
                             "Android 13 and newer asks for your OK first. If nothing happens when you tap, " +
                             "the button opens notification settings - turn notifications on there.",
                         style = MaterialTheme.typography.bodySmall,
@@ -138,7 +138,7 @@ private fun TutorialCard(state: SetupState, onGrantCapture: () -> Unit, onReques
             Text("Optional: screen capture", style = MaterialTheme.typography.titleSmall)
             Text(
                 if (state.capture) "On - image and text steps are ready."
-                else "Only needed for image and text steps. Android asks again each time MacroBot is restarted.",
+                else "Only needed for image and text steps. Android asks again each time Ultrebo is restarted.",
                 style = MaterialTheme.typography.bodySmall,
             )
             if (!state.capture) {

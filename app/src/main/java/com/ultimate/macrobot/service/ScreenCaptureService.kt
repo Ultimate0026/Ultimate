@@ -40,7 +40,7 @@ class ScreenCaptureService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         createChannel()
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL)
-            .setContentTitle("MacroBot")
+            .setContentTitle("Ultrebo")
             .setContentText("Screen capture is on for image recognition")
             .setSmallIcon(android.R.drawable.ic_menu_camera)
             .setOngoing(true)

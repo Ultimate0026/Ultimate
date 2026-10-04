@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MacroBot - record taps, replay them, react to what's on screen</title>
-<meta name="description" content="MacroBot is a free, open-source Android app that records and replays taps and swipes, and can find images and text on screen. Here is exactly what it does and why it asks for each permission.">
-<meta property="og:title" content="MacroBot">
+<title>Ultrebo - record taps, replay them, react to what's on screen</title>
+<meta name="description" content="Ultrebo is a free, open-source Android app that records and replays taps and swipes, and can find images and text on screen. Here is exactly what it does and why it asks for each permission.">
+<meta property="og:title" content="Ultrebo">
 <meta property="og:description" content="Record taps, replay them, and react to images and text on screen. Open source, nothing leaves your phone.">
 <style>
   :root {
@@ -60,7 +60,7 @@
 <div class="wrap">
 
 <header class="hero">
-  <h1>MacroBot</h1>
+  <h1>Ultrebo</h1>
   <p class="lead">Record your taps and swipes, replay them on a loop, and let your phone react when a button
   or some text shows up on screen. Built for repetitive game tasks like tower-defense farming.</p>
   <div class="buttons">
@@ -73,9 +73,9 @@
 <section>
   <h2>What it does</h2>
   <div class="grid">
-    <div class="card"><h3>Record</h3><p>Play normally with a small floating bar on top. MacroBot saves each tap and swipe with the pauses between them.</p></div>
+    <div class="card"><h3>Record</h3><p>Play normally with a small floating bar on top. Ultrebo saves each tap and swipe with the pauses between them.</p></div>
     <div class="card"><h3>Edit every step</h3><p>Change positions, delays, repeats and order. Test a single step. Switch steps on and off.</p></div>
-    <div class="card"><h3>Find images</h3><p>Crop a button or icon from your screen and MacroBot taps it whenever it appears.</p></div>
+    <div class="card"><h3>Find images</h3><p>Crop a button or icon from your screen and Ultrebo taps it whenever it appears.</p></div>
     <div class="card"><h3>Find text</h3><p>Type the words to look for (like "I'm here") and it taps them when they show up.</p></div>
     <div class="card"><h3>Pop-up watcher</h3><p>Keeps checking in the background while your macro runs. Pause and carry on, or restart the macro, when a pop-up appears.</p></div>
     <div class="card"><h3>You choose how often</h3><p>Set how often it looks at the screen, from several times a second to every few seconds, to save battery.</p></div>
@@ -84,26 +84,26 @@
 
 <section id="permissions">
   <h2>Why each permission?</h2>
-  <p>MacroBot asks for a few sensitive permissions because tapping for you needs them. Here is exactly what each one
+  <p>Ultrebo asks for a few sensitive permissions because tapping for you needs them. Here is exactly what each one
   is used for, and nothing else.</p>
   <table>
     <thead><tr><th>Permission</th><th>What it is used for</th></tr></thead>
     <tbody>
       <tr><td class="perm">Accessibility service</td>
-        <td>This is how every auto-clicker app taps for you. MacroBot uses it only to perform the taps and swipes
+        <td>This is how every auto-clicker app taps for you. Ultrebo uses it only to perform the taps and swipes
         in your macros and to show its floating RUN / REC bar. It does not ask for permission to read the content of other apps.</td></tr>
       <tr><td class="perm">Screen capture <span class="tag">optional</span></td>
-        <td>Only needed for image and text steps, so MacroBot can look at the screen and find your target. Frames are
+        <td>Only needed for image and text steps, so Ultrebo can look at the screen and find your target. Frames are
         checked in memory on your phone and thrown away. The only picture ever saved is the small region you crop yourself.
         Android asks you again each time the app restarts.</td></tr>
       <tr><td class="perm">Notifications</td>
-        <td>Android requires a visible notice while screen capture is on. That is the only notification MacroBot shows.</td></tr>
+        <td>Android requires a visible notice while screen capture is on. That is the only notification Ultrebo shows.</td></tr>
       <tr><td class="perm">Internet</td>
         <td>Used to ask GitHub whether a newer version exists, and to download it if you tap Update. You can turn the check off.
         The text-recognition library (Google ML Kit) runs on your phone, but it may send anonymous usage statistics to Google,
         never your screen content.</td></tr>
       <tr><td class="perm">Install unknown apps <span class="tag">optional</span></td>
-        <td>Only used by the in-app updater, to install MacroBot's own new version. Android only accepts an update
+        <td>Only used by the in-app updater, to install Ultrebo's own new version. Android only accepts an update
         signed with the same key as the app you have.</td></tr>
     </tbody>
   </table>
@@ -123,9 +123,9 @@
 <section>
   <h2>Install</h2>
   <ol>
-    <li>On your phone, open the <a href="https://github.com/Ultimate0026/Ultimate/releases/latest">latest release</a> and download <code>MacroBot-….apk</code>.</li>
+    <li>On your phone, open the <a href="https://github.com/Ultimate0026/Ultimate/releases/latest">latest release</a> and download <code>Ultrebo-….apk</code>.</li>
     <li>Tap the file and allow "Install unknown apps" for your browser or Files app when Android asks.</li>
-    <li>Open MacroBot. The <strong>Get started</strong> guide walks you through the permissions and disappears once they are on.</li>
+    <li>Open Ultrebo. The <strong>Get started</strong> guide walks you through the permissions and disappears once they are on.</li>
     <li>If Android says a setting is "restricted", the guide shows how to allow it (Android blocks apps installed outside the Play Store until you do).</li>
   </ol>
 </section>
@@ -135,19 +135,19 @@
   <details><summary>Is it safe?</summary>
     <p>Everything it does is described above and in the open-source code. It has no ads or accounts and does not upload your macros or screenshots. As with any app, only install it if you are comfortable with that.</p></details>
   <details><summary>Could I get banned from a game for using it?</summary>
-    <p>Possibly. Many games forbid automation in their rules and may suspend accounts that use it. MacroBot does not hide itself or avoid detection. You are responsible for how you use it.</p></details>
+    <p>Possibly. Many games forbid automation in their rules and may suspend accounts that use it. Ultrebo does not hide itself or avoid detection. You are responsible for how you use it.</p></details>
   <details><summary>Why does it need the accessibility service?</summary>
     <p>It is the only official way an Android app can tap and swipe on other apps. Every auto-clicker uses it.</p></details>
   <details><summary>Does it need root?</summary>
     <p>No.</p></details>
   <details><summary>Is it on the Play Store?</summary>
-    <p>No. Apps that automate taps are very restricted there, so MacroBot is distributed from GitHub.</p></details>
+    <p>No. Apps that automate taps are very restricted there, so Ultrebo is distributed from GitHub.</p></details>
   <details><summary>Something is broken. Where do I report it?</summary>
     <p>Open an issue on <a href="https://github.com/Ultimate0026/Ultimate/issues">GitHub</a> and say your phone model and Android version.</p></details>
 </section>
 
 <footer>
-  <p class="small">MacroBot is MIT-licensed open-source software. Many games forbid automation in their terms of service;
+  <p class="small">Ultrebo is MIT-licensed open-source software. Many games forbid automation in their terms of service;
   you are responsible for how you use this app. Not affiliated with Roblox or any game publisher.</p>
 </footer>
 

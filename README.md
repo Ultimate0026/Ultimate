@@ -1,4 +1,4 @@
-# MacroBot
+# Ultrebo
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -24,9 +24,9 @@ game tasks such as tower-defense farming, but it works over any app.
 
 ## Install
 
-1. Open the [latest release](../../releases/latest) on your phone and download `MacroBot-*.apk`.
+1. Open the [latest release](../../releases/latest) on your phone and download `Ultrebo-*.apk`.
 2. Tap the file and allow "Install unknown apps" for your browser/Files app when Android asks.
-3. Open MacroBot. A **Get started** guide on the home screen walks you through the permissions it needs:
+3. Open Ultrebo. A **Get started** guide on the home screen walks you through the permissions it needs:
    1. **Accessibility service** - needed to perform taps. The guide opens the right settings page. On
       Android 13+ you may first need **Allow restricted settings** (the guide has a button for that too).
    2. **Notifications** (Android 13+) - for the small "screen capture is on" notification.
@@ -38,7 +38,7 @@ Requires Android 8.0 (API 26) or newer.
 
 ## Why each permission?
 
-MacroBot asks for a few sensitive permissions because tapping for you needs them. Each one is used for exactly this and nothing else:
+Ultrebo asks for a few sensitive permissions because tapping for you needs them. Each one is used for exactly this and nothing else:
 
 | Permission | What it is used for |
 | --- | --- |
@@ -46,13 +46,13 @@ MacroBot asks for a few sensitive permissions because tapping for you needs them
 | **Screen capture** (optional) | Only for image and text steps. Frames are checked in memory on your phone and discarded; the only image saved is the region you crop. Android asks again each time the app restarts. |
 | **Notifications** | Android requires a visible notice while screen capture is on. |
 | **Internet** | Asking GitHub if a newer release exists (can be turned off) and downloading it if you tap Update. Google ML Kit, used for text recognition, runs on the phone but may send anonymous usage statistics. |
-| **Install unknown apps** (optional) | Only for the in-app updater, to install MacroBot's own update. Android rejects updates signed with a different key. |
+| **Install unknown apps** (optional) | Only for the in-app updater, to install Ultrebo's own update. Android rejects updates signed with a different key. |
 
 ## Quick start
 
 1. **New macro**, open it.
 2. Tap **Add step > Record inputs in the game** (or **Floating controls**), switch to your game, press **REC**, play the inputs you want, press **DONE**.
-3. Back in MacroBot, tap a step to edit it (position, delays, priority, repeat...). Use the ⋮ menu on a step to test, move or delete it.
+3. Back in Ultrebo, tap a step to edit it (position, delays, priority, repeat...). Use the ⋮ menu on a step to test, move or delete it.
 4. Press **Start** at the bottom (or **RUN** on the floating bar). **STOP** ends it. Closing the bar (X) also stops it.
 
 ### Run modes
@@ -67,7 +67,7 @@ MacroBot asks for a few sensitive permissions because tapping for you needs them
 Set a macro to **Reactive** mode with *Tap image* steps and it keeps watching the screen until you press STOP,
 tapping whenever a target appears. *Check screen for images every (ms)* controls how often it looks:
 `10000` checks every 10 seconds, which is much easier on the battery and CPU than the default 1 second.
-The phone's screen has to stay on and MacroBot's accessibility service has to stay enabled.
+The phone's screen has to stay on and Ultrebo's accessibility service has to stay enabled.
 
 ### Watchers: handling pop-ups while the macro runs
 
@@ -94,7 +94,7 @@ matching, so use a longer check interval (1-3 seconds) if the phone gets warm.
 
 1. In a macro, tap **Add step > Find a picture on screen**, then press *Pick image from screen*.
 2. Switch to your game, press **CROP**, and drag a box around the target (a button or icon).
-3. Reopen MacroBot - a thumbnail appears on the step. Raise the match threshold if it taps the wrong
+3. Reopen Ultrebo - a thumbnail appears on the step. Raise the match threshold if it taps the wrong
    thing, lower it if it misses.
 
 Tips: crop tightly around something distinctive; capture on the same phone and orientation you will run
@@ -104,11 +104,11 @@ on (matching is done at screen resolution); avoid regions with animated or chang
 
 | Problem | Fix |
 | --- | --- |
-| Accessibility option is greyed out | Settings > Apps > MacroBot > ⋮ > *Allow restricted settings*, then retry. |
+| Accessibility option is greyed out | Settings > Apps > Ultrebo > ⋮ > *Allow restricted settings*, then retry. |
 | Taps land in the wrong place | Re-record after changing screen rotation or display size; coordinates are absolute. |
 | Image is never found | Re-crop it, lower the threshold (try 0.75), and make sure screen capture is ON. |
 | Image taps the wrong thing | Crop a more distinctive area and raise the threshold (0.9+). |
-| Macro stops by itself | Android may have turned the accessibility service off (battery savers do this). Re-enable it and exclude MacroBot from battery optimisation. |
+| Macro stops by itself | Android may have turned the accessibility service off (battery savers do this). Re-enable it and exclude Ultrebo from battery optimisation. |
 | Games detect and block it | Some games block gestures from accessibility services. Nothing here works around that. |
 
 ## Privacy
@@ -130,15 +130,15 @@ The app has the `INTERNET` permission for two things:
 
 When a newer release exists, a popup offers **Update now**. It downloads the APK from this repo's GitHub
 release (checked against the SHA-256 GitHub publishes) and hands it to Android's installer, which updates
-MacroBot in place - your macros and settings are kept. Android still asks you to confirm, and the first
-time it asks you to allow MacroBot to "install unknown apps". A **Release page** button is there as a manual
+Ultrebo in place - your macros and settings are kept. Android still asks you to confirm, and the first
+time it asks you to allow Ultrebo to "install unknown apps". A **Release page** button is there as a manual
 fallback.
 
 This only works if every release is signed with the same key (see *Releasing* below). Android may switch
 off the accessibility service after an update; the **Get started** guide reappears if so.
 
 Because of this, the app declares the `REQUEST_INSTALL_PACKAGES` permission. It is only used for this
-self-update and can only ever install an update to MacroBot itself (Android rejects anything signed with a
+self-update and can only ever install an update to Ultrebo itself (Android rejects anything signed with a
 different key).
 
 ## Building from source
@@ -147,7 +147,7 @@ different key).
 ./gradlew testDebugUnitTest assembleDebug
 ```
 Open the folder in Android Studio, or let GitHub Actions build it: every push uploads a
-`MacroBot-debug-apk` artifact (sign-in required to download).
+`Ultrebo-debug-apk` artifact (sign-in required to download).
 
 ```
 app/src/main/java/com/ultimate/macrobot/
@@ -161,7 +161,7 @@ app/src/main/java/com/ultimate/macrobot/
 ## Releasing (maintainers)
 
 1. On GitHub: **Releases > Draft a new release**, create a tag such as `v1.0.0`, **Publish**.
-2. The *Release APK* workflow builds the app and attaches `MacroBot-v1.0.0.apk` to that release.
+2. The *Release APK* workflow builds the app and attaches `Ultrebo-v1.0.0.apk` to that release.
 
 **Signing:** Android only installs an update over an existing install if both APKs have the same signing
 key. Create a key once and store it as repository secrets (Settings > Secrets and variables > Actions):

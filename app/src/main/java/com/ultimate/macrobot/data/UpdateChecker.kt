@@ -39,7 +39,7 @@ object UpdateChecker {
                 conn.connectTimeout = 8000
                 conn.readTimeout = 8000
                 conn.setRequestProperty("Accept", "application/vnd.github+json")
-                conn.setRequestProperty("User-Agent", "MacroBot")
+                conn.setRequestProperty("User-Agent", "Ultrebo")
                 if (conn.responseCode != 200) return null
                 parseRelease(conn.inputStream.bufferedReader().use { it.readText() }, currentVersion)
             } finally {
