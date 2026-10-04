@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultrebo for Windows and Mac - mouse and keyboard macro recorder</title>
+<meta name="description" content="Ultrebo for computer records and replays your mouse clicks and key presses, finds images and text on screen, and handles pop-ups with rules. Free and open source for Windows and macOS.">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#1a73e8">
+<link rel="canonical" href="https://ultrevo.github.io/Ultrebo/pc.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ultrebo for Windows and Mac">
+<meta property="og:description" content="Record and replay mouse clicks and key presses, find images and text on screen, and handle pop-ups with rules. Free and open source.">
+<meta property="og:url" content="https://ultrevo.github.io/Ultrebo/pc.html">
+<meta property="og:site_name" content="Ultrebo">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Ultrebo for computer",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Windows 10 or newer, macOS",
+  "description": "Records and replays mouse clicks and key presses on Windows and macOS, and can find images and text on screen.",
+  "url": "https://ultrevo.github.io/Ultrebo/pc.html",
+  "downloadUrl": "https://github.com/Ultrevo/Ultrebo-pc/releases/latest",
+  "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+  "author": { "@type": "Person", "name": "Ultrevo" }
+}
+</script>
+<link rel="stylesheet" href="style.css?v=4">
+<style>
+  .wide { margin: 12px 0 24px; }
+  .wide img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--border); }
+  .wide figcaption { font-size: .9rem; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="site" aria-label="Site"><a href="./">Home</a><a href="pc.html" aria-current="page">Computer version</a><a href="install.html">Phone install guide</a><a href="permissions.html">Permissions</a><a href="https://discord.gg/mAKGfaAWWW">Discord</a><a href="https://github.com/Ultrevo/Ultrebo-pc">Source</a></nav>
+
+<header class="hero">
+  <h1>Ultrebo for Windows and Mac</h1>
+  <p class="lead">Record your mouse clicks and key presses, replay them on a loop, and let your computer react when a
+  button or some text shows up on screen. Built for repetitive game tasks like tower-defense farming.</p>
+  <div class="buttons">
+    <a class="btn primary" href="https://github.com/Ultrevo/Ultrebo-pc/releases/latest">Download for computer</a>
+    <a class="btn secondary" href="https://github.com/Ultrevo/Ultrebo-pc">View the source code</a>
+    <a class="btn secondary" href="https://discord.gg/mAKGfaAWWW">Join the Discord</a>
+  </div>
+  <p class="small">Windows 10 and 11, and macOS (Apple silicon and Intel). Free, with no accounts, no ads and no tracking. Looking for the phone version? <a href="./">Ultrebo for Android</a>.</p>
+</header>
+
+<section>
+  <h2>What it does</h2>
+  <div class="grid">
+    <div class="card"><h3>Record</h3><p>Press F9, play normally, press F9 again. Ultrebo saves each click, drag, scroll and key press with the pauses between them.</p></div>
+    <div class="card"><h3>Edit every step</h3><p>Change positions, waits, repeats and order. Test a single step. Switch steps on and off.</p></div>
+    <div class="card"><h3>Find images</h3><p>Drag a box over a button or icon on your screen and Ultrebo clicks it whenever it appears.</p></div>
+    <div class="card"><h3>Find text</h3><p>Type the words to look for (like "I'm here") and it clicks them when they show up. Text is read on your computer, offline.</p></div>
+    <div class="card"><h3>Rules</h3><p>Always-watching detections that check the screen while your macro runs. Pause and carry on, or restart the macro, when a pop-up appears. If two show at once, the one nearest the top goes first.</p></div>
+    <div class="card"><h3>Share your rules</h3><p>Export your rules as one file and send it to other players, so they don't have to set everything up themselves.</p></div>
+    <div class="card"><h3>Works inside games</h3><p>F8 starts and stops, F9 records, even while a game has focus. You can change both keys. Choose which monitor it watches if you have more than one.</p></div>
+    <div class="card"><h3>Private</h3><p>Macros and screenshots stay on your computer. The only network use is an optional check for a newer version.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>A look inside</h2>
+  <figure class="wide">
+    <img src="img/pc-steps.webp" width="1180" height="440" loading="lazy"
+         alt="Ultrebo's Steps tab on a computer: a list of steps such as clicks, a key press, finding the text Skip, and a scroll, each with its wait time">
+    <figcaption>Your macro's steps run from the top of the list down. Move them with Up and Down.</figcaption>
+  </figure>
+  <figure class="wide">
+    <img src="img/pc-rules.webp" width="1180" height="440" loading="lazy"
+         alt="Ultrebo's Rules tab: three rules that watch for the text I'm here, Defeat and Claim reward and say what to do when each appears">
+    <figcaption>Rules watch the screen the whole time. The rule at the top wins if several show at once.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Download and install</h2>
+  <p>There is no installer. Download the zip for your system from the <a href="https://github.com/Ultrevo/Ultrebo-pc/releases/latest">latest release</a>, unzip it, and run Ultrebo.</p>
+  <h3 style="margin-top:20px">Windows</h3>
+  <ol class="steps">
+    <li>Download <code>Ultrebo-v….-windows-x64.zip</code> and unzip it anywhere, for example on your Desktop.</li>
+    <li>Open the <code>Ultrebo</code> folder and double-click <code>Ultrebo.exe</code>.</li>
+    <li>If Windows says <strong>"Windows protected your PC"</strong>, click <strong>More info</strong>, then <strong>Run anyway</strong>. This appears because the app isn't signed with a paid certificate. Some antivirus programs also flag any program that records the keyboard and mouse. Ultrebo only records while you press Record, and its source code is public.</li>
+    <li>If a game ignores the clicks, right-click <code>Ultrebo.exe</code> and choose <strong>Run as administrator</strong>.</li>
+  </ol>
+  <h3 style="margin-top:20px">Mac</h3>
+  <ol class="steps">
+    <li>Download <code>Ultrebo-v….-macos-apple-silicon.zip</code> (M1 and newer) or the Intel one, and unzip it.</li>
+    <li>Drag <strong>Ultrebo</strong> into your <strong>Applications</strong> folder, then <strong>right-click it and choose Open</strong> the first time. If macOS says it can't verify the app, go to <em>System Settings &gt; Privacy &amp; Security</em> and choose <strong>Open Anyway</strong>.</li>
+    <li>In <em>System Settings &gt; Privacy &amp; Security</em>, switch Ultrebo on under <strong>Accessibility</strong> (to click and press keys), <strong>Input Monitoring</strong> (to record, and for the hotkeys) and <strong>Screen Recording</strong> (only for image and text steps). Ultrebo's <em>Get started</em> card shows what is still missing.</li>
+    <li>Quit and reopen Ultrebo after switching the permissions on.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Your first macro</h2>
+  <ol class="steps">
+    <li>Click <strong>New</strong> to make a macro.</li>
+    <li>Click <strong>Add step &gt; Record inputs</strong> (or press <strong>F9</strong>). The window minimises. Do the clicks and key presses you want in your game, then press <strong>F9</strong> again.</li>
+    <li>Double-click a step to change it. Use <strong>Test</strong> to run just that step.</li>
+    <li>Press <strong>F8</strong> (or <strong>Start</strong>) to run the macro. Press <strong>F8</strong> again to stop. F8 is your safety brake, so check it works before you leave a macro running.</li>
+  </ol>
+  <p>Play in <strong>windowed mode</strong>, and don't move or resize the game window between recording and running, because clicks are recorded as screen positions.</p>
+</section>
+
+<section>
+  <h2>Privacy</h2>
+  <p>Everything runs on your computer. Your macros and the pictures you crop are stored in your user folder. Screenshots are looked at in memory and thrown away; the only picture saved is the box you crop. Text recognition is bundled and runs offline. The one network request is the optional update check against GitHub, which you can switch off in Settings.</p>
+  <p><strong>Recording captures every key you press until you stop it</strong>, so don't type passwords while recording.</p>
+</section>
+
+<section>
+  <h2>Check it yourself</h2>
+  <ul>
+    <li><strong>The code is public.</strong> Read every line on <a href="https://github.com/Ultrevo/Ultrebo-pc">GitHub</a>.</li>
+    <li><strong>Built in the open.</strong> The downloads are built by GitHub's own build system from that code.</li>
+    <li><strong>Scan it.</strong> Upload the zip to <a href="https://www.virustotal.com">VirusTotal</a> if you want a second opinion.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Common questions</h2>
+  <details><summary>Clicks land in the wrong place</summary><p>Don't move or resize the game window after recording. On Windows, keep display scaling the same as when you recorded. Re-record if in doubt.</p></details>
+  <details><summary>A game ignores the clicks</summary><p>On Windows, run Ultrebo as administrator. Some games with anti-cheat block simulated input entirely, and nothing here works around that.</p></details>
+  <details><summary>Nothing happens on a Mac</summary><p>Check that Accessibility and Input Monitoring are switched on for Ultrebo, then quit and reopen it.</p></details>
+  <details><summary>An image or some text is never found</summary><p>Re-pick the image or lower the match threshold (try 0.75). For text, lower the match strictness (try 0.7), or use an image for stylised game fonts.</p></details>
+  <details><summary>Does it work on Linux?</summary><p>There is no packaged Linux build. It can run from source on X11, but not on Wayland, which blocks the kind of input control Ultrebo needs.</p></details>
+  <details><summary>Will I get banned?</summary><p>Many games forbid automation in their terms of service and may suspend accounts that use it. Ultrebo does not hide itself or avoid detection. You are responsible for how you use it.</p></details>
+  <details><summary>I'm stuck</summary><p>Join the <a href="https://discord.gg/mAKGfaAWWW">Discord server</a> and open a support ticket. Say your operating system and what you did.</p></details>
+</section>
+
+<footer>
+  <p class="small">Ultrebo is open-source software under the GPL-3.0 licence, copyright (C) 2026 Ultrevo. Many games forbid
+  automation in their terms of service; you are responsible for how you use this app. Not affiliated with Roblox or any game publisher.</p>
+</footer>
+</div>
+</body>
+</html>
