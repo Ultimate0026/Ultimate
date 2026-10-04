@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MacroBot - record taps, replay them, react to what's on screen</title>
+<meta name="description" content="MacroBot is a free, open-source Android app that records and replays taps and swipes, and can find images and text on screen. Here is exactly what it does and why it asks for each permission.">
+<meta property="og:title" content="MacroBot">
+<meta property="og:description" content="Record taps, replay them, and react to images and text on screen. Open source, nothing leaves your phone.">
+<style>
+  :root {
+    --bg: #ffffff; --surface: #f4f6fa; --text: #14171f; --muted: #5a6275;
+    --accent: #1a73e8; --accent-text: #ffffff; --border: #dde2ec; --ok: #137333;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #11141b; --surface: #1a1f2a; --text: #eceff6; --muted: #a2abbd;
+      --accent: #6aa8ff; --accent-text: #0b1220; --border: #2b3242; --ok: #7bd88f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 16px; }
+  header.hero { padding: 56px 0 40px; }
+  h1 { font-size: clamp(2rem, 6vw, 3rem); line-height: 1.15; margin: 0 0 12px; }
+  h2 { font-size: 1.5rem; margin: 48px 0 12px; }
+  h3 { font-size: 1.05rem; margin: 0 0 4px; }
+  p { margin: 0 0 12px; }
+  .lead { font-size: 1.15rem; color: var(--muted); max-width: 40em; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 8px; }
+  a.btn { display: inline-block; padding: 12px 20px; border-radius: 10px; text-decoration: none;
+          font-weight: 600; border: 1px solid var(--accent); }
+  a.primary { background: var(--accent); color: var(--accent-text); }
+  a.secondary { color: var(--accent); }
+  .small { color: var(--muted); font-size: .9rem; }
+  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .card p { color: var(--muted); margin: 0; }
+  table { width: 100%; border-collapse: collapse; background: var(--surface);
+          border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+  th { font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  tr:last-child td { border-bottom: 0; }
+  td.perm { font-weight: 600; white-space: nowrap; }
+  .tag { display: inline-block; font-size: .75rem; padding: 1px 8px; border-radius: 99px;
+         border: 1px solid var(--border); color: var(--muted); margin-left: 6px; font-weight: 500; }
+  ol { padding-left: 1.3em; } li { margin-bottom: 6px; }
+  details { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+            padding: 12px 16px; margin-bottom: 10px; }
+  summary { cursor: pointer; font-weight: 600; }
+  details p { margin: 10px 0 0; color: var(--muted); }
+  code { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1px 6px; }
+  footer { margin: 56px 0 40px; padding-top: 20px; border-top: 1px solid var(--border); }
+  a { color: var(--accent); }
+  @media (max-width: 560px) { td.perm { white-space: normal; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>MacroBot</h1>
+  <p class="lead">Record your taps and swipes, replay them on a loop, and let your phone react when a button
+  or some text shows up on screen. Built for repetitive game tasks like tower-defense farming.</p>
+  <div class="buttons">
+    <a class="btn primary" href="https://github.com/Ultimate0026/Ultimate/releases/latest">Download the APK</a>
+    <a class="btn secondary" href="https://github.com/Ultimate0026/Ultimate">View the source code</a>
+  </div>
+  <p class="small">Android 8.0 or newer. Not available for iPhone, because iOS does not let apps tap other apps.</p>
+</header>
+
+<section>
+  <h2>What it does</h2>
+  <div class="grid">
+    <div class="card"><h3>Record</h3><p>Play normally with a small floating bar on top. MacroBot saves each tap and swipe with the pauses between them.</p></div>
+    <div class="card"><h3>Edit every step</h3><p>Change positions, delays, repeats and order. Test a single step. Switch steps on and off.</p></div>
+    <div class="card"><h3>Find images</h3><p>Crop a button or icon from your screen and MacroBot taps it whenever it appears.</p></div>
+    <div class="card"><h3>Find text</h3><p>Type the words to look for (like "I'm here") and it taps them when they show up.</p></div>
+    <div class="card"><h3>Pop-up watcher</h3><p>Keeps checking in the background while your macro runs. Pause and carry on, or restart the macro, when a pop-up appears.</p></div>
+    <div class="card"><h3>You choose how often</h3><p>Set how often it looks at the screen, from several times a second to every few seconds, to save battery.</p></div>
+  </div>
+</section>
+
+<section id="permissions">
+  <h2>Why each permission?</h2>
+  <p>MacroBot asks for a few sensitive permissions because tapping for you needs them. Here is exactly what each one
+  is used for, and nothing else.</p>
+  <table>
+    <thead><tr><th>Permission</th><th>What it is used for</th></tr></thead>
+    <tbody>
+      <tr><td class="perm">Accessibility service</td>
+        <td>This is how every auto-clicker app taps for you. MacroBot uses it only to perform the taps and swipes
+        in your macros and to show its floating RUN / REC bar. It does not ask for permission to read the content of other apps.</td></tr>
+      <tr><td class="perm">Screen capture <span class="tag">optional</span></td>
+        <td>Only needed for image and text steps, so MacroBot can look at the screen and find your target. Frames are
+        checked in memory on your phone and thrown away. The only picture ever saved is the small region you crop yourself.
+        Android asks you again each time the app restarts.</td></tr>
+      <tr><td class="perm">Notifications</td>
+        <td>Android requires a visible notice while screen capture is on. That is the only notification MacroBot shows.</td></tr>
+      <tr><td class="perm">Internet</td>
+        <td>Used to ask GitHub whether a newer version exists, and to download it if you tap Update. You can turn the check off.
+        The text-recognition library (Google ML Kit) runs on your phone, but it may send anonymous usage statistics to Google,
+        never your screen content.</td></tr>
+      <tr><td class="perm">Install unknown apps <span class="tag">optional</span></td>
+        <td>Only used by the in-app updater, to install MacroBot's own new version. Android only accepts an update
+        signed with the same key as the app you have.</td></tr>
+    </tbody>
+  </table>
+  <p class="small" style="margin-top:12px">Your macros and cropped images are stored privately on your phone and are never uploaded.
+  There are no ads and no accounts at the moment.</p>
+</section>
+
+<section>
+  <h2>Check it yourself</h2>
+  <ul>
+    <li><strong>The code is public.</strong> Read every line on <a href="https://github.com/Ultimate0026/Ultimate">GitHub</a>.</li>
+    <li><strong>Built in the open.</strong> The downloadable APK is built by GitHub's own build system from that code, and the release page lists its SHA-256 checksum.</li>
+    <li><strong>Scan it.</strong> Upload the APK to <a href="https://www.virustotal.com">VirusTotal</a> if you want a second opinion.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Install</h2>
+  <ol>
+    <li>On your phone, open the <a href="https://github.com/Ultimate0026/Ultimate/releases/latest">latest release</a> and download <code>MacroBot-….apk</code>.</li>
+    <li>Tap the file and allow "Install unknown apps" for your browser or Files app when Android asks.</li>
+    <li>Open MacroBot. The <strong>Get started</strong> guide walks you through the permissions and disappears once they are on.</li>
+    <li>If Android says a setting is "restricted", the guide shows how to allow it (Android blocks apps installed outside the Play Store until you do).</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Questions</h2>
+  <details><summary>Is it safe?</summary>
+    <p>Everything it does is described above and in the open-source code. It has no ads or accounts and does not upload your macros or screenshots. As with any app, only install it if you are comfortable with that.</p></details>
+  <details><summary>Could I get banned from a game for using it?</summary>
+    <p>Possibly. Many games forbid automation in their rules and may suspend accounts that use it. MacroBot does not hide itself or avoid detection. You are responsible for how you use it.</p></details>
+  <details><summary>Why does it need the accessibility service?</summary>
+    <p>It is the only official way an Android app can tap and swipe on other apps. Every auto-clicker uses it.</p></details>
+  <details><summary>Does it need root?</summary>
+    <p>No.</p></details>
+  <details><summary>Is it on the Play Store?</summary>
+    <p>No. Apps that automate taps are very restricted there, so MacroBot is distributed from GitHub.</p></details>
+  <details><summary>Something is broken. Where do I report it?</summary>
+    <p>Open an issue on <a href="https://github.com/Ultimate0026/Ultimate/issues">GitHub</a> and say your phone model and Android version.</p></details>
+</section>
+
+<footer>
+  <p class="small">MacroBot is MIT-licensed open-source software. Many games forbid automation in their terms of service;
+  you are responsible for how you use this app. Not affiliated with Roblox or any game publisher.</p>
+</footer>
+
+</div>
+</body>
+</html>

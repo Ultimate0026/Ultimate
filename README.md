@@ -36,6 +36,18 @@ game tasks such as tower-defense farming, but it works over any app.
 
 Requires Android 8.0 (API 26) or newer.
 
+## Why each permission?
+
+MacroBot asks for a few sensitive permissions because tapping for you needs them. Each one is used for exactly this and nothing else:
+
+| Permission | What it is used for |
+| --- | --- |
+| **Accessibility service** | How every auto-clicker taps for you. Used only to perform your macros' taps and swipes and to show the floating RUN / REC bar. It does not request permission to read other apps' content. |
+| **Screen capture** (optional) | Only for image and text steps. Frames are checked in memory on your phone and discarded; the only image saved is the region you crop. Android asks again each time the app restarts. |
+| **Notifications** | Android requires a visible notice while screen capture is on. |
+| **Internet** | Asking GitHub if a newer release exists (can be turned off) and downloading it if you tap Update. Google ML Kit, used for text recognition, runs on the phone but may send anonymous usage statistics. |
+| **Install unknown apps** (optional) | Only for the in-app updater, to install MacroBot's own update. Android rejects updates signed with a different key. |
+
 ## Quick start
 
 1. **New macro**, open it.
