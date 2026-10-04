@@ -3,6 +3,8 @@
 
     <!-- Only used to ask GitHub whether a newer release exists (can be switched off in the app). -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Lets the in-app updater hand a downloaded MacroBot update to Android's installer. -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -38,6 +40,10 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
         </service>
+
+        <receiver
+            android:name=".data.InstallResultReceiver"
+            android:exported="false" />
 
         <!-- Screen capture for image recognition. -->
         <service

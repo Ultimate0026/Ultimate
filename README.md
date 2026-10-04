@@ -116,9 +116,18 @@ The app has the `INTERNET` permission for two things:
 
 ### Updating
 
-When a newer release exists, a popup offers **Download**, which opens the release page; tap the `.apk` to
-install over the current version. This works only if every release is signed with the same key (see
-*Releasing* below).
+When a newer release exists, a popup offers **Update now**. It downloads the APK from this repo's GitHub
+release (checked against the SHA-256 GitHub publishes) and hands it to Android's installer, which updates
+MacroBot in place - your macros and settings are kept. Android still asks you to confirm, and the first
+time it asks you to allow MacroBot to "install unknown apps". A **Release page** button is there as a manual
+fallback.
+
+This only works if every release is signed with the same key (see *Releasing* below). Android may switch
+off the accessibility service after an update; the **Get started** guide reappears if so.
+
+Because of this, the app declares the `REQUEST_INSTALL_PACKAGES` permission. It is only used for this
+self-update and can only ever install an update to MacroBot itself (Android rejects anything signed with a
+different key).
 
 ## Building from source
 

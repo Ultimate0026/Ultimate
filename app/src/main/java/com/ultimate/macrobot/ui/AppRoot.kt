@@ -18,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -41,6 +42,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -49,12 +51,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.ultimate.macrobot.BuildConfig
 import com.ultimate.macrobot.MacroBotApp
+import com.ultimate.macrobot.data.ApkInstaller
 import com.ultimate.macrobot.data.UpdateChecker
 import com.ultimate.macrobot.model.Macro
 import com.ultimate.macrobot.service.MacroAccessibilityService
 import com.ultimate.macrobot.service.ScreenCaptureService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -74,18 +78,60 @@ fun AppRoot(
             update = withContext(Dispatchers.IO) { UpdateChecker.check(BuildConfig.VERSION_NAME) }
         }
     }
+    var progress by remember { mutableStateOf<Float?>(null) }
+    var updateError by remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
     update?.let { u ->
+        val downloading = progress != null
         AlertDialog(
-            onDismissRequest = { update = null },
+            onDismissRequest = { if (!downloading) update = null },
             title = { Text("Update available") },
-            text = { Text("MacroBot ${u.version} is out (you have ${BuildConfig.VERSION_NAME}). Download opens the release page; tap the .apk there to install it over the current version.") },
-            confirmButton = {
-                TextButton(onClick = {
-                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(u.url)))
-                    update = null
-                }) { Text("Download") }
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("MacroBot ${u.version} is out (you have ${BuildConfig.VERSION_NAME}).")
+                    if (u.apkUrl != null) {
+                        Text(
+                            "Update now downloads it and installs it over this app, keeping your macros. " +
+                                "Android will ask you to confirm.",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+                    progress?.let { p -> LinearProgressIndicator(progress = { p }, modifier = Modifier.fillMaxWidth()) }
+                    updateError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                }
             },
-            dismissButton = { TextButton(onClick = { update = null }) { Text("Later") } },
+            confirmButton = {
+                TextButton(enabled = !downloading, onClick = {
+                    if (u.apkUrl == null) {
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(u.url)))
+                        update = null
+                    } else if (!context.packageManager.canRequestPackageInstalls()) {
+                        updateError = "First allow MacroBot to install updates on the page that just opened, " +
+                            "then come back and tap Update now again."
+                        context.startActivity(
+                            Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:${context.packageName}")),
+                        )
+                    } else {
+                        updateError = null
+                        progress = 0f
+                        scope.launch {
+                            val error = ApkInstaller.downloadAndInstall(context, u) { progress = it }
+                            progress = null
+                            if (error != null) updateError = error else update = null
+                        }
+                    }
+                }) { Text(if (u.apkUrl == null) "Download" else "Update now") }
+            },
+            dismissButton = {
+                Row {
+                    if (u.apkUrl != null) {
+                        TextButton(enabled = !downloading, onClick = {
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(u.url)))
+                        }) { Text("Release page") }
+                    }
+                    TextButton(enabled = !downloading, onClick = { update = null }) { Text("Later") }
+                }
+            },
         )
     }
 
