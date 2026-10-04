@@ -185,3 +185,8 @@ debug key, so users would have to uninstall before moving to a properly signed b
 modified versions must stay open source under the same licence and keep the copyright notice. See
 [NOTICE](NOTICE) for the extra permission covering Google ML Kit. Releases v0.1.0 to v0.1.2 were published
 under the MIT License and remain available under those terms.
+
+## Credits
+
+Ultrebo is designed, directed, tested and maintained by Ultrevo. Much of the code was written with the help of an
+AI assistant (Claude, by Anthropic).
