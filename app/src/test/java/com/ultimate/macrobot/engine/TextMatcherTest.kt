@@ -31,8 +31,9 @@ class TextMatcherTest {
 
     @Test
     fun toleratesSmallOcrMistakes() {
-        val misread = listOf(listOf(word("I'm", 0), word("heer", 70)))
-        assertNotNull(TextMatcher.find(misread, "I'm here", 0.7))
+        // One wrong letter out of six: similarity is about 0.83.
+        val misread = listOf(listOf(word("I'm", 0), word("hera", 70)))
+        assertNotNull(TextMatcher.find(misread, "I'm here", 0.8))
         assertNull(TextMatcher.find(misread, "I'm here", 0.95))
     }
 
