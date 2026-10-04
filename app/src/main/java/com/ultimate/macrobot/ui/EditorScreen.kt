@@ -389,7 +389,7 @@ private fun SettingsTab(macro: Macro, onChange: ((Macro) -> Macro) -> Unit) {
             NumField("Loops (0 = forever)", macro.loops.toLong(), Modifier.weight(1f)) { v ->
                 onChange { it.copy(loops = v.toInt().coerceAtLeast(0)) }
             }
-            NumField("Pause between loops (ms)", macro.loopDelayMs, Modifier.weight(1f)) { v ->
+            NumField("Loop pause (ms)", macro.loopDelayMs, Modifier.weight(1f)) { v ->
                 onChange { it.copy(loopDelayMs = v.coerceAtLeast(0)) }
             }
         }
