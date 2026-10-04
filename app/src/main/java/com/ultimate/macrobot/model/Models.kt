@@ -55,8 +55,8 @@ data class Step(
     val templateFile: String? = null,
     /** Text steps: the words to look for on screen. */
     val text: String = "",
-    /** Minimum match score, 0..1 (image steps). */
-    val threshold: Float = 0.85f,
+    /** Minimum match score / text similarity, 0..1 (image and text steps). */
+    val threshold: Float = 0.8f,
     /** Sequence mode: how long to keep looking for the image. 0 = look once. */
     val timeoutMs: Long = 5000,
     val repeat: Int = 1,

@@ -3,10 +3,10 @@ package com.ultimate.macrobot.ui
 import android.graphics.BitmapFactory
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,17 +16,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,7 +35,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -43,11 +47,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.ultimate.macrobot.MacroBotApp
 import com.ultimate.macrobot.engine.MacroRunner
@@ -59,7 +65,7 @@ import com.ultimate.macrobot.model.StepType
 import com.ultimate.macrobot.service.MacroAccessibilityService
 import com.ultimate.macrobot.service.ScreenCaptureService
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditorScreen(
     macroId: String,
@@ -78,6 +84,7 @@ fun EditorScreen(
     val running by MacroRunner.running.collectAsState()
     val status by MacroRunner.status.collectAsState()
     var editing by remember { mutableStateOf<Step?>(null) }
+    var tab by rememberSaveable { mutableStateOf(0) }
 
     fun toast(msg: String) = Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
     fun change(transform: (Macro) -> Macro) = repo.update(macroId, transform)
@@ -100,10 +107,22 @@ fun EditorScreen(
         m.copy(steps = list.mapIndexed { idx, s -> s.copy(priority = (idx + 1) * 10) })
     }
 
+    /** Shows the floating RUN / REC / CROP bar and returns to the game. */
+    fun openFloatingControls(message: String? = null) {
+        val svc = MacroAccessibilityService.instance
+        if (svc == null) {
+            toast("Enable the accessibility service first (Home screen)")
+        } else {
+            svc.overlay.showBubble()
+            if (message != null) toast(message)
+            onSendToBackground()
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(macro.name) },
+                title = { Text(macro.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -111,130 +130,52 @@ fun EditorScreen(
                 },
             )
         },
-    ) { padding ->
-        LazyColumn(
-            modifier = Modifier.padding(padding),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            item {
-                Card(Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        var name by remember(macroId) { mutableStateOf(macro.name) }
-                        OutlinedTextField(
-                            value = name,
-                            onValueChange = { name = it; change { m -> m.copy(name = it) } },
-                            label = { Text("Name") },
-                            modifier = Modifier.fillMaxWidth(),
-                            singleLine = true,
-                        )
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            RunMode.entries.forEach { mode ->
-                                FilterChip(
-                                    selected = macro.mode == mode,
-                                    onClick = { change { it.copy(mode = mode) } },
-                                    label = { Text(mode.label) },
-                                )
-                            }
-                        }
-                        Text(macro.mode.help, style = MaterialTheme.typography.bodySmall)
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            NumField(
-                                "Loops (0 = forever)", macro.loops.toLong(), Modifier.weight(1f),
-                            ) { v -> change { it.copy(loops = v.toInt().coerceAtLeast(0)) } }
-                            NumField(
-                                "Delay between loops (ms)", macro.loopDelayMs, Modifier.weight(1f),
-                            ) { v -> change { it.copy(loopDelayMs = v.coerceAtLeast(0)) } }
-                        }
-                        NumField(
-                            "Check screen for images every (ms)", macro.scanIntervalMs, Modifier.fillMaxWidth(),
-                        ) { v -> change { it.copy(scanIntervalMs = v.coerceAtLeast(100)) } }
-                        Text(
-                            "Image steps look at the screen this often. Higher = easier on battery " +
-                                "(10000 = every 10 seconds). Reactive mode keeps watching until stopped.",
-                            style = MaterialTheme.typography.bodySmall,
-                        )
+        bottomBar = {
+            RunBar(
+                running = running,
+                status = status,
+                onToggle = {
+                    if (running) {
+                        MacroRunner.stop()
+                    } else {
+                        MacroAccessibilityService.instance?.overlay?.showBubble()
+                        val error = MacroRunner.start(context)
+                        if (error != null) toast(error) else onSendToBackground()
                     }
-                }
-            }
-
-            item {
-                Card(Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Button(onClick = {
-                                if (running) {
-                                    MacroRunner.stop()
-                                } else {
-                                    MacroAccessibilityService.instance?.overlay?.showBubble()
-                                    val error = MacroRunner.start(context)
-                                    if (error != null) toast(error) else onSendToBackground()
-                                }
-                            }) { Text(if (running) "Stop" else "Start") }
-                            OutlinedButton(onClick = {
-                                val svc = MacroAccessibilityService.instance
-                                if (svc == null) {
-                                    toast("Enable the accessibility service first (Home screen)")
-                                } else {
-                                    svc.overlay.showBubble()
-                                    onSendToBackground()
-                                }
-                            }) { Text("Floating controls") }
-                        }
-                        if (running) Text("Running: $status")
-                        Text(
-                            "To record: tap Floating controls, open your game, press REC, play " +
-                                "your inputs, press DONE. They appear below as steps you can edit.",
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                    }
-                }
-            }
-
-            item {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        "Steps (${macro.steps.size}) - runs top to bottom",
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        Button(onClick = { editing = Step(priority = macro.nextPriority()) }) {
-                            Icon(Icons.Default.Add, contentDescription = null)
-                            Text("Tap / swipe")
-                        }
-                        Button(onClick = {
-                            editing = Step(type = StepType.TAP_IMAGE, priority = macro.nextPriority())
-                        }) {
-                            Icon(Icons.Default.Add, contentDescription = null)
-                            Text("Image step")
-                        }
-                        Button(onClick = {
-                            editing = Step(type = StepType.TAP_TEXT, threshold = 0.8f, priority = macro.nextPriority())
-                        }) {
-                            Icon(Icons.Default.Add, contentDescription = null)
-                            Text("Text step")
-                        }
-                    }
-                }
-            }
-
-            val ordered = macro.ordered()
-            items(ordered, key = { it.id }) { step ->
-                StepCard(
-                    index = ordered.indexOf(step) + 1,
-                    step = step,
-                    onToggle = { upsert(step.copy(enabled = it)) },
-                    onUp = { move(step, -1) },
-                    onDown = { move(step, 1) },
-                    onTest = { MacroRunner.testStep(step) },
-                    onEdit = { editing = step },
-                    onDelete = { change { m -> m.copy(steps = m.steps.filter { it.id != step.id }) } },
+                },
+                onControls = { openFloatingControls() },
+            )
+        },
+        floatingActionButton = {
+            if (tab == 0) {
+                AddStepButton(
+                    onRecord = {
+                        openFloatingControls("Press REC, play your inputs in the game, then press DONE")
+                    },
+                    onTapSwipe = { editing = Step(priority = macro.nextPriority()) },
+                    onImage = { editing = Step(type = StepType.TAP_IMAGE, priority = macro.nextPriority()) },
+                    onText = { editing = Step(type = StepType.TAP_TEXT, priority = macro.nextPriority()) },
                 )
             }
-            item { Spacer(Modifier.height(24.dp)) }
+        },
+    ) { padding ->
+        Column(Modifier.padding(padding)) {
+            TabRow(selectedTabIndex = tab) {
+                Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text("Steps (${macro.steps.size})") })
+                Tab(selected = tab == 1, onClick = { tab = 1 }, text = { Text("Settings") })
+            }
+            if (tab == 0) {
+                StepsTab(
+                    macro = macro,
+                    onToggle = { step, on -> upsert(step.copy(enabled = on)) },
+                    onMove = ::move,
+                    onTest = { MacroRunner.testStep(it) },
+                    onEdit = { editing = it },
+                    onDelete = { step -> change { m -> m.copy(steps = m.steps.filter { it.id != step.id }) } },
+                )
+            } else {
+                SettingsTab(macro = macro, onChange = ::change)
+            }
         }
     }
 
@@ -250,7 +191,7 @@ fun EditorScreen(
                 when {
                     svc == null -> toast("Enable the accessibility service first (Home screen)")
                     ScreenCaptureService.instance?.isReady != true -> {
-                        toast("Grant screen capture first (Home screen)")
+                        toast("Grant screen capture first")
                         onGrantCapture()
                     }
                     else -> {
@@ -266,7 +207,99 @@ fun EditorScreen(
 }
 
 @Composable
-private fun StepCard(
+private fun RunBar(running: Boolean, status: String, onToggle: () -> Unit, onControls: () -> Unit) {
+    Surface(tonalElevation = 3.dp) {
+        Column(
+            Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            if (running) Text("Running: $status", style = MaterialTheme.typography.bodySmall)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(onClick = onToggle, modifier = Modifier.weight(1f)) {
+                    Text(if (running) "Stop" else "Start")
+                }
+                OutlinedButton(onClick = onControls, modifier = Modifier.weight(1f)) {
+                    Text("Floating controls")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AddStepButton(
+    onRecord: () -> Unit,
+    onTapSwipe: () -> Unit,
+    onImage: () -> Unit,
+    onText: () -> Unit,
+) {
+    var open by remember { mutableStateOf(false) }
+    Box {
+        ExtendedFloatingActionButton(
+            onClick = { open = true },
+            icon = { Icon(Icons.Default.Add, contentDescription = null) },
+            text = { Text("Add step") },
+        )
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            DropdownMenuItem(text = { Text("Record inputs in the game") }, onClick = { open = false; onRecord() })
+            DropdownMenuItem(text = { Text("Tap or swipe (type position)") }, onClick = { open = false; onTapSwipe() })
+            DropdownMenuItem(text = { Text("Find a picture on screen") }, onClick = { open = false; onImage() })
+            DropdownMenuItem(text = { Text("Find text on screen") }, onClick = { open = false; onText() })
+        }
+    }
+}
+
+@Composable
+private fun StepsTab(
+    macro: Macro,
+    onToggle: (Step, Boolean) -> Unit,
+    onMove: (Step, Int) -> Unit,
+    onTest: (Step) -> Unit,
+    onEdit: (Step) -> Unit,
+    onDelete: (Step) -> Unit,
+) {
+    val ordered = macro.ordered()
+    LazyColumn(
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 96.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        if (ordered.isEmpty()) {
+            item {
+                Card(Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text("No steps yet", style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            "Tap Add step. You can record your inputs in the game, or add taps, " +
+                                "pictures and text by hand.",
+                        )
+                    }
+                }
+            }
+        } else {
+            item {
+                Text(
+                    "Runs top to bottom. Tap a step to edit it.",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        }
+        items(ordered, key = { it.id }) { step ->
+            StepRow(
+                index = ordered.indexOf(step) + 1,
+                step = step,
+                onToggle = { onToggle(step, it) },
+                onUp = { onMove(step, -1) },
+                onDown = { onMove(step, 1) },
+                onTest = { onTest(step) },
+                onEdit = { onEdit(step) },
+                onDelete = { onDelete(step) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun StepRow(
     index: Int,
     step: Step,
     onToggle: (Boolean) -> Unit,
@@ -280,30 +313,93 @@ private fun StepCard(
     val thumb = remember(step.templateFile) {
         step.templateFile?.let { BitmapFactory.decodeFile(repo.templatePath(it).path)?.asImageBitmap() }
     }
-    Card(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) {
-                    Text("$index. ${step.title()}", style = MaterialTheme.typography.titleMedium)
-                    Text("${step.type.label} ${step.summary()}")
-                    Text(
-                        "priority ${step.priority} - wait ${step.delayAfterMs} ms" +
-                            if (step.repeat > 1) " - x${step.repeat}" else "",
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
-                if (thumb != null) {
-                    Image(thumb, contentDescription = "Template", modifier = Modifier.size(48.dp).padding(end = 8.dp))
-                }
-                Switch(checked = step.enabled, onCheckedChange = onToggle)
+    var menu by remember { mutableStateOf(false) }
+    Card(Modifier.fillMaxWidth().clickable(onClick = onEdit)) {
+        Row(
+            Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(Modifier.weight(1f)) {
+                Text(
+                    "$index. ${step.title()}",
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    "${step.type.label} ${step.summary()}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    "wait ${step.delayAfterMs} ms" + if (step.repeat > 1) " - x${step.repeat}" else "",
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
-            Row {
-                IconButton(onClick = onUp) { Icon(Icons.Default.KeyboardArrowUp, "Move up") }
-                IconButton(onClick = onDown) { Icon(Icons.Default.KeyboardArrowDown, "Move down") }
-                IconButton(onClick = onTest) { Icon(Icons.Default.PlayArrow, "Test step") }
-                IconButton(onClick = onEdit) { Icon(Icons.Default.Edit, "Edit step") }
-                IconButton(onClick = onDelete) { Icon(Icons.Default.Delete, "Delete step") }
+            if (thumb != null) {
+                Image(thumb, contentDescription = "Template", modifier = Modifier.size(40.dp).padding(end = 8.dp))
+            }
+            Switch(checked = step.enabled, onCheckedChange = onToggle)
+            Box {
+                IconButton(onClick = { menu = true }) { Icon(Icons.Default.MoreVert, "More actions") }
+                DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                    DropdownMenuItem(text = { Text("Edit") }, onClick = { menu = false; onEdit() })
+                    DropdownMenuItem(text = { Text("Test this step") }, onClick = { menu = false; onTest() })
+                    DropdownMenuItem(text = { Text("Move up") }, onClick = { menu = false; onUp() })
+                    DropdownMenuItem(text = { Text("Move down") }, onClick = { menu = false; onDown() })
+                    DropdownMenuItem(text = { Text("Delete") }, onClick = { menu = false; onDelete() })
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun SettingsTab(macro: Macro, onChange: ((Macro) -> Macro) -> Unit) {
+    Column(
+        Modifier.verticalScroll(rememberScrollState()).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        var name by remember(macro.id) { mutableStateOf(macro.name) }
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it; onChange { m -> m.copy(name = it) } },
+            label = { Text("Macro name") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+        )
+
+        Spacer(Modifier.height(6.dp))
+        Text("How it runs", style = MaterialTheme.typography.titleSmall)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            RunMode.entries.forEach { mode ->
+                FilterChip(
+                    selected = macro.mode == mode,
+                    onClick = { onChange { it.copy(mode = mode) } },
+                    label = { Text(mode.label) },
+                )
+            }
+        }
+        Text(macro.mode.help, style = MaterialTheme.typography.bodySmall)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            NumField("Loops (0 = forever)", macro.loops.toLong(), Modifier.weight(1f)) { v ->
+                onChange { it.copy(loops = v.toInt().coerceAtLeast(0)) }
+            }
+            NumField("Pause between loops (ms)", macro.loopDelayMs, Modifier.weight(1f)) { v ->
+                onChange { it.copy(loopDelayMs = v.coerceAtLeast(0)) }
+            }
+        }
+
+        Spacer(Modifier.height(6.dp))
+        Text("Screen checks", style = MaterialTheme.typography.titleSmall)
+        NumField("Look at the screen every (ms)", macro.scanIntervalMs, Modifier.fillMaxWidth()) { v ->
+            onChange { it.copy(scanIntervalMs = v.coerceAtLeast(100)) }
+        }
+        Text(
+            "How often image and text steps check the screen. Higher is easier on the battery " +
+                "(10000 = every 10 seconds). Reactive mode and always-watching steps keep checking until stopped.",
+            style = MaterialTheme.typography.bodySmall,
+        )
     }
 }

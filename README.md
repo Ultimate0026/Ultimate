@@ -37,9 +37,9 @@ Requires Android 8.0 (API 26) or newer.
 ## Quick start
 
 1. **New macro**, open it.
-2. Tap **Floating controls**, switch to your game, press **REC**, play the inputs you want, press **DONE**.
-3. Back in MacroBot, tweak the steps (delays, priority, repeat...). Use the ▶ button on a step to test it.
-4. Press **Start** (or **RUN** on the floating bar). **STOP** ends it. Closing the bar (X) also stops it.
+2. Tap **Add step > Record inputs in the game** (or **Floating controls**), switch to your game, press **REC**, play the inputs you want, press **DONE**.
+3. Back in MacroBot, tap a step to edit it (position, delays, priority, repeat...). Use the ⋮ menu on a step to test, move or delete it.
+4. Press **Start** at the bottom (or **RUN** on the floating bar). **STOP** ends it. Closing the bar (X) also stops it.
 
 ### Run modes
 
@@ -69,7 +69,7 @@ A macro with only watchers just sits and watches until you press STOP. Watchers 
 
 ### Text steps
 
-Tap **Text step**, type the words to find (for example `I'm here`), and choose *Tap text* or *Wait for text*.
+Tap **Add step > Find text on screen**, type the words to find (for example `I'm here`), and use the *Tap it when found* switch to choose whether it taps or only waits.
 It reads the screen with on-device OCR, so no picture needs to be cropped. Capital letters, spaces and
 punctuation are ignored. *Match strictness* controls how many misread letters are forgiven (lower = more
 forgiving). Text steps support everything image steps do, including **Always watching** and the two
@@ -78,7 +78,7 @@ matching, so use a longer check interval (1-3 seconds) if the phone gets warm.
 
 ### Image steps
 
-1. In a macro, tap **Image step** (or **Tap / swipe** and pick *Tap image* / *Wait for image* as the type), then press *Pick image from screen*.
+1. In a macro, tap **Add step > Find a picture on screen**, then press *Pick image from screen*.
 2. Switch to your game, press **CROP**, and drag a box around the target (a button or icon).
 3. Reopen MacroBot - a thumbnail appears on the step. Raise the match threshold if it taps the wrong
    thing, lower it if it misses.

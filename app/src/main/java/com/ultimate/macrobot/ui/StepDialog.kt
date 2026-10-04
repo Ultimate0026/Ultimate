@@ -1,6 +1,5 @@
 package com.ultimate.macrobot.ui
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -12,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -45,6 +45,28 @@ fun NumField(label: String, value: Long, modifier: Modifier = Modifier, onValue:
     )
 }
 
+/** The four things a step can be; image/text steps tap or only wait depending on a switch. */
+private enum class Kind(val label: String) {
+    TAP("Tap"),
+    SWIPE("Swipe"),
+    IMAGE("Find image"),
+    TEXT("Find text"),
+}
+
+private fun kindOf(step: Step): Kind = when {
+    step.isImage -> Kind.IMAGE
+    step.isText -> Kind.TEXT
+    step.type == StepType.SWIPE -> Kind.SWIPE
+    else -> Kind.TAP
+}
+
+private fun typeFor(kind: Kind, tap: Boolean): StepType = when (kind) {
+    Kind.TAP -> StepType.TAP
+    Kind.SWIPE -> StepType.SWIPE
+    Kind.IMAGE -> if (tap) StepType.TAP_IMAGE else StepType.WAIT_IMAGE
+    Kind.TEXT -> if (tap) StepType.TAP_TEXT else StepType.WAIT_TEXT
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun StepDialog(
@@ -55,8 +77,18 @@ fun StepDialog(
 ) {
     var step by remember { mutableStateOf(initial) }
     var threshold by remember { mutableStateOf(initial.threshold.toString()) }
+    var advanced by remember { mutableStateOf(false) }
 
     fun current(): Step = step.copy(threshold = threshold.toFloatOrNull()?.coerceIn(0.1f, 1f) ?: step.threshold)
+
+    val kind = kindOf(step)
+    val finds = step.needsScreen
+    val isWatcher = finds && step.watch
+    val tapsSomething = when {
+        kind == Kind.TAP || kind == Kind.SWIPE -> true
+        isWatcher -> step.tapOnSeen
+        else -> step.tapsTarget
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -73,60 +105,56 @@ fun StepDialog(
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
+
+                // --- What the step does
+                Text("What it does", style = MaterialTheme.typography.titleSmall)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    StepType.entries.forEach { type ->
+                    Kind.entries.forEach { k ->
                         FilterChip(
-                            selected = step.type == type,
-                            onClick = { step = step.copy(type = type) },
-                            label = { Text(type.label) },
+                            selected = kind == k,
+                            onClick = {
+                                val tap = step.tapsTarget || !step.needsScreen
+                                step = step.copy(type = typeFor(k, tap))
+                            },
+                            label = { Text(k.label) },
                         )
                     }
                 }
                 Text(
-                    when (step.type) {
-                        StepType.TAP -> "Taps one fixed spot on the screen."
-                        StepType.SWIPE -> "Drags from one spot to another."
-                        StepType.WAIT_IMAGE -> "Waits until a picture you choose is on screen. Does not tap."
-                        StepType.TAP_IMAGE -> "Looks for a picture you choose and taps it wherever it appears."
-                        StepType.WAIT_TEXT -> "Waits until the words you type appear on screen. Does not tap."
-                        StepType.TAP_TEXT -> "Looks for the words you type and taps them wherever they appear."
+                    when (kind) {
+                        Kind.TAP -> "Taps one fixed spot on the screen."
+                        Kind.SWIPE -> "Drags from one spot to another."
+                        Kind.IMAGE -> "Looks for a picture you choose, wherever it appears."
+                        Kind.TEXT -> "Looks for words you type, wherever they appear."
                     },
                     style = MaterialTheme.typography.bodySmall,
                 )
 
-                if (!step.needsScreen) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        NumField("X", step.x.toLong(), Modifier.weight(1f)) { step = step.copy(x = it.toInt()) }
-                        NumField("Y", step.y.toLong(), Modifier.weight(1f)) { step = step.copy(y = it.toInt()) }
+                // --- Where / what to look for
+                when (kind) {
+                    Kind.TAP, Kind.SWIPE -> {
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            NumField("X", step.x.toLong(), Modifier.weight(1f)) { step = step.copy(x = it.toInt()) }
+                            NumField("Y", step.y.toLong(), Modifier.weight(1f)) { step = step.copy(y = it.toInt()) }
+                        }
+                        if (kind == Kind.SWIPE) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                NumField("End X", step.x2.toLong(), Modifier.weight(1f)) { step = step.copy(x2 = it.toInt()) }
+                                NumField("End Y", step.y2.toLong(), Modifier.weight(1f)) { step = step.copy(y2 = it.toInt()) }
+                            }
+                        }
                     }
-                }
-                if (step.type == StepType.SWIPE) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        NumField("End X", step.x2.toLong(), Modifier.weight(1f)) { step = step.copy(x2 = it.toInt()) }
-                        NumField("End Y", step.y2.toLong(), Modifier.weight(1f)) { step = step.copy(y2 = it.toInt()) }
-                    }
-                }
-                if (step.type == StepType.TAP || step.type == StepType.SWIPE || step.tapsTarget) {
-                    NumField(
-                        if (step.type == StepType.SWIPE) "Swipe time (ms)" else "Press time (ms)",
-                        step.durationMs, Modifier.fillMaxWidth(),
-                    ) { step = step.copy(durationMs = it.coerceAtLeast(1)) }
-                }
-
-                if (step.needsScreen) {
-                    if (step.isImage) {
-                        Text(
-                            "How to pick the picture:\n" +
-                                "1. Press the button below (MacroBot goes to the background).\n" +
-                                "2. Open your game and press CROP on the floating bar.\n" +
-                                "3. Drag a box around the button or icon to look for.\n" +
-                                "4. Come back here - a thumbnail shows on the step.",
-                            style = MaterialTheme.typography.bodySmall,
-                        )
+                    Kind.IMAGE -> {
                         OutlinedButton(onClick = { onPickImage(current()) }, modifier = Modifier.fillMaxWidth()) {
                             Text(if (step.templateFile == null) "Pick image from screen" else "Re-pick image from screen")
                         }
-                    } else {
+                        Text(
+                            "MacroBot goes to the background. Open your game, press CROP on the floating " +
+                                "bar and drag a box around the button or icon. A thumbnail then shows on the step.",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+                    Kind.TEXT -> {
                         OutlinedTextField(
                             value = step.text,
                             onValueChange = { step = step.copy(text = it) },
@@ -135,31 +163,32 @@ fun StepDialog(
                             modifier = Modifier.fillMaxWidth(),
                         )
                         Text(
-                            "Capital letters, spaces and punctuation are ignored. Works for Latin letters " +
-                                "and numbers (English and similar). Pick a distinctive word or phrase.",
+                            "Capital letters, spaces and punctuation are ignored. Latin letters and " +
+                                "numbers only (English and similar).",
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
-                    OutlinedTextField(
-                        value = threshold,
-                        onValueChange = { threshold = it },
-                        label = {
-                            Text(
-                                if (step.isText) "Match strictness (0.1 - 1.0, lower forgives misreads)"
-                                else "Match threshold (0.1 - 1.0)",
-                            )
-                        },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                        modifier = Modifier.fillMaxWidth(),
-                    )
+                }
 
+                // --- Image / text options
+                if (finds) {
+                    if (!step.watch) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("Tap it when found", Modifier.weight(1f))
+                            Switch(
+                                checked = step.tapsTarget,
+                                onCheckedChange = { step = step.copy(type = typeFor(kind, it)) },
+                            )
+                        }
+                    }
+
+                    HorizontalDivider()
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
-                            Text("Always watching")
+                            Text("Pop-up watcher", style = MaterialTheme.typography.titleSmall)
                             Text(
-                                "Checks the screen in the background for the whole run, even while " +
-                                    "your other steps are tapping. Use it for pop-ups like \"I'm here\".",
+                                "Keeps checking in the background for the whole run, even while other " +
+                                    "steps are tapping. Good for pop-ups like \"I'm here\".",
                                 style = MaterialTheme.typography.bodySmall,
                             )
                         }
@@ -177,37 +206,65 @@ fun StepDialog(
                             }
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(if (step.isText) "Tap the text when seen" else "Tap the image when seen", Modifier.weight(1f))
+                            Text("Tap it when seen", Modifier.weight(1f))
                             Switch(checked = step.tapOnSeen, onCheckedChange = { step = step.copy(tapOnSeen = it) })
                         }
-                    } else {
-                        NumField("Look for up to (ms, sequence mode)", step.timeoutMs, Modifier.fillMaxWidth()) {
-                            step = step.copy(timeoutMs = it.coerceAtLeast(0))
-                        }
                     }
+                    HorizontalDivider()
                 }
 
-                val isWatcher = step.needsScreen && step.watch
                 NumField(
-                    if (isWatcher) "Wait after it appears, before the macro continues/restarts (ms)" else "Delay after (ms)",
+                    if (isWatcher) "Wait after it appears, before the macro continues/restarts (ms)"
+                    else "Wait afterwards (ms)",
                     step.delayAfterMs, Modifier.fillMaxWidth(),
-                ) {
-                    step = step.copy(delayAfterMs = it.coerceAtLeast(0))
+                ) { step = step.copy(delayAfterMs = it.coerceAtLeast(0)) }
+
+                // --- Advanced
+                TextButton(onClick = { advanced = !advanced }) {
+                    Text(if (advanced) "Hide advanced options" else "Advanced options")
                 }
-                if (!isWatcher) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        NumField("Priority (low runs first)", step.priority.toLong(), Modifier.weight(1f)) {
-                            step = step.copy(priority = it.toInt())
-                        }
-                        NumField("Repeat", step.repeat.toLong(), Modifier.weight(1f)) {
-                            step = step.copy(repeat = it.toInt().coerceAtLeast(1))
+                if (advanced) {
+                    if (tapsSomething) {
+                        NumField(
+                            if (kind == Kind.SWIPE) "Swipe time (ms)" else "Press time (ms)",
+                            step.durationMs, Modifier.fillMaxWidth(),
+                        ) { step = step.copy(durationMs = it.coerceAtLeast(1)) }
+                    }
+                    if (finds) {
+                        OutlinedTextField(
+                            value = threshold,
+                            onValueChange = { threshold = it },
+                            label = {
+                                Text(
+                                    if (kind == Kind.TEXT) "Match strictness (0.1 - 1.0, lower forgives misreads)"
+                                    else "Match threshold (0.1 - 1.0)",
+                                )
+                            },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        if (!step.watch) {
+                            NumField("Look for up to (ms, sequence mode)", step.timeoutMs, Modifier.fillMaxWidth()) {
+                                step = step.copy(timeoutMs = it.coerceAtLeast(0))
+                            }
                         }
                     }
+                    if (!isWatcher) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            NumField("Priority (low runs first)", step.priority.toLong(), Modifier.weight(1f)) {
+                                step = step.copy(priority = it.toInt())
+                            }
+                            NumField("Repeat", step.repeat.toLong(), Modifier.weight(1f)) {
+                                step = step.copy(repeat = it.toInt().coerceAtLeast(1))
+                            }
+                        }
+                        Text(
+                            "Priority decides order: 10 runs before 20. Equal numbers keep list order.",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
                 }
-                Text(
-                    "Priority decides order: 10 runs before 20. Equal numbers keep list order.",
-                    style = MaterialTheme.typography.bodySmall,
-                )
             }
         },
         confirmButton = { TextButton(onClick = { onSave(current()) }) { Text("Save") } },

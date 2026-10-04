@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -106,6 +107,8 @@ private fun HomeScreen(onOpen: (String) -> Unit, onGrantCapture: () -> Unit) {
     val repo = MacroBotApp.repo
     val macros by repo.macros.collectAsState()
     var pendingDelete by remember { mutableStateOf<Macro?>(null) }
+    var showAbout by remember { mutableStateOf(false) }
+    if (showAbout) AboutDialog(onDismiss = { showAbout = false })
     pendingDelete?.let { m ->
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
@@ -118,7 +121,16 @@ private fun HomeScreen(onOpen: (String) -> Unit, onGrantCapture: () -> Unit) {
         )
     }
     Scaffold(
-        topBar = { TopAppBar(title = { Text("MacroBot") }) },
+        topBar = {
+            TopAppBar(
+                title = { Text("MacroBot") },
+                actions = {
+                    IconButton(onClick = { showAbout = true }) {
+                        Icon(Icons.Default.Info, contentDescription = "About and privacy")
+                    }
+                },
+            )
+        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
@@ -156,7 +168,6 @@ private fun HomeScreen(onOpen: (String) -> Unit, onGrantCapture: () -> Unit) {
                     }
                 }
             }
-            item { AboutCard() }
             item { Spacer(Modifier.height(72.dp)) }
         }
     }
@@ -172,65 +183,80 @@ fun SetupCard(onGrantCapture: () -> Unit) {
 
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Setup", style = MaterialTheme.typography.titleMedium)
-
-            Text("1. Accessibility service: ${if (accessibilityOn) "ON" else "OFF"}")
+            Text(
+                if (accessibilityOn) "Ready" else "Setup needed",
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Text(
+                "Accessibility ${if (accessibilityOn) "on" else "off"} - " +
+                    "Screen capture ${if (captureOn) "on" else "off"}",
+                style = MaterialTheme.typography.bodySmall,
+            )
             if (!accessibilityOn) {
                 Text(
-                    "Turn on MacroBot under Downloaded/Installed apps. If Android says \"restricted " +
-                        "setting\", open Settings > Apps > MacroBot > menu > Allow restricted settings first.",
+                    "Turn on MacroBot under Accessibility > Downloaded/Installed apps. If Android says " +
+                        "\"restricted setting\", open Settings > Apps > MacroBot > menu > " +
+                        "Allow restricted settings first.",
                     style = MaterialTheme.typography.bodySmall,
                 )
                 OutlinedButton(onClick = {
                     context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
                 }) { Text("Open accessibility settings") }
             }
-
-            Text("2. Screen capture (image recognition): ${if (captureOn) "ON" else "OFF"}")
-            if (captureOn) {
-                OutlinedButton(onClick = { ScreenCaptureService.stop(context) }) { Text("Turn off") }
-            } else {
-                OutlinedButton(onClick = onGrantCapture) { Text("Grant screen capture") }
-            }
-
-            Text("3. Floating controls (RUN / REC / CROP over your game)")
-            Button(onClick = {
-                val svc = MacroAccessibilityService.instance
-                if (svc == null) {
-                    Toast.makeText(context, "Enable the accessibility service first", Toast.LENGTH_SHORT).show()
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(onClick = {
+                    val svc = MacroAccessibilityService.instance
+                    if (svc == null) {
+                        Toast.makeText(context, "Enable the accessibility service first", Toast.LENGTH_SHORT).show()
+                    } else {
+                        svc.overlay.showBubble()
+                    }
+                }) { Text("Floating controls") }
+                if (captureOn) {
+                    OutlinedButton(onClick = { ScreenCaptureService.stop(context) }) { Text("Stop capture") }
                 } else {
-                    svc.overlay.showBubble()
+                    OutlinedButton(onClick = onGrantCapture) { Text("Grant screen capture") }
                 }
-            }) { Text("Show floating controls") }
+            }
+            Text(
+                "Screen capture is only needed for image and text steps.",
+                style = MaterialTheme.typography.bodySmall,
+            )
         }
     }
 }
 
 @Composable
-private fun AboutCard() {
-    Card(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text("About", style = MaterialTheme.typography.titleMedium)
-            Text(
-                "MacroBot ${BuildConfig.VERSION_NAME} - records and replays taps and swipes, and can " +
-                    "react to images and text on screen. Your macros and screenshots never leave your device. " +
+private fun AboutDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("About MacroBot ${BuildConfig.VERSION_NAME}") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(
+                    "Records and replays taps and swipes, and can react to images and text on screen. " +
+                        "Your macros and screenshots never leave your device.",
+                )
+                Text(
                     "The app checks GitHub for newer releases (optional), and the text-recognition " +
-                    "library (Google ML Kit) may send anonymous usage statistics, never your screen content.",
-                style = MaterialTheme.typography.bodySmall,
-            )
-            var checks by remember { mutableStateOf(MacroBotApp.repo.updateChecksEnabled) }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Check for updates on launch", Modifier.weight(1f))
-                Switch(checked = checks, onCheckedChange = {
-                    checks = it
-                    MacroBotApp.repo.updateChecksEnabled = it
-                })
+                        "library (Google ML Kit) may send anonymous usage statistics - never your screen content.",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                var checks by remember { mutableStateOf(MacroBotApp.repo.updateChecksEnabled) }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Check for updates on launch", Modifier.weight(1f))
+                    Switch(checked = checks, onCheckedChange = {
+                        checks = it
+                        MacroBotApp.repo.updateChecksEnabled = it
+                    })
+                }
+                Text(
+                    "Responsible use: many games forbid automation in their terms of service and may " +
+                        "suspend accounts that use it. You are responsible for how you use this app.",
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
-            Text(
-                "Responsible use: many games forbid automation in their terms of service and may " +
-                    "suspend accounts that use it. You are responsible for how you use this app.",
-                style = MaterialTheme.typography.bodySmall,
-            )
-        }
-    }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text("Close") } },
+    )
 }
