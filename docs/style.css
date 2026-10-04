@@ -53,3 +53,9 @@
   .callout p { margin: 0; color: var(--muted); }
   .steps > li { margin-bottom: 14px; }
 
+
+  .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 12px; }
+  .shots figure, .shot-single { margin: 0; }
+  .shots img, .shot-single img { width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid var(--border); }
+  figcaption { font-size: .9rem; color: var(--muted); margin-top: 8px; }
+  .shot-single { max-width: 260px; margin: 12px 0 20px; }
