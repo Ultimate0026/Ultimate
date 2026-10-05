@@ -4,6 +4,11 @@
 package com.ultimate.macrobot.engine
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
+import android.util.Log
+import android.widget.Toast
 import com.ultimate.macrobot.MacroBotApp
 import com.ultimate.macrobot.model.Macro
 import com.ultimate.macrobot.model.RunMode
@@ -12,6 +17,8 @@ import com.ultimate.macrobot.model.StepType
 import com.ultimate.macrobot.model.WatchAction
 import com.ultimate.macrobot.service.MacroAccessibilityService
 import com.ultimate.macrobot.service.ScreenCaptureService
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -42,7 +49,21 @@ object MacroRunner {
     /** Only one thing touches the screen at a time: the main macro or a watcher. */
     private val actionLock = Mutex()
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    /** An error while running (for example the phone running out of memory) stops the macro and says so, instead of crashing the app. */
+    private val failureHandler = CoroutineExceptionHandler { _, error ->
+        if (error is CancellationException) return@CoroutineExceptionHandler
+        Log.e("Ultrebo", "The macro stopped because of an error", error)
+        val reason = if (error is OutOfMemoryError) "the phone ran out of memory" else error.javaClass.simpleName
+        _status.value = ""
+        appContext?.let { context ->
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(context, "Macro stopped: $reason", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default + failureHandler)
+    private var appContext: Context? = null
     private var job: Job? = null
 
     /** Pause between screen checks; set from the running macro. */
@@ -77,6 +98,7 @@ object MacroRunner {
             if (enabled.any { it.isText && it.text.isBlank() }) return "A text step or rule has no text entered."
         }
         stop()
+        appContext = context.applicationContext
         scanMs = macro.scanIntervalMs.coerceAtLeast(MIN_SCAN_MS)
         _running.value = true
         job = scope.launch {
@@ -210,15 +232,13 @@ object MacroRunner {
         val times = step.repeat.coerceAtLeast(1)
         when (step.type) {
             StepType.TAP, StepType.SWIPE -> repeat(times) {
-                performLocked(step, step.x, step.y)
-                delay(step.delayAfterMs)
+                performThenWait(step, step.x, step.y)
             }
             StepType.WAIT_IMAGE, StepType.TAP_IMAGE, StepType.WAIT_TEXT, StepType.TAP_TEXT -> {
                 val match = waitForTarget(step) ?: return // not found in time: skip the step
                 if (step.tapsTarget) {
                     repeat(times) {
-                        performLocked(step, match.x, match.y)
-                        delay(step.delayAfterMs)
+                        performThenWait(step, match.x, match.y)
                     }
                 } else {
                     delay(step.delayAfterMs)
@@ -236,8 +256,7 @@ object MacroRunner {
                 when (step.type) {
                     StepType.TAP, StepType.SWIPE -> {
                         _status.value = step.title()
-                        performLocked(step, step.x, step.y)
-                        delay(step.delayAfterMs)
+                        performThenWait(step, step.x, step.y)
                         return
                     }
                     StepType.WAIT_IMAGE, StepType.TAP_IMAGE, StepType.WAIT_TEXT, StepType.TAP_TEXT -> {
@@ -246,8 +265,7 @@ object MacroRunner {
                             _status.value = step.title()
                             if (step.tapsTarget) {
                                 repeat(step.repeat.coerceAtLeast(1)) {
-                                    performLocked(step, match.x, match.y)
-                                    delay(step.delayAfterMs)
+                                    performThenWait(step, match.x, match.y)
                                 }
                             } else {
                                 delay(step.delayAfterMs)
@@ -302,8 +320,19 @@ object MacroRunner {
         }
     }
 
-    private suspend fun performLocked(step: Step, x: Int, y: Int) =
-        actionLock.withLock { perform(step, x, y) }
+    /**
+     * Does the gesture, then waits so the next one starts [Step.durationMs] + [Step.delayAfterMs] after this
+     * one began. Counting from when the gesture began keeps the gap steady even when the phone is slow to
+     * start or report a tap.
+     */
+    private suspend fun performThenWait(step: Step, x: Int, y: Int) {
+        var startedAt = 0L
+        actionLock.withLock {
+            startedAt = SystemClock.elapsedRealtime()
+            perform(step, x, y)
+        }
+        delay(Pacing.remainingMs(startedAt, step.durationMs, step.delayAfterMs, SystemClock.elapsedRealtime()))
+    }
 
     private suspend fun perform(step: Step, x: Int, y: Int) {
         val svc = MacroAccessibilityService.instance

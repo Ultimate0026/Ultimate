@@ -136,7 +136,10 @@ class ScreenCaptureService : Service() {
                 image.width + rowPadding / plane.pixelStride, image.height, Bitmap.Config.ARGB_8888,
             )
             padded.copyPixelsFromBuffer(plane.buffer)
-            return if (rowPadding == 0) padded else Bitmap.createBitmap(padded, 0, 0, image.width, image.height)
+            if (rowPadding == 0) return padded
+            // Cut off the padding, then free the bigger copy now rather than leaving it for the garbage collector:
+            // a full-screen bitmap every look at the screen adds up quickly on phones with little memory.
+            return Bitmap.createBitmap(padded, 0, 0, image.width, image.height).also { padded.recycle() }
         } finally {
             image.close()
         }
