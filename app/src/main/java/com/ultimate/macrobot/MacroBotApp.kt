@@ -4,16 +4,22 @@
 package com.ultimate.macrobot
 
 import android.app.Application
+import android.content.Context
 import com.ultimate.macrobot.data.MacroRepository
 
 class MacroBotApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        appContext = applicationContext
         repo = MacroRepository(this)
     }
 
     companion object {
         lateinit var repo: MacroRepository
+            private set
+
+        /** For messages shown from background work. */
+        lateinit var appContext: Context
             private set
     }
 }

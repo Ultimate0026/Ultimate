@@ -193,6 +193,18 @@ fun StepDialog(
                         }
                     }
 
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("Send a screenshot to Discord when found", Modifier.weight(1f))
+                        Switch(checked = step.notify, onCheckedChange = { step = step.copy(notify = it) })
+                    }
+                    if (step.notify) {
+                        Text(
+                            "Needs a Discord webhook: tap the bell button on the home screen. At most one screenshot " +
+                                "every few seconds for this step.",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+
                     HorizontalDivider()
                     if (rule) {
                         Text("When it appears", style = MaterialTheme.typography.titleSmall)

@@ -43,6 +43,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -172,6 +173,8 @@ private fun HomeScreen(
     var pendingDelete by remember { mutableStateOf<Macro?>(null) }
     var showAbout by remember { mutableStateOf(false) }
     if (showAbout) AboutDialog(onDismiss = { showAbout = false })
+    var showDiscord by remember { mutableStateOf(false) }
+    if (showDiscord) DiscordDialog(onDismiss = { showDiscord = false })
     pendingDelete?.let { m ->
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
@@ -188,6 +191,9 @@ private fun HomeScreen(
             TopAppBar(
                 title = { Text("Ultrebo") },
                 actions = {
+                    IconButton(onClick = { showDiscord = true }) {
+                        Icon(Icons.Default.Notifications, contentDescription = "Discord alerts")
+                    }
                     IconButton(onClick = { showAbout = true }) {
                         Icon(Icons.Default.Info, contentDescription = "About and privacy")
                     }
@@ -252,7 +258,8 @@ private fun AboutDialog(onDismiss: () -> Unit) {
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(
                     "Records and replays taps and swipes, and can react to images and text on screen. " +
-                        "Your macros and screenshots never leave your device.",
+                        "Your macros and screenshots stay on your device, unless you set a Discord webhook and switch on " +
+                        "\"Send a screenshot to Discord\" for a step or rule; then a screenshot is sent to that webhook when it is found.",
                 )
                 Text(
                     "The app checks GitHub for newer releases (optional), and the text-recognition " +

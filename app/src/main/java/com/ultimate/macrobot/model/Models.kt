@@ -84,6 +84,8 @@ data class Step(
     val tapOnSeen: Boolean = true,
     /** Rules: the [RuleGroup] this rule belongs to, if any. */
     val groupId: String? = null,
+    /** Send a screenshot to the Discord webhook (set in the app) whenever this is found. */
+    val notify: Boolean = false,
 ) {
     val isImage: Boolean get() = type == StepType.WAIT_IMAGE || type == StepType.TAP_IMAGE
     val isText: Boolean get() = type == StepType.WAIT_TEXT || type == StepType.TAP_TEXT
@@ -101,8 +103,9 @@ data class Step(
         if (isImage && templateFile == null) return "no image picked"
         if (isText && text.isBlank()) return "no text entered"
         val target = if (isImage) "an image" else "\"$text\""
+        val shot = if (notify) "send a screenshot to Discord, then " else ""
         val tap = if (tapOnSeen) "tap it, then " else ""
-        return "When $target appears: $tap${onSeen.label.lowercase()}"
+        return "When $target appears: $shot$tap${onSeen.label.lowercase()}"
     }
 
     /** What the per-step Test button should run: a rule is tested as a plain find-and-tap (or find-only) step. */
@@ -113,7 +116,9 @@ data class Step(
         else -> this
     }
 
-    fun summary(): String = when (type) {
+    fun summary(): String = baseSummary() + if (notify && needsScreen) " - screenshot to Discord" else ""
+
+    private fun baseSummary(): String = when (type) {
         StepType.TAP -> "($x, $y)"
         StepType.SWIPE -> "($x, $y) -> ($x2, $y2)"
         StepType.WAIT_IMAGE, StepType.TAP_IMAGE ->

@@ -4,12 +4,14 @@
 package com.ultimate.macrobot.engine
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
 import com.ultimate.macrobot.MacroBotApp
+import com.ultimate.macrobot.data.DiscordWebhook
 import com.ultimate.macrobot.model.Macro
 import com.ultimate.macrobot.model.RunMode
 import com.ultimate.macrobot.model.Step
@@ -96,6 +98,12 @@ object MacroRunner {
             if (ScreenCaptureService.instance?.isReady != true) return "Grant screen capture first (needed for image and text steps and rules)."
             if (enabled.any { it.isImage && it.templateFile == null }) return "An image step or rule has no image picked."
             if (enabled.any { it.isText && it.text.isBlank() }) return "A text step or rule has no text entered."
+            enabled.firstOrNull { it.needsScreen && it.notify }?.let {
+                if (!DiscordNotifier.configured()) {
+                    return "\"${it.title()}\" is set to send a screenshot to Discord, but no Discord webhook is set. " +
+                        "Add one with the bell button on the home screen, or switch that option off."
+                }
+            }
         }
         stop()
         appContext = context.applicationContext
@@ -214,6 +222,7 @@ object MacroRunner {
             val (step, match) = hit ?: continue
 
             _status.value = "Watcher: ${step.title()}"
+            notifyFound(step, match)
             actionLock.withLock {
                 if (step.tapOnSeen) perform(step, match.x, match.y)
                 if (step.onSeen == WatchAction.RESTART) stopMain()
@@ -236,6 +245,7 @@ object MacroRunner {
             }
             StepType.WAIT_IMAGE, StepType.TAP_IMAGE, StepType.WAIT_TEXT, StepType.TAP_TEXT -> {
                 val match = waitForTarget(step) ?: return // not found in time: skip the step
+                notifyFound(step, match)
                 if (step.tapsTarget) {
                     repeat(times) {
                         performThenWait(step, match.x, match.y)
@@ -263,6 +273,7 @@ object MacroRunner {
                         val match = if (frame != null) findTarget(frame, step) else null
                         if (match != null) {
                             _status.value = step.title()
+                            notifyFound(step, match)
                             if (step.tapsTarget) {
                                 repeat(step.repeat.coerceAtLeast(1)) {
                                     performThenWait(step, match.x, match.y)
@@ -283,15 +294,23 @@ object MacroRunner {
     }
 
     /** Where an image or text step's target is on this frame, or null when it is not visible. */
-    private data class Target(val x: Int, val y: Int)
+    private data class Target(val x: Int, val y: Int, val shot: Bitmap? = null)
+
+    /** A step that asked for it was found: queue the screenshot it was found in for Discord (sent in the background). */
+    private fun notifyFound(step: Step, target: Target) {
+        if (!step.notify) return
+        val macro = DiscordWebhook.cleanText(MacroBotApp.repo.active()?.name.orEmpty(), 60)
+        val where = if (macro.isEmpty()) "" else " in \"$macro\""
+        DiscordNotifier.send(step.id, "Ultrebo found \"${DiscordWebhook.cleanText(step.title(), 80)}\"$where", target.shot)
+    }
 
     private fun findTarget(frame: ImageMatcher.Frame, step: Step): Target? = when {
         step.isImage -> {
             val file = step.templateFile?.let { MacroBotApp.repo.templatePath(it) }
-            if (file == null) null else ImageMatcher.find(frame, file, step.threshold)?.let { Target(it.x, it.y) }
+            if (file == null) null else ImageMatcher.find(frame, file, step.threshold)?.let { Target(it.x, it.y, frame.bitmap) }
         }
         step.isText ->
-            TextMatcher.find(frame.text, step.text, step.threshold.toDouble())?.let { Target(it.x, it.y) }
+            TextMatcher.find(frame.text, step.text, step.threshold.toDouble())?.let { Target(it.x, it.y, frame.bitmap) }
         else -> null
     }
 

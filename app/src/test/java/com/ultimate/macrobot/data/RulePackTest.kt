@@ -64,6 +64,19 @@ class RulePackTest {
     private fun json(body: String) = zip(mapOf("rules.json" to body.toByteArray()))
 
     @Test
+    fun sharedPacksNeverCarryOrSwitchOnDiscord() {
+        val rule = text("AFK", "I'm here", 10).copy(notify = true)
+        val bytes = pack(listOf(rule))
+        val entries = java.util.zip.ZipInputStream(ByteArrayInputStream(bytes)).use { z ->
+            generateSequence { z.nextEntry }.associate { it.name to z.readBytes() }
+        }
+        assertFalse(String(entries.getValue("rules.json")).contains("notify"))
+        val handMade = String(entries.getValue("rules.json")).replaceFirst("{", "{\"notify\": true,")
+        val rules = RulePack.read(ByteArrayInputStream(zip(mapOf("rules.json" to handMade.toByteArray()))), clean).rules
+        assertFalse(rules.single().rule.notify)
+    }
+
+    @Test
     fun exportThenImportKeepsTheRulesAndMakesNewOnes() {
         val original = listOf(text("AFK", "I'm here", 20), image("Claim", 10))
         val contents = RulePack.read(ByteArrayInputStream(pack(original)), clean)

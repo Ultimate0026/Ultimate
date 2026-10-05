@@ -29,6 +29,14 @@ class MacroRepository(context: Context) {
         get() = prefs.getBoolean("update_checks", true)
         set(value) { prefs.edit().putBoolean("update_checks", value).apply() }
 
+    /**
+     * The Discord webhook that steps and rules marked "send a screenshot to Discord" post to. It is a secret, so it is
+     * kept only here (private app storage, not backed up), never inside a macro or a shared rule pack.
+     */
+    var webhookUrl: String
+        get() = prefs.getString("webhook_url", "") ?: ""
+        set(value) { prefs.edit().putString("webhook_url", value.trim()).apply() }
+
     fun setActive(id: String?) {
         _activeId.value = id
         prefs.edit().putString("active", id).apply()

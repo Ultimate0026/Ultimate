@@ -3,9 +3,12 @@
 
 package com.ultimate.macrobot.model
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ModelsTest {
@@ -123,6 +126,18 @@ class ModelsTest {
         assertEquals(emptyList<RuleGroup>(), after.groups)
         assertEquals(1, after.rules.size)
         assertEquals(null, after.rules[0].groupId)
+    }
+
+    @Test
+    fun theDiscordOptionIsRememberedWithTheStepAndShownInSummaries() {
+        val json = Json { encodeDefaults = true; ignoreUnknownKeys = true }
+        val step = Step(type = StepType.TAP_TEXT, text = "Victory", notify = true)
+        val back = json.decodeFromString<Step>(json.encodeToString(step))
+        assertTrue(back.notify)
+        assertFalse(json.decodeFromString<Step>("{}").notify) // macros saved before this option existed
+        assertTrue(step.summary().contains("Discord"))
+        assertTrue(step.copy(watch = true).ruleSummary().contains("Discord"))
+        assertFalse(step.copy(notify = false).summary().contains("Discord"))
     }
 
     @Test

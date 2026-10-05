@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Only used to ask GitHub whether a newer release exists (can be switched off in the app). -->
+    <!-- Asks GitHub whether a newer release exists (can be switched off in the app), and posts screenshots to the
+         user's own Discord webhook when they switch that on for a step or rule. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Lets the in-app updater hand a downloaded MacroBot update to Android's installer. -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
