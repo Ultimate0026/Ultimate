@@ -38,8 +38,8 @@
       <td>Android requires a visible notice while screen capture is running. It is the only notification Ultrebo shows.</td>
       <td>Settings &gt; Apps &gt; Ultrebo &gt; Notifications</td></tr>
     <tr><td class="perm">Internet</td>
-      <td>Used to ask GitHub whether a newer version exists, and to download it if you tap <em>Update now</em>. Nothing about you, your phone or your macros is sent.</td>
-      <td>Switch off <em>Check for updates on launch</em> in the About screen</td></tr>
+      <td>Used to ask GitHub whether a newer version exists, and to download it if you tap <em>Update now</em>. Nothing about you, your phone or your macros is sent. If you set a Discord webhook (the bell button) and switch it on for a step or rule, it is also used to post a screenshot to that webhook when the step or rule is found.</td>
+      <td>Switch off <em>Check for updates on launch</em> in the About screen. Empty the Discord webhook to stop screenshots</td></tr>
     <tr><td class="perm">Install unknown apps <span class="tag">optional</span></td>
       <td>Only used by the in-app updater to install Ultrebo's own new version. Android only accepts an update signed with the same key as the app you already have.</td>
       <td>Settings &gt; Apps &gt; Ultrebo &gt; Install unknown apps</td></tr>
@@ -48,7 +48,7 @@
 
 <h2>What Ultrebo does not do</h2>
 <ul>
-  <li>It does not upload your macros, screenshots or cropped images. They stay on your phone.</li>
+  <li>It does not upload your macros, screenshots or cropped images. They stay on your phone, except a screenshot you have asked for: only if you set a Discord webhook and switch it on for a step or rule is that screenshot posted to your webhook.</li>
   <li>It does not read what is inside other apps through the accessibility service.</li>
   <li>It has no ads and no accounts at the moment.</li>
   <li>It does not hide itself or try to avoid detection by games.</li>

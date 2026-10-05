@@ -97,6 +97,19 @@ Set your rules up once, then share them. On the **Rules** tab tap **Export rules
 - Rule packs from the computer version can't be used on a phone, and the other way round.
 - **Only import rule packs from people you trust, and check what each rule does:** rules tap things on your screen.
 
+### Screenshots to Discord
+
+Want to know when something is found while you're away? Add a **Discord webhook** and switch on **Send a screenshot to Discord when found** in any picture or text
+step, or in a rule. Each time it is found, Ultrebo posts a screenshot of your screen, with a short message such as `Ultrebo found "Victory" in "Farm"`, to your channel.
+
+1. In Discord open your channel's **Settings > Integrations > Webhooks > New Webhook** and choose **Copy Webhook URL**.
+2. In Ultrebo tap the **bell** button at the top of the home screen, paste it in and tap **Send test** to check it works.
+
+- A step sends at most one screenshot every few seconds, so a rule that keeps matching won't flood the channel. Sending happens in the background and never slows the macro down.
+- **Keep the webhook address private:** anyone who has it can post in that channel. It is saved only on your phone and is never included in a shared rules file. Importing rules never switches this on.
+- The screenshot shows your whole screen at that moment, so it can include anything that is showing.
+- If a macro has this switched on but no webhook is set, Ultrebo tells you instead of starting.
+
 ## Troubleshooting
 
 | Problem | Fix |
@@ -119,10 +132,10 @@ Each sensitive permission is used for exactly one thing:
 | **Accessibility service** | Performing your macros' taps and swipes and showing the floating bar. It doesn't read other apps' content. |
 | **Screen capture** (optional) | Only for picture and text steps. Frames are checked in memory and thrown away; the only image saved is the box you crop. Android asks again each time the app restarts. |
 | **Notifications** | Android requires a visible notice while screen capture is on. |
-| **Internet** | Checking GitHub for a newer release (you can turn this off) and downloading it if you tap Update. |
+| **Internet** | Checking GitHub for a newer release (you can turn this off), downloading it if you tap Update, and, only if you set a Discord webhook and switch it on for a step or rule, sending a screenshot to that webhook when it is found. |
 | **Install unknown apps** (optional) | Only so the in-app updater can install Ultrebo's own update. Android rejects anything signed with a different key. |
 
-Macros and cropped images are stored in the app's private storage and never uploaded. On launch the app asks GitHub's public API for the latest release
+Macros and cropped images are stored in the app's private storage and never uploaded. The one thing that can leave your phone is a screenshot you ask for: only if you set a Discord webhook and switch on *Send a screenshot to Discord* for a step or rule is that screenshot posted to your webhook. On launch the app asks GitHub's public API for the latest release
 and compares version numbers; nothing about you, your phone or your macros is sent. Switch it off with **Check for updates on launch** in About.
 
 Text recognition uses Google's [ML Kit](https://developers.google.com/ml-kit), which runs on your phone with a model bundled in the app.
