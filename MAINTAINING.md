@@ -23,8 +23,8 @@ docs/       The website (GitHub Pages)
 
 ## Releasing
 
-1. On GitHub: **Releases > Draft a new release**, create a tag such as `v0.1.5`, **Publish**.
-2. The *Release APK* workflow builds the app and attaches `Ultrebo-v0.1.5.apk` to that release. The tag becomes the version.
+1. On GitHub: **Releases > Draft a new release**, create a tag such as `v0.1.10`, **Publish**.
+2. The *Release APK* workflow builds the app and attaches `Ultrebo-v0.1.10.apk` to that release. The tag becomes the version.
 
 ## Signing
 
