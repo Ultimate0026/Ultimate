@@ -193,6 +193,22 @@ fun StepDialog(
                         }
                     }
 
+                    if (!rule) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("Then start the macro over from the first step", Modifier.weight(1f))
+                            Switch(
+                                checked = step.onSeen == WatchAction.RESTART,
+                                onCheckedChange = {
+                                    step = step.copy(onSeen = if (it) WatchAction.RESTART else WatchAction.CONTINUE)
+                                },
+                            )
+                        }
+                        Text(
+                            "Goes back to step 1 as soon as this is found, instead of carrying on to the next step. " +
+                                "It doesn't use up a loop. Only used in Sequence mode.",
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text("Send a screenshot to Discord when found", Modifier.weight(1f))
                         Switch(checked = step.notify, onCheckedChange = { step = step.copy(notify = it) })

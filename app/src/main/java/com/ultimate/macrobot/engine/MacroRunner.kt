@@ -179,9 +179,18 @@ object MacroRunner {
             when (macro.mode) {
                 RunMode.SEQUENCE -> {
                     if (round > 1) gate.restarted() // a new loop is a restart: groups set to re-enable wake up
+                    var startOver = false
                     for (step in steps) {
                         currentCoroutineContext().ensureActive()
-                        runSequenceStep(step)
+                        if (runSequenceStep(step)) {
+                            startOver = true // this step was found and is set to start the macro over
+                            break
+                        }
+                    }
+                    if (startOver) {
+                        round-- // starting over isn't a finished loop
+                        gate.restarted()
+                        continue
                     }
                     delay(macro.loopDelayMs)
                 }
@@ -236,22 +245,27 @@ object MacroRunner {
         }
     }
 
-    private suspend fun runSequenceStep(step: Step) {
+    /** Runs one step. True when the macro should now start over from its first step (a found step set to do that). */
+    private suspend fun runSequenceStep(step: Step): Boolean {
         _status.value = step.title()
         val times = step.repeat.coerceAtLeast(1)
-        when (step.type) {
-            StepType.TAP, StepType.SWIPE -> repeat(times) {
-                performThenWait(step, step.x, step.y)
+        return when (step.type) {
+            StepType.TAP, StepType.SWIPE -> {
+                repeat(times) { performThenWait(step, step.x, step.y) }
+                false
             }
             StepType.WAIT_IMAGE, StepType.TAP_IMAGE, StepType.WAIT_TEXT, StepType.TAP_TEXT -> {
-                val match = waitForTarget(step) ?: return // not found in time: skip the step
-                notifyFound(step, match)
-                if (step.tapsTarget) {
-                    repeat(times) {
-                        performThenWait(step, match.x, match.y)
-                    }
+                val match = waitForTarget(step)
+                if (match == null) {
+                    false // not found in time: skip the step
                 } else {
-                    delay(step.delayAfterMs)
+                    notifyFound(step, match)
+                    if (step.tapsTarget) {
+                        repeat(times) { performThenWait(step, match.x, match.y) }
+                    } else {
+                        delay(step.delayAfterMs)
+                    }
+                    step.onSeen == WatchAction.RESTART
                 }
             }
         }

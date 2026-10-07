@@ -141,6 +141,20 @@ class ModelsTest {
     }
 
     @Test
+    fun aStepCanBeSetToStartTheMacroOver() {
+        val json = Json { encodeDefaults = true; ignoreUnknownKeys = true }
+        val step = Step(type = StepType.TAP_IMAGE, templateFile = "a.png", onSeen = WatchAction.RESTART)
+        assertEquals(WatchAction.RESTART, json.decodeFromString<Step>(json.encodeToString(step)).onSeen)
+        assertEquals(WatchAction.CONTINUE, json.decodeFromString<Step>("{}").onSeen) // macros saved before the option
+        assertTrue(step.summary().contains("start the macro over"))
+        assertFalse(step.copy(onSeen = WatchAction.CONTINUE).summary().contains("start the macro over"))
+        // rules have their own wording, so the plain-step note isn't added to them
+        assertFalse(step.copy(watch = true).summary().contains("start the macro over"))
+        // taps and swipes never start the macro over
+        assertFalse(Step(type = StepType.TAP, onSeen = WatchAction.RESTART).summary().contains("start the macro over"))
+    }
+
+    @Test
     fun importedGroupsAreMergedByName() {
         val mine = RuleGroup(name = "pop-ups", pauseS = 5)
         val theirs = RuleGroup(name = "Pop-ups", pauseS = 30)

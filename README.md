@@ -62,6 +62,9 @@ Requires Android 8.0 or newer. After the first install, Ultrebo offers to update
 Crop tightly around something distinctive, use the same phone and orientation you'll run it on, and avoid areas with changing numbers. Raise the match
 threshold if it taps the wrong thing; lower it if it misses.
 
+In a picture or text step you can also switch on **Then start the macro over from the first step**: as soon as it's found (and tapped), the macro goes back to
+step 1 instead of carrying on to the next step. It doesn't use up one of your loops, and it's only used in Sequence mode.
+
 ### Find text
 
 Tap **Add step > Find text on screen** and type the words (for example `I'm here`). Capital letters, spaces and punctuation are ignored.

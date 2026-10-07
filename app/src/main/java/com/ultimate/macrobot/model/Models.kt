@@ -116,7 +116,10 @@ data class Step(
         else -> this
     }
 
-    fun summary(): String = baseSummary() + if (notify && needsScreen) " - screenshot to Discord" else ""
+    fun summary(): String =
+        baseSummary() +
+            (if (needsScreen && !watch && onSeen == WatchAction.RESTART) " - then start the macro over" else "") +
+            (if (notify && needsScreen) " - screenshot to Discord" else "")
 
     private fun baseSummary(): String = when (type) {
         StepType.TAP -> "($x, $y)"
