@@ -1,0 +1,1122 @@
+[
+ {
+  "name": "LilGreen",
+  "rarity": "Common",
+  "size": 3,
+  "face": "Eyes",
+  "triangles": 1640,
+  "bodyWidth": 2.9983748370622227,
+  "bounds": [
+   [
+    -1.499,
+    0.0,
+    -1.564
+   ],
+   [
+    1.499,
+    2.4,
+    1.499
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#69D24B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "BlueBlob",
+  "rarity": "Common",
+  "size": 3,
+  "face": "Eyes",
+  "triangles": 2264,
+  "bodyWidth": 2.998374837062223,
+  "bounds": [
+   [
+    -2.049,
+    0.0,
+    -1.546
+   ],
+   [
+    1.499,
+    3.064,
+    1.499
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#4FA3F7",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyelids": {
+    "color": "#4FA3F7",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Lashes": {
+    "color": "#16325C",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#16325C",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Zzz": {
+    "color": "#EAF5FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Pinky",
+  "rarity": "Common",
+  "size": 3,
+  "face": "Eyes",
+  "triangles": 2224,
+  "bodyWidth": 2.9983748370622227,
+  "bounds": [
+   [
+    -1.499,
+    0.0,
+    -1.542
+   ],
+   [
+    1.499,
+    2.4,
+    1.499
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#FF9CC8",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#FF5E99",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "BlushLines": {
+    "color": "#E0407A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Mudsy",
+  "rarity": "Common",
+  "size": 3,
+  "face": "Eyes",
+  "triangles": 2700,
+  "bodyWidth": 2.998374837062223,
+  "bounds": [
+   [
+    -1.836,
+    0.0,
+    -1.836
+   ],
+   [
+    1.836,
+    2.28,
+    1.836
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#7B5134",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Puddle": {
+    "color": "#5E3B24",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Drips": {
+    "color": "#7B5134",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Pupils": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#3B1E10",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Tongue": {
+    "color": "#FF7F9A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Tooth": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Bubblegum",
+  "rarity": "Uncommon",
+  "size": 3.2,
+  "face": "Eyes",
+  "triangles": 2480,
+  "bodyWidth": 3.198266492866371,
+  "bounds": [
+   [
+    -1.599,
+    0.0,
+    -2.869
+   ],
+   [
+    1.599,
+    2.56,
+    1.599
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#FF3FA4",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#FF77BE",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#B0186A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Bubble": {
+    "color": "#FF8CCB",
+    "material": "SmoothPlastic",
+    "transparency": 0.3
+   },
+   "BubbleShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.1
+   }
+  }
+ },
+ {
+  "name": "LemonDrop",
+  "rarity": "Uncommon",
+  "size": 3.2,
+  "face": "Eyes",
+  "triangles": 2540,
+  "bodyWidth": 3.198266492866371,
+  "bounds": [
+   [
+    -1.599,
+    0.0,
+    -1.673
+   ],
+   [
+    1.599,
+    3.054,
+    1.599
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#FFE873",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#FFB36B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "LemonRind": {
+    "color": "#F2C400",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "LemonFlesh": {
+    "color": "#FFF27A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "LemonPith": {
+    "color": "#FFFCE6",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Minty",
+  "rarity": "Uncommon",
+  "size": 3.2,
+  "face": "Eyes",
+  "triangles": 2052,
+  "bodyWidth": 3.198266492866371,
+  "bounds": [
+   [
+    -1.599,
+    0.0,
+    -1.664
+   ],
+   [
+    1.599,
+    3.751,
+    1.599
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#8FF0C8",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#FF9EB5",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Leaf": {
+    "color": "#2FA84F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "LeafVein": {
+    "color": "#1E7A38",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Stem": {
+    "color": "#6B4A2B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "TopHat",
+  "rarity": "Rare",
+  "size": 3.6,
+  "face": "Eyes",
+  "triangles": 2816,
+  "bodyWidth": 3.5980498044746683,
+  "bounds": [
+   [
+    -1.799,
+    0.0,
+    -1.928
+   ],
+   [
+    1.799,
+    3.943,
+    1.799
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#F2A65A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Hat": {
+    "color": "#1E1E26",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "HatBand": {
+    "color": "#B71C2C",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Monocle": {
+    "color": "#E8B830",
+    "material": "Metal",
+    "transparency": 0.0
+   },
+   "Lens": {
+    "color": "#D8F3FF",
+    "material": "Glass",
+    "transparency": 0.55
+   },
+   "Mustache": {
+    "color": "#3B2618",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Ninja",
+  "rarity": "Rare",
+  "size": 3.6,
+  "face": "Eyes",
+  "triangles": 2708,
+  "bodyWidth": 3.5980498044746683,
+  "bounds": [
+   [
+    -1.799,
+    0.0,
+    -1.826
+   ],
+   [
+    1.799,
+    2.88,
+    2.422
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#23232B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Pupils": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Brows": {
+    "color": "#23232B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#5A5A66",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Headband": {
+    "color": "#D7263D",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Lava",
+  "rarity": "Rare",
+  "size": 3.6,
+  "face": "Eyes",
+  "triangles": 2168,
+  "bodyWidth": 3.634341733094076,
+  "bounds": [
+   [
+    -1.818,
+    0.0,
+    -1.933
+   ],
+   [
+    1.816,
+    2.86,
+    1.788
+   ]
+  ],
+  "looks": {
+   "Core": {
+    "color": "#FF5A00",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Body": {
+    "color": "#3A2B27",
+    "material": "Slate",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#FFD23F",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#FF8C1A",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Frost",
+  "rarity": "Epic",
+  "size": 4,
+  "face": "Eyes",
+  "triangles": 2568,
+  "bodyWidth": 3.9978331160829645,
+  "bounds": [
+   [
+    -1.999,
+    0.0,
+    -2.074
+   ],
+   [
+    1.999,
+    4.748,
+    1.999
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#8FD8FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1A2E4A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#1A2E4A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#FFB8D9",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Snow": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Crystals": {
+    "color": "#DDF7FF",
+    "material": "Glass",
+    "transparency": 0.2
+   }
+  }
+ },
+ {
+  "name": "Royal",
+  "rarity": "Epic",
+  "size": 4,
+  "face": "Eyes",
+  "triangles": 2904,
+  "bodyWidth": 3.9978331160829645,
+  "bounds": [
+   [
+    -2.382,
+    0.0,
+    -2.071
+   ],
+   [
+    2.382,
+    3.789,
+    2.376
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#8A4FD8",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Crown": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0
+   },
+   "Gems": {
+    "color": "#E0115F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cape": {
+    "color": "#C1121F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Collar": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Ghost",
+  "rarity": "Epic",
+  "size": 4,
+  "face": "Eyes",
+  "triangles": 2532,
+  "bodyWidth": 3.922077922077922,
+  "bounds": [
+   [
+    -2.286,
+    0.0,
+    -2.0
+   ],
+   [
+    2.286,
+    4.2,
+    2.0
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#F2F5FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.3
+   },
+   "Arms": {
+    "color": "#F2F5FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.3
+   },
+   "Eyes": {
+    "color": "#2B2D42",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#2B2D42",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#C9D3FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Devil",
+  "rarity": "Legendary",
+  "size": 4.5,
+  "face": "Eyes",
+  "triangles": 2644,
+  "bodyWidth": 4.497562255593334,
+  "bounds": [
+   [
+    -2.249,
+    0.0,
+    -2.315
+   ],
+   [
+    2.859,
+    4.5,
+    2.579
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#D9263A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Brows": {
+    "color": "#5E0A16",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#3A0A10",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Fang": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Horns": {
+    "color": "#2A0B10",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Tail": {
+    "color": "#C21F33",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "TailTip": {
+    "color": "#2A0B10",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Angel",
+  "rarity": "Legendary",
+  "size": 4.5,
+  "face": "Eyes",
+  "triangles": 2768,
+  "bodyWidth": 4.497562255593334,
+  "bounds": [
+   [
+    -2.904,
+    0.0,
+    -2.318
+   ],
+   [
+    2.904,
+    4.488,
+    2.249
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#FFF0D4",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#3A2A1A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#FFB3B3",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#3A2A1A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Halo": {
+    "color": "#FFD84A",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Wings": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Galaxy",
+  "rarity": "Legendary",
+  "size": 4.5,
+  "face": "Eyes",
+  "triangles": 2680,
+  "bodyWidth": 4.497562255593334,
+  "bounds": [
+   [
+    -2.249,
+    0.0,
+    -2.318
+   ],
+   [
+    2.249,
+    3.6,
+    2.249
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#2C1A5C",
+    "material": "SmoothPlastic",
+    "transparency": 0.22
+   },
+   "Nebula": {
+    "color": "#9B3FE0",
+    "material": "SmoothPlastic",
+    "transparency": 0.55
+   },
+   "Stars": {
+    "color": "#FFF4B8",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Sparkles": {
+    "color": "#9FE8FF",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#FFFFFF",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Dragon",
+  "rarity": "Mythic",
+  "size": 5.2,
+  "face": "Eyes",
+  "triangles": 2736,
+  "bodyWidth": 5.197183050907853,
+  "bounds": [
+   [
+    -3.284,
+    0.0,
+    -2.667
+   ],
+   [
+    3.284,
+    5.016,
+    2.85
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#3FA34D",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Belly": {
+    "color": "#F3DC8A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Nostrils": {
+    "color": "#1F5C29",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#1F3F22",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Fangs": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Horns": {
+    "color": "#E8B530",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Spikes": {
+    "color": "#E8B530",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Wings": {
+    "color": "#2F8A3E",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "WingBones": {
+    "color": "#E8B530",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Void",
+  "rarity": "Mythic",
+  "size": 5.2,
+  "face": "Eyes",
+  "triangles": 2296,
+  "bodyWidth": 5.197183050907853,
+  "bounds": [
+   [
+    -3.459,
+    0.0,
+    -3.071
+   ],
+   [
+    3.537,
+    4.16,
+    3.549
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#050508",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#B026FF",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Orbs": {
+    "color": "#7A1FD1",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "King",
+  "rarity": "Secret",
+  "size": 6.5,
+  "face": "Eyes",
+  "triangles": 2928,
+  "bodyWidth": 6.496478813634817,
+  "bounds": [
+   [
+    -3.248,
+    0.0,
+    -3.377
+   ],
+   [
+    3.248,
+    6.3,
+    3.248
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#F7C531",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#FF9A5A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Crown": {
+    "color": "#E0A40E",
+    "material": "Metal",
+    "transparency": 0.0
+   },
+   "GemsRed": {
+    "color": "#E0115F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "GemsBlue": {
+    "color": "#2D6CDF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "GemsGreen": {
+    "color": "#1FAF5A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cushion": {
+    "color": "#B01030",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Glitch",
+  "rarity": "Secret",
+  "size": 6.5,
+  "face": "Face",
+  "triangles": 916,
+  "bodyWidth": 6.500000000000001,
+  "bounds": [
+   [
+    -3.563,
+    0.0,
+    -3.25
+   ],
+   [
+    3.338,
+    6.338,
+    3.25
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#39FF14",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Chunks": {
+    "color": "#FF1FE0",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Face": {
+    "color": "#0B0B0B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Bits": {
+    "color": "#FF1FE0",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "BitsGreen": {
+    "color": "#39FF14",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
+ }
+]
