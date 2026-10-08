@@ -72,36 +72,45 @@ What the base has, by the names your scripts can use:
 Colours are set at the top of `tools/build_base.py`. Change them and run
 `python3 slimes/tools/build_base.py` to get a new builder script.
 
-## Map props
+## Map props and valley dressing
 
 In `props/`, same conventions (studs, front faces −Z, pivot at the bottom centre).
 
-| Model | Where | Height (studs) | Triangles |
-|---|---|---|---|
-| ValleyGate | Valley entrance, 100 wide | 30.4 | 8,020 |
-| Meadow_FlowerClump | Meadow | 3.8 | 2,656 |
-| Meadow_Mushrooms | Meadow | 6.0 | 1,736 |
-| Meadow_Sunflower | Meadow | 10.6 | 1,312 |
-| Swamp_DeadTree | Swamp | 11.5 | 1,670 |
-| Swamp_Reeds | Swamp | 5.0 | 820 |
-| Lava_Spire | Lava | 12.5 | 748 |
-| Lava_Vent | Lava | 6.2 | 892 |
-| Crystal_Cluster | Crystal | 8.6 | 416 |
-| Crystal_Shards | Crystal | 4.4 | 416 |
-| Void_Obelisk | Void | 11.8 | 344 |
-| Void_Shards | Void | 6.5 | 960 |
-| Tree_A | Street | 20.6 | 2,608 |
-| Tree_B | Street | 23.8 | 448 |
-| PlazaStatue | Plaza | 12.0 | 2,988 |
+| Model | What it is | Height (studs) |
+|---|---|---|
+| ValleyGate | Slime-tower arch for the valley entrance, 100 wide, "SLIME VALLEY" sign | 30.4 |
+| ZoneArch_Meadow / Swamp / Lava / Crystal / Void | Themed arch to replace each zone banner, 96 wide, sign with zone name and rarity line | 31–37 |
+| Cliff_Meadow / Swamp / Lava / Crystal / Void | Themed cliff piece (24 wide) that CliffDresser stretches onto your wall blocks | 35–40 |
+| Meadow_FlowerClump, Meadow_Mushrooms, Meadow_Sunflower | Meadow props | 4–11 |
+| Swamp_DeadTree, Swamp_Reeds | Swamp props | 5–12 |
+| Lava_Spire, Lava_Vent | Lava props | 6–13 |
+| Crystal_Cluster, Crystal_Shards | Crystal props | 4–9 |
+| Void_Obelisk, Void_Shards | Void props | 7–12 |
+| Tree_A, Tree_B | Street trees | 21, 24 |
+| PlazaStatue | King Slime statue on a plinth | 12 |
 
-1. Import the `.glb` files, then run [`roblox/PropSetup.lua`](roblox/PropSetup.lua) in the Command Bar. It colours
-   and anchors every part and turns collisions on only for solid parts (trunks, rocks, pillars, the plinth), so
-   players don't snag on petals and reeds. It also writes "SLIME VALLEY" on the gate sign and "KING SLIME" on
-   the statue plaque, adds lights to glowing parts and scales each prop to its height.
-2. Place `ValleyGate`, the trees and `PlazaStatue` by hand.
-3. To dress a zone, keep the set-up zone props in ServerStorage, select that zone's floor part, set `ZONE` at the
-   top of [`roblox/PropScatter.lua`](roblox/PropScatter.lua) and run it. It keeps a lane down the middle clear for
-   running and puts the props in `Workspace > MapProps > <Zone>`. Running it again replaces that zone's props.
+Steps in Studio (all scripts go in the Command Bar):
+
+1. Import the `.glb` files, then run [`roblox/PropSetup.lua`](roblox/PropSetup.lua). It colours and anchors every
+   part, turns collisions on only for solid parts (trunks, rocks, pillars), so players don't snag on petals and
+   reeds, writes the sign text, adds lights to glowing parts and scales each prop to its height. Move the set-up
+   props into ServerStorage; they are the templates.
+2. Place `ValleyGate`, the five `ZoneArch` models (over your old banners), the trees and `PlazaStatue`. The arch
+   signs show the zone name and rarity line; edit `SignGui*.SubLabel` to add the guardian speed text.
+3. For each zone, select its floor, set `ZONE` at the top of [`roblox/ZoneDresser.lua`](roblox/ZoneDresser.lua) and
+   run it. It scatters that zone's props, lays a themed path down the middle (stepping stones, a boardwalk, basalt
+   over glowing lava, ice tiles, glowing void tiles) with the area around it kept clear for running, adds drifting
+   particles and tags the floor with its zone.
+4. Then select that zone's wall blocks and run [`roblox/CliffDresser.lua`](roblox/CliffDresser.lua) with the same
+   `ZONE`. Each block gets cliff pieces stretched to its size, rocky face toward the valley; the block stays as an
+   invisible collision wall, so gameplay doesn't change.
+5. Run [`roblox/MapLighting.lua`](roblox/MapLighting.lua) once. It sets soft afternoon lighting with a light haze,
+   bloom on neon and sun rays, and installs a `ZoneMood` LocalScript that fades the haze and colour as players walk
+   between zones: warm in the Meadow, misty green in the Swamp, orange haze in the Lava zone, cool in the Crystal
+   zone and dark purple in the Void.
+
+Everything placed by the dressers goes into `Workspace > MapProps > <Zone>`. Running a dresser again replaces what
+it placed before.
 
 ## Importing into Roblox Studio
 

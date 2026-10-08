@@ -10,8 +10,10 @@
 	    solid parts (trunks, rocks, pillars), so players don't snag on petals and reeds
 	  - anchors every part and moves them straight under the model
 	  - puts the pivot at the bottom centre and scales the prop to its height in studs
-	  - adds sign text (the gate's "SLIME VALLEY", the statue's plaque) and lights for glowing parts
-	  - tags it with a PropZone attribute, which PropScatter.lua uses to find props for a zone
+	  - adds sign text (the gate's "SLIME VALLEY", each zone arch's name and rarity line, the statue's
+	    plaque) and lights for glowing parts
+	  - tags it with PropZone and PropKind attributes, which ZoneDresser.lua and CliffDresser.lua use
+	    to find the right pieces for a zone
 
 	Running it again is safe.
 ]]
@@ -59,22 +61,31 @@ local function addSign(part, sign)
 		gui.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
 		gui.PixelsPerStud = sign.PixelsPerStud
 		gui.LightInfluence = 0
-		local label = Instance.new("TextLabel")
-		label.Name = "Label"
-		label.BackgroundTransparency = 1
-		label.AnchorPoint = Vector2.new(0.5, 0.5)
-		label.Position = UDim2.fromScale(0.5, 0.5)
-		label.Size = UDim2.fromScale(0.92, 0.8)
-		label.Font = Enum.Font.FredokaOne
-		label.TextScaled = true
-		label.Text = sign.Text
-		label.TextColor3 = sign.Color
-		local stroke = Instance.new("UIStroke")
-		stroke.Color = Color3.new(0, 0, 0)
-		stroke.Transparency = 0.4
-		stroke.Thickness = 3
-		stroke.Parent = label
-		label.Parent = gui
+		local hasSub = sign.Sub ~= ""
+		local function addLabel(name, text, color, y, height)
+			local label = Instance.new("TextLabel")
+			label.Name = name
+			label.BackgroundTransparency = 1
+			label.AnchorPoint = Vector2.new(0.5, 0.5)
+			label.Position = UDim2.fromScale(0.5, y)
+			label.Size = UDim2.fromScale(0.92, height)
+			label.Font = Enum.Font.FredokaOne
+			label.TextScaled = true
+			label.Text = text
+			label.TextColor3 = color
+			local stroke = Instance.new("UIStroke")
+			stroke.Color = Color3.new(0, 0, 0)
+			stroke.Transparency = 0.4
+			stroke.Thickness = 3
+			stroke.Parent = label
+			label.Parent = gui
+		end
+		if hasSub then
+			addLabel("Label", sign.Text, sign.Color, 0.38, 0.52)
+			addLabel("SubLabel", sign.Sub, Color3.new(1, 1, 1), 0.8, 0.26)
+		else
+			addLabel("Label", sign.Text, sign.Color, 0.5, 0.8)
+		end
 		gui.Parent = part
 	end
 end
@@ -147,6 +158,7 @@ local function setup(model, spec)
 		end
 	end
 	model:SetAttribute("PropZone", spec.Zone)
+	model:SetAttribute("PropKind", spec.Kind)
 end
 
 local candidates = {}

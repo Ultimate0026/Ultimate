@@ -10,14 +10,16 @@
 	    solid parts (trunks, rocks, pillars), so players don't snag on petals and reeds
 	  - anchors every part and moves them straight under the model
 	  - puts the pivot at the bottom centre and scales the prop to its height in studs
-	  - adds sign text (the gate's "SLIME VALLEY", the statue's plaque) and lights for glowing parts
-	  - tags it with a PropZone attribute, which PropScatter.lua uses to find props for a zone
+	  - adds sign text (the gate's "SLIME VALLEY", each zone arch's name and rarity line, the statue's
+	    plaque) and lights for glowing parts
+	  - tags it with PropZone and PropKind attributes, which ZoneDresser.lua and CliffDresser.lua use
+	    to find the right pieces for a zone
 
 	Running it again is safe.
 ]]
 
 local SPECS = {
-	ValleyGate = { Zone = "Gate", Height = 30.3928, Main = "Arch", Signs = { { Part = "SignPanel", Text = "SLIME VALLEY", Color = Color3.fromRGB(255, 213, 74), PixelsPerStud = 20, FrontOnly = false } }, Lights = {  }, Parts = {
+	ValleyGate = { Zone = "Gate", Kind = "Landmark", Height = 30.3928, Main = "Arch", Signs = { { Part = "SignPanel", Text = "SLIME VALLEY", Sub = "", Color = Color3.fromRGB(255, 213, 74), PixelsPerStud = 20, FrontOnly = false } }, Lights = {  }, Parts = {
 		Arch = { Color3.fromRGB(139, 234, 79), Enum.Material.SmoothPlastic, 0, true },
 		Drips = { Color3.fromRGB(139, 234, 79), Enum.Material.SmoothPlastic, 0, false },
 		Eyes = { Color3.fromRGB(27, 27, 31), Enum.Material.SmoothPlastic, 0, false },
@@ -33,7 +35,7 @@ local SPECS = {
 		SignFrame = { Color3.fromRGB(255, 92, 122), Enum.Material.SmoothPlastic, 0, true },
 		Straps = { Color3.fromRGB(139, 234, 79), Enum.Material.SmoothPlastic, 0, false },
 	} },
-	Meadow_FlowerClump = { Zone = "Meadow", Height = 3.8426, Main = "Stems", Signs = {  }, Lights = {  }, Parts = {
+	Meadow_FlowerClump = { Zone = "Meadow", Kind = "Scatter", Height = 3.8426, Main = "Stems", Signs = {  }, Lights = {  }, Parts = {
 		Stems = { Color3.fromRGB(62, 155, 58), Enum.Material.SmoothPlastic, 0, false },
 		Leaves = { Color3.fromRGB(88, 184, 74), Enum.Material.SmoothPlastic, 0, false },
 		Grass = { Color3.fromRGB(76, 168, 67), Enum.Material.SmoothPlastic, 0, false },
@@ -43,73 +45,73 @@ local SPECS = {
 		PetalsPurple = { Color3.fromRGB(180, 140, 255), Enum.Material.SmoothPlastic, 0, false },
 		PetalsRed = { Color3.fromRGB(255, 90, 90), Enum.Material.SmoothPlastic, 0, false },
 	} },
-	Meadow_Mushrooms = { Zone = "Meadow", Height = 6.0273, Main = "Stems", Signs = {  }, Lights = {  }, Parts = {
+	Meadow_Mushrooms = { Zone = "Meadow", Kind = "Scatter", Height = 6.0273, Main = "Stems", Signs = {  }, Lights = {  }, Parts = {
 		Stems = { Color3.fromRGB(243, 233, 210), Enum.Material.SmoothPlastic, 0, true },
 		CapsRed = { Color3.fromRGB(226, 69, 60), Enum.Material.SmoothPlastic, 0, true },
 		CapsOrange = { Color3.fromRGB(242, 140, 40), Enum.Material.SmoothPlastic, 0, false },
 		Spots = { Color3.fromRGB(255, 255, 255), Enum.Material.SmoothPlastic, 0, false },
 		Grass = { Color3.fromRGB(76, 168, 67), Enum.Material.SmoothPlastic, 0, false },
 	} },
-	Meadow_Sunflower = { Zone = "Meadow", Height = 10.5937, Main = "Stem", Signs = {  }, Lights = {  }, Parts = {
+	Meadow_Sunflower = { Zone = "Meadow", Kind = "Scatter", Height = 10.5937, Main = "Stem", Signs = {  }, Lights = {  }, Parts = {
 		Stem = { Color3.fromRGB(62, 155, 58), Enum.Material.SmoothPlastic, 0, true },
 		Leaves = { Color3.fromRGB(88, 184, 74), Enum.Material.SmoothPlastic, 0, false },
 		Petals = { Color3.fromRGB(255, 210, 63), Enum.Material.SmoothPlastic, 0, false },
 		Seeds = { Color3.fromRGB(107, 62, 31), Enum.Material.SmoothPlastic, 0, false },
 	} },
-	Swamp_DeadTree = { Zone = "Swamp", Height = 11.5018, Main = "Trunk", Signs = {  }, Lights = {  }, Parts = {
+	Swamp_DeadTree = { Zone = "Swamp", Kind = "Scatter", Height = 11.5018, Main = "Trunk", Signs = {  }, Lights = {  }, Parts = {
 		Trunk = { Color3.fromRGB(107, 91, 78), Enum.Material.SmoothPlastic, 0, true },
 		Branches = { Color3.fromRGB(107, 91, 78), Enum.Material.SmoothPlastic, 0, false },
 		Moss = { Color3.fromRGB(126, 154, 85), Enum.Material.SmoothPlastic, 0, false },
 	} },
-	Swamp_Reeds = { Zone = "Swamp", Height = 5.0353, Main = "Stalks", Signs = {  }, Lights = {  }, Parts = {
+	Swamp_Reeds = { Zone = "Swamp", Kind = "Scatter", Height = 5.0353, Main = "Stalks", Signs = {  }, Lights = {  }, Parts = {
 		Stalks = { Color3.fromRGB(110, 143, 58), Enum.Material.SmoothPlastic, 0, false },
 		Blades = { Color3.fromRGB(134, 168, 74), Enum.Material.SmoothPlastic, 0, false },
 		Cattails = { Color3.fromRGB(122, 75, 42), Enum.Material.SmoothPlastic, 0, false },
 	} },
-	Lava_Spire = { Zone = "Lava", Height = 12.5024, Main = "Rock", Signs = {  }, Lights = {  }, Parts = {
+	Lava_Spire = { Zone = "Lava", Kind = "Scatter", Height = 12.5024, Main = "Rock", Signs = {  }, Lights = {  }, Parts = {
 		Rock = { Color3.fromRGB(58, 46, 43), Enum.Material.Slate, 0, true },
 		Magma = { Color3.fromRGB(255, 106, 0), Enum.Material.Neon, 0, false },
 		Rubble = { Color3.fromRGB(43, 34, 32), Enum.Material.Slate, 0, false },
 	} },
-	Lava_Vent = { Zone = "Lava", Height = 6.2400, Main = "Rock", Signs = {  }, Lights = {  }, Parts = {
+	Lava_Vent = { Zone = "Lava", Kind = "Scatter", Height = 6.2400, Main = "Rock", Signs = {  }, Lights = {  }, Parts = {
 		Rock = { Color3.fromRGB(58, 46, 43), Enum.Material.Slate, 0, true },
 		Pool = { Color3.fromRGB(255, 122, 0), Enum.Material.Neon, 0, false },
 		Embers = { Color3.fromRGB(255, 194, 61), Enum.Material.Neon, 0, false },
 		Smoke = { Color3.fromRGB(154, 143, 140), Enum.Material.SmoothPlastic, 0.45, false },
 	} },
-	Crystal_Cluster = { Zone = "Crystal", Height = 8.6132, Main = "Crystals", Signs = {  }, Lights = {  }, Parts = {
+	Crystal_Cluster = { Zone = "Crystal", Kind = "Scatter", Height = 8.6132, Main = "Crystals", Signs = {  }, Lights = {  }, Parts = {
 		Crystals = { Color3.fromRGB(185, 167, 255), Enum.Material.Glass, 0.15, true },
 		Cores = { Color3.fromRGB(231, 222, 255), Enum.Material.Neon, 0, false },
 		Base = { Color3.fromRGB(94, 97, 120), Enum.Material.Slate, 0, true },
 	} },
-	Crystal_Shards = { Zone = "Crystal", Height = 4.3902, Main = "Crystals", Signs = {  }, Lights = {  }, Parts = {
+	Crystal_Shards = { Zone = "Crystal", Kind = "Scatter", Height = 4.3902, Main = "Crystals", Signs = {  }, Lights = {  }, Parts = {
 		Crystals = { Color3.fromRGB(143, 233, 255), Enum.Material.Glass, 0.15, true },
 		Cores = { Color3.fromRGB(224, 251, 255), Enum.Material.Neon, 0, false },
 		Base = { Color3.fromRGB(94, 97, 120), Enum.Material.Slate, 0, true },
 	} },
-	Void_Obelisk = { Zone = "Void", Height = 11.8000, Main = "Obelisk", Signs = {  }, Lights = { "Capstone" }, Parts = {
+	Void_Obelisk = { Zone = "Void", Kind = "Scatter", Height = 11.8000, Main = "Obelisk", Signs = {  }, Lights = { "Capstone" }, Parts = {
 		Obelisk = { Color3.fromRGB(26, 16, 36), Enum.Material.Slate, 0, true },
 		Runes = { Color3.fromRGB(176, 38, 255), Enum.Material.Neon, 0, false },
 		Capstone = { Color3.fromRGB(199, 125, 255), Enum.Material.Neon, 0, false },
 		Steps = { Color3.fromRGB(18, 11, 26), Enum.Material.Slate, 0, true },
 	} },
-	Void_Shards = { Zone = "Void", Height = 6.5176, Main = "Shards", Signs = {  }, Lights = {  }, Parts = {
+	Void_Shards = { Zone = "Void", Kind = "Scatter", Height = 6.5176, Main = "Shards", Signs = {  }, Lights = {  }, Parts = {
 		Shards = { Color3.fromRGB(91, 33, 168), Enum.Material.Glass, 0.25, false },
 		Cores = { Color3.fromRGB(199, 125, 255), Enum.Material.Neon, 0, false },
 		GlowRing = { Color3.fromRGB(176, 38, 255), Enum.Material.Neon, 0, false },
 		Rubble = { Color3.fromRGB(18, 11, 26), Enum.Material.Slate, 0, true },
 	} },
-	Tree_A = { Zone = "Street", Height = 20.6469, Main = "Trunk", Signs = {  }, Lights = {  }, Parts = {
+	Tree_A = { Zone = "Street", Kind = "Landmark", Height = 20.6469, Main = "Trunk", Signs = {  }, Lights = {  }, Parts = {
 		Trunk = { Color3.fromRGB(139, 90, 43), Enum.Material.Wood, 0, true },
 		Leaves = { Color3.fromRGB(76, 191, 79), Enum.Material.SmoothPlastic, 0, true },
 		LeavesDark = { Color3.fromRGB(56, 160, 64), Enum.Material.SmoothPlastic, 0, true },
 	} },
-	Tree_B = { Zone = "Street", Height = 23.8000, Main = "Trunk", Signs = {  }, Lights = {  }, Parts = {
+	Tree_B = { Zone = "Street", Kind = "Landmark", Height = 23.8000, Main = "Trunk", Signs = {  }, Lights = {  }, Parts = {
 		Trunk = { Color3.fromRGB(122, 74, 36), Enum.Material.Wood, 0, true },
 		Needles = { Color3.fromRGB(46, 139, 87), Enum.Material.SmoothPlastic, 0, true },
 		NeedlesLight = { Color3.fromRGB(63, 166, 106), Enum.Material.SmoothPlastic, 0, true },
 	} },
-	PlazaStatue = { Zone = "Plaza", Height = 11.9560, Main = "Plinth", Signs = { { Part = "Plaque", Text = "KING SLIME", Color = Color3.fromRGB(59, 42, 10), PixelsPerStud = 60, FrontOnly = true } }, Lights = {  }, Parts = {
+	PlazaStatue = { Zone = "Plaza", Kind = "Landmark", Height = 11.9560, Main = "Plinth", Signs = { { Part = "Plaque", Text = "KING SLIME", Sub = "", Color = Color3.fromRGB(59, 42, 10), PixelsPerStud = 60, FrontOnly = true } }, Lights = {  }, Parts = {
 		Plinth = { Color3.fromRGB(237, 231, 218), Enum.Material.Marble, 0, true },
 		Trim = { Color3.fromRGB(212, 169, 58), Enum.Material.Metal, 0, true },
 		Plaque = { Color3.fromRGB(201, 154, 46), Enum.Material.Metal, 0, false },
@@ -123,6 +125,89 @@ local SPECS = {
 		GemsBlue = { Color3.fromRGB(45, 108, 223), Enum.Material.SmoothPlastic, 0, false },
 		GemsGreen = { Color3.fromRGB(31, 175, 90), Enum.Material.SmoothPlastic, 0, false },
 		Cushion = { Color3.fromRGB(176, 16, 48), Enum.Material.SmoothPlastic, 0, false },
+	} },
+	Cliff_Meadow = { Zone = "Meadow", Kind = "Cliff", Height = 34.6987, Main = "Rock", Signs = {  }, Lights = {  }, Parts = {
+		Rock = { Color3.fromRGB(140, 123, 102), Enum.Material.Slate, 0, true },
+		RockLight = { Color3.fromRGB(168, 149, 124), Enum.Material.Slate, 0, true },
+		Grass = { Color3.fromRGB(92, 194, 74), Enum.Material.Grass, 0, true },
+		GrassBlades = { Color3.fromRGB(76, 174, 62), Enum.Material.SmoothPlastic, 0, false },
+		Centres = { Color3.fromRGB(255, 201, 61), Enum.Material.SmoothPlastic, 0, false },
+		PetalsPink = { Color3.fromRGB(255, 143, 196), Enum.Material.SmoothPlastic, 0, false },
+		PetalsWhite = { Color3.fromRGB(255, 255, 255), Enum.Material.SmoothPlastic, 0, false },
+	} },
+	Cliff_Swamp = { Zone = "Swamp", Kind = "Cliff", Height = 35.7405, Main = "Rock", Signs = {  }, Lights = {  }, Parts = {
+		Rock = { Color3.fromRGB(74, 90, 76), Enum.Material.Slate, 0, true },
+		RockDark = { Color3.fromRGB(58, 72, 64), Enum.Material.Slate, 0, true },
+		Moss = { Color3.fromRGB(94, 140, 58), Enum.Material.Grass, 0, true },
+		HangingMoss = { Color3.fromRGB(126, 154, 85), Enum.Material.SmoothPlastic, 0, false },
+		Goo = { Color3.fromRGB(141, 187, 94), Enum.Material.SmoothPlastic, 0, false },
+		Stems = { Color3.fromRGB(232, 220, 192), Enum.Material.SmoothPlastic, 0, false },
+		Caps = { Color3.fromRGB(194, 85, 45), Enum.Material.SmoothPlastic, 0, false },
+		Spots = { Color3.fromRGB(255, 244, 224), Enum.Material.SmoothPlastic, 0, false },
+	} },
+	Cliff_Lava = { Zone = "Lava", Kind = "Cliff", Height = 36.1749, Main = "Rock", Signs = {  }, Lights = {  }, Parts = {
+		Rock = { Color3.fromRGB(46, 36, 34), Enum.Material.Slate, 0, true },
+		RockLight = { Color3.fromRGB(61, 48, 44), Enum.Material.Slate, 0, true },
+		Magma = { Color3.fromRGB(255, 106, 0), Enum.Material.Neon, 0, false },
+		Spikes = { Color3.fromRGB(26, 20, 19), Enum.Material.Slate, 0, false },
+	} },
+	Cliff_Crystal = { Zone = "Crystal", Kind = "Cliff", Height = 39.1887, Main = "Rock", Signs = {  }, Lights = {  }, Parts = {
+		Rock = { Color3.fromRGB(111, 115, 148), Enum.Material.Slate, 0, true },
+		RockLight = { Color3.fromRGB(138, 143, 179), Enum.Material.Slate, 0, true },
+		Snow = { Color3.fromRGB(244, 248, 255), Enum.Material.SmoothPlastic, 0, true },
+		Crystals = { Color3.fromRGB(185, 167, 255), Enum.Material.Glass, 0.15, false },
+		Cores = { Color3.fromRGB(231, 222, 255), Enum.Material.Neon, 0, false },
+	} },
+	Cliff_Void = { Zone = "Void", Kind = "Cliff", Height = 40.0164, Main = "Rock", Signs = {  }, Lights = {  }, Parts = {
+		Rock = { Color3.fromRGB(28, 20, 38), Enum.Material.Slate, 0, true },
+		RockLight = { Color3.fromRGB(39, 28, 53), Enum.Material.Slate, 0, true },
+		Veins = { Color3.fromRGB(155, 48, 255), Enum.Material.Neon, 0, false },
+		Floaters = { Color3.fromRGB(39, 28, 53), Enum.Material.Slate, 0, false },
+		FloaterGlow = { Color3.fromRGB(199, 125, 255), Enum.Material.Neon, 0, false },
+	} },
+	ZoneArch_Meadow = { Zone = "Meadow", Kind = "Arch", Height = 31.0019, Main = "Posts", Signs = { { Part = "SignPanel", Text = "SUNNY MEADOW", Sub = "Common + Uncommon slimes", Color = Color3.fromRGB(242, 208, 59), PixelsPerStud = 16, FrontOnly = false } }, Lights = {  }, Parts = {
+		Posts = { Color3.fromRGB(139, 90, 43), Enum.Material.Wood, 0, true },
+		Vines = { Color3.fromRGB(62, 155, 58), Enum.Material.SmoothPlastic, 0, false },
+		Leaves = { Color3.fromRGB(88, 184, 74), Enum.Material.SmoothPlastic, 0, false },
+		Centres = { Color3.fromRGB(255, 201, 61), Enum.Material.SmoothPlastic, 0, false },
+		PetalsPink = { Color3.fromRGB(255, 143, 196), Enum.Material.SmoothPlastic, 0, false },
+		PetalsWhite = { Color3.fromRGB(255, 255, 255), Enum.Material.SmoothPlastic, 0, false },
+		PetalsPurple = { Color3.fromRGB(180, 140, 255), Enum.Material.SmoothPlastic, 0, false },
+		SignPanel = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		SignFrame = { Color3.fromRGB(201, 138, 75), Enum.Material.SmoothPlastic, 0, true },
+	} },
+	ZoneArch_Swamp = { Zone = "Swamp", Kind = "Arch", Height = 32.8684, Main = "Logs", Signs = { { Part = "SignPanel", Text = "GLOOP SWAMP", Sub = "Uncommon + Rare slimes", Color = Color3.fromRGB(124, 227, 139), PixelsPerStud = 16, FrontOnly = false } }, Lights = {  }, Parts = {
+		Logs = { Color3.fromRGB(92, 74, 58), Enum.Material.Wood, 0, true },
+		Moss = { Color3.fromRGB(94, 140, 58), Enum.Material.Grass, 0, false },
+		HangingMoss = { Color3.fromRGB(126, 154, 85), Enum.Material.SmoothPlastic, 0, false },
+		Stems = { Color3.fromRGB(232, 220, 192), Enum.Material.SmoothPlastic, 0, false },
+		Caps = { Color3.fromRGB(194, 85, 45), Enum.Material.SmoothPlastic, 0, false },
+		Spots = { Color3.fromRGB(255, 244, 224), Enum.Material.SmoothPlastic, 0, false },
+		SignPanel = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		SignFrame = { Color3.fromRGB(79, 115, 99), Enum.Material.SmoothPlastic, 0, true },
+	} },
+	ZoneArch_Lava = { Zone = "Lava", Kind = "Arch", Height = 33.5000, Main = "Basalt", Signs = { { Part = "SignPanel", Text = "MAGMA PITS", Sub = "Rare + Epic slimes", Color = Color3.fromRGB(255, 154, 61), PixelsPerStud = 16, FrontOnly = false } }, Lights = { "Magma" }, Parts = {
+		Basalt = { Color3.fromRGB(46, 36, 34), Enum.Material.Slate, 0, true },
+		BasaltLight = { Color3.fromRGB(61, 48, 44), Enum.Material.Slate, 0, true },
+		Magma = { Color3.fromRGB(255, 106, 0), Enum.Material.Neon, 0, false },
+		Horns = { Color3.fromRGB(26, 20, 19), Enum.Material.Slate, 0, false },
+		SignPanel = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		SignFrame = { Color3.fromRGB(255, 122, 26), Enum.Material.SmoothPlastic, 0, true },
+	} },
+	ZoneArch_Crystal = { Zone = "Crystal", Kind = "Arch", Height = 36.9475, Main = "Ice", Signs = { { Part = "SignPanel", Text = "CRYSTAL PEAKS", Sub = "Epic + Legendary slimes", Color = Color3.fromRGB(169, 155, 255), PixelsPerStud = 16, FrontOnly = false } }, Lights = {  }, Parts = {
+		Ice = { Color3.fromRGB(207, 233, 255), Enum.Material.Ice, 0, true },
+		Crystals = { Color3.fromRGB(185, 167, 255), Enum.Material.Glass, 0.15, true },
+		Cores = { Color3.fromRGB(231, 222, 255), Enum.Material.Neon, 0, false },
+		SignPanel = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		SignFrame = { Color3.fromRGB(169, 155, 255), Enum.Material.SmoothPlastic, 0, true },
+	} },
+	ZoneArch_Void = { Zone = "Void", Kind = "Arch", Height = 32.8815, Main = "Obelisks", Signs = { { Part = "SignPanel", Text = "THE VOID", Sub = "Legendary + Mythic slimes", Color = Color3.fromRGB(199, 125, 255), PixelsPerStud = 16, FrontOnly = false } }, Lights = { "ShardCores" }, Parts = {
+		Obelisks = { Color3.fromRGB(26, 16, 36), Enum.Material.Slate, 0, true },
+		Runes = { Color3.fromRGB(176, 38, 255), Enum.Material.Neon, 0, false },
+		Shards = { Color3.fromRGB(91, 33, 168), Enum.Material.Glass, 0.25, false },
+		ShardCores = { Color3.fromRGB(199, 125, 255), Enum.Material.Neon, 0, false },
+		SignPanel = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		SignFrame = { Color3.fromRGB(155, 48, 255), Enum.Material.SmoothPlastic, 0, true },
 	} },
 }
 
@@ -165,22 +250,31 @@ local function addSign(part, sign)
 		gui.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
 		gui.PixelsPerStud = sign.PixelsPerStud
 		gui.LightInfluence = 0
-		local label = Instance.new("TextLabel")
-		label.Name = "Label"
-		label.BackgroundTransparency = 1
-		label.AnchorPoint = Vector2.new(0.5, 0.5)
-		label.Position = UDim2.fromScale(0.5, 0.5)
-		label.Size = UDim2.fromScale(0.92, 0.8)
-		label.Font = Enum.Font.FredokaOne
-		label.TextScaled = true
-		label.Text = sign.Text
-		label.TextColor3 = sign.Color
-		local stroke = Instance.new("UIStroke")
-		stroke.Color = Color3.new(0, 0, 0)
-		stroke.Transparency = 0.4
-		stroke.Thickness = 3
-		stroke.Parent = label
-		label.Parent = gui
+		local hasSub = sign.Sub ~= ""
+		local function addLabel(name, text, color, y, height)
+			local label = Instance.new("TextLabel")
+			label.Name = name
+			label.BackgroundTransparency = 1
+			label.AnchorPoint = Vector2.new(0.5, 0.5)
+			label.Position = UDim2.fromScale(0.5, y)
+			label.Size = UDim2.fromScale(0.92, height)
+			label.Font = Enum.Font.FredokaOne
+			label.TextScaled = true
+			label.Text = text
+			label.TextColor3 = color
+			local stroke = Instance.new("UIStroke")
+			stroke.Color = Color3.new(0, 0, 0)
+			stroke.Transparency = 0.4
+			stroke.Thickness = 3
+			stroke.Parent = label
+			label.Parent = gui
+		end
+		if hasSub then
+			addLabel("Label", sign.Text, sign.Color, 0.38, 0.52)
+			addLabel("SubLabel", sign.Sub, Color3.new(1, 1, 1), 0.8, 0.26)
+		else
+			addLabel("Label", sign.Text, sign.Color, 0.5, 0.8)
+		end
 		gui.Parent = part
 	end
 end
@@ -253,6 +347,7 @@ local function setup(model, spec)
 		end
 	end
 	model:SetAttribute("PropZone", spec.Zone)
+	model:SetAttribute("PropKind", spec.Kind)
 end
 
 local candidates = {}

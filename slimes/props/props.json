@@ -2,6 +2,7 @@
  {
   "name": "ValleyGate",
   "zone": "Gate",
+  "kind": "Landmark",
   "height": 30.392778365079312,
   "main": "Arch",
   "signs": [
@@ -109,6 +110,7 @@
  {
   "name": "Meadow_FlowerClump",
   "zone": "Meadow",
+  "kind": "Scatter",
   "height": 3.8426302007675135,
   "main": "Stems",
   "signs": [],
@@ -173,6 +175,7 @@
  {
   "name": "Meadow_Mushrooms",
   "zone": "Meadow",
+  "kind": "Scatter",
   "height": 6.027330181800304,
   "main": "Stems",
   "signs": [],
@@ -219,6 +222,7 @@
  {
   "name": "Meadow_Sunflower",
   "zone": "Meadow",
+  "kind": "Scatter",
   "height": 10.593701305623355,
   "main": "Stem",
   "signs": [],
@@ -259,6 +263,7 @@
  {
   "name": "Swamp_DeadTree",
   "zone": "Swamp",
+  "kind": "Scatter",
   "height": 11.501781302966155,
   "main": "Trunk",
   "signs": [],
@@ -293,6 +298,7 @@
  {
   "name": "Swamp_Reeds",
   "zone": "Swamp",
+  "kind": "Scatter",
   "height": 5.03533106430147,
   "main": "Stalks",
   "signs": [],
@@ -327,6 +333,7 @@
  {
   "name": "Lava_Spire",
   "zone": "Lava",
+  "kind": "Scatter",
   "height": 12.50238682779185,
   "main": "Rock",
   "signs": [],
@@ -361,6 +368,7 @@
  {
   "name": "Lava_Vent",
   "zone": "Lava",
+  "kind": "Scatter",
   "height": 6.24,
   "main": "Rock",
   "signs": [],
@@ -401,6 +409,7 @@
  {
   "name": "Crystal_Cluster",
   "zone": "Crystal",
+  "kind": "Scatter",
   "height": 8.613240058941726,
   "main": "Crystals",
   "signs": [],
@@ -435,6 +444,7 @@
  {
   "name": "Crystal_Shards",
   "zone": "Crystal",
+  "kind": "Scatter",
   "height": 4.390165372561176,
   "main": "Crystals",
   "signs": [],
@@ -469,6 +479,7 @@
  {
   "name": "Void_Obelisk",
   "zone": "Void",
+  "kind": "Scatter",
   "height": 11.8,
   "main": "Obelisk",
   "signs": [],
@@ -511,6 +522,7 @@
  {
   "name": "Void_Shards",
   "zone": "Void",
+  "kind": "Scatter",
   "height": 6.5175661281715,
   "main": "Shards",
   "signs": [],
@@ -551,6 +563,7 @@
  {
   "name": "Tree_A",
   "zone": "Street",
+  "kind": "Landmark",
   "height": 20.646864045475382,
   "main": "Trunk",
   "signs": [],
@@ -585,6 +598,7 @@
  {
   "name": "Tree_B",
   "zone": "Street",
+  "kind": "Landmark",
   "height": 23.799999999999997,
   "main": "Trunk",
   "signs": [],
@@ -619,6 +633,7 @@
  {
   "name": "PlazaStatue",
   "zone": "Plaza",
+  "kind": "Landmark",
   "height": 11.956037471815556,
   "main": "Plinth",
   "signs": [
@@ -715,6 +730,598 @@
     "material": "SmoothPlastic",
     "transparency": 0.0,
     "collide": false
+   }
+  }
+ },
+ {
+  "name": "Cliff_Meadow",
+  "zone": "Meadow",
+  "kind": "Cliff",
+  "height": 34.69872922297347,
+  "main": "Rock",
+  "signs": [],
+  "lights": [],
+  "triangles": 2256,
+  "size": [
+   24.0,
+   34.7,
+   15.68
+  ],
+  "looks": {
+   "Rock": {
+    "color": "#8C7B66",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "RockLight": {
+    "color": "#A8957C",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Grass": {
+    "color": "#5CC24A",
+    "material": "Grass",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "GrassBlades": {
+    "color": "#4CAE3E",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Centres": {
+    "color": "#FFC93D",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "PetalsPink": {
+    "color": "#FF8FC4",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "PetalsWhite": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Cliff_Swamp",
+  "zone": "Swamp",
+  "kind": "Cliff",
+  "height": 35.74047733746966,
+  "main": "Rock",
+  "signs": [],
+  "lights": [],
+  "triangles": 2004,
+  "size": [
+   24.0,
+   35.74,
+   15.62
+  ],
+  "looks": {
+   "Rock": {
+    "color": "#4A5A4C",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "RockDark": {
+    "color": "#3A4840",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Moss": {
+    "color": "#5E8C3A",
+    "material": "Grass",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "HangingMoss": {
+    "color": "#7E9A55",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Goo": {
+    "color": "#8DBB5E",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Stems": {
+    "color": "#E8DCC0",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Caps": {
+    "color": "#C2552D",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Spots": {
+    "color": "#FFF4E0",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Cliff_Lava",
+  "zone": "Lava",
+  "kind": "Cliff",
+  "height": 36.17493125420619,
+  "main": "Rock",
+  "signs": [],
+  "lights": [],
+  "triangles": 860,
+  "size": [
+   24.0,
+   36.17,
+   15.46
+  ],
+  "looks": {
+   "Rock": {
+    "color": "#2E2422",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "RockLight": {
+    "color": "#3D302C",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Magma": {
+    "color": "#FF6A00",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Spikes": {
+    "color": "#1A1413",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Cliff_Crystal",
+  "zone": "Crystal",
+  "kind": "Cliff",
+  "height": 39.1886921782852,
+  "main": "Rock",
+  "signs": [],
+  "lights": [],
+  "triangles": 804,
+  "size": [
+   24.0,
+   39.19,
+   17.24
+  ],
+  "looks": {
+   "Rock": {
+    "color": "#6F7394",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "RockLight": {
+    "color": "#8A8FB3",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Snow": {
+    "color": "#F4F8FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Crystals": {
+    "color": "#B9A7FF",
+    "material": "Glass",
+    "transparency": 0.15,
+    "collide": false
+   },
+   "Cores": {
+    "color": "#E7DEFF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Cliff_Void",
+  "zone": "Void",
+  "kind": "Cliff",
+  "height": 40.016367433944154,
+  "main": "Rock",
+  "signs": [],
+  "lights": [],
+  "triangles": 1248,
+  "size": [
+   24.0,
+   40.02,
+   15.39
+  ],
+  "looks": {
+   "Rock": {
+    "color": "#1C1426",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "RockLight": {
+    "color": "#271C35",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Veins": {
+    "color": "#9B30FF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Floaters": {
+    "color": "#271C35",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "FloaterGlow": {
+    "color": "#C77DFF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "ZoneArch_Meadow",
+  "zone": "Meadow",
+  "kind": "Arch",
+  "height": 31.001918775532864,
+  "main": "Posts",
+  "signs": [
+   {
+    "part": "SignPanel",
+    "text": "SUNNY MEADOW",
+    "sub": "Common + Uncommon slimes",
+    "color": "#F2D03B",
+    "ppu": 16
+   }
+  ],
+  "lights": [],
+  "triangles": 7016,
+  "size": [
+   97.95,
+   31.0,
+   8.27
+  ],
+  "looks": {
+   "Posts": {
+    "color": "#8B5A2B",
+    "material": "Wood",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Vines": {
+    "color": "#3E9B3A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Leaves": {
+    "color": "#58B84A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Centres": {
+    "color": "#FFC93D",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "PetalsPink": {
+    "color": "#FF8FC4",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "PetalsWhite": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "PetalsPurple": {
+    "color": "#B48CFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "SignPanel": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SignFrame": {
+    "color": "#C98A4B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "ZoneArch_Swamp",
+  "zone": "Swamp",
+  "kind": "Arch",
+  "height": 32.86839504296848,
+  "main": "Logs",
+  "signs": [
+   {
+    "part": "SignPanel",
+    "text": "GLOOP SWAMP",
+    "sub": "Uncommon + Rare slimes",
+    "color": "#7CE38B",
+    "ppu": 16
+   }
+  ],
+  "lights": [],
+  "triangles": 4100,
+  "size": [
+   97.83,
+   32.87,
+   7.57
+  ],
+  "looks": {
+   "Logs": {
+    "color": "#5C4A3A",
+    "material": "Wood",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Moss": {
+    "color": "#5E8C3A",
+    "material": "Grass",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "HangingMoss": {
+    "color": "#7E9A55",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Stems": {
+    "color": "#E8DCC0",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Caps": {
+    "color": "#C2552D",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Spots": {
+    "color": "#FFF4E0",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "SignPanel": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SignFrame": {
+    "color": "#4F7363",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "ZoneArch_Lava",
+  "zone": "Lava",
+  "kind": "Arch",
+  "height": 33.5,
+  "main": "Basalt",
+  "signs": [
+   {
+    "part": "SignPanel",
+    "text": "MAGMA PITS",
+    "sub": "Rare + Epic slimes",
+    "color": "#FF9A3D",
+    "ppu": 16
+   }
+  ],
+  "lights": [
+   "Magma"
+  ],
+  "triangles": 2288,
+  "size": [
+   97.0,
+   33.5,
+   8.94
+  ],
+  "looks": {
+   "Basalt": {
+    "color": "#2E2422",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "BasaltLight": {
+    "color": "#3D302C",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Magma": {
+    "color": "#FF6A00",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Horns": {
+    "color": "#1A1413",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "SignPanel": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SignFrame": {
+    "color": "#FF7A1A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "ZoneArch_Crystal",
+  "zone": "Crystal",
+  "kind": "Arch",
+  "height": 36.94746798628045,
+  "main": "Ice",
+  "signs": [
+   {
+    "part": "SignPanel",
+    "text": "CRYSTAL PEAKS",
+    "sub": "Epic + Legendary slimes",
+    "color": "#A99BFF",
+    "ppu": 16
+   }
+  ],
+  "lights": [],
+  "triangles": 822,
+  "size": [
+   98.54,
+   36.95,
+   9.66
+  ],
+  "looks": {
+   "Ice": {
+    "color": "#CFE9FF",
+    "material": "Ice",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Crystals": {
+    "color": "#B9A7FF",
+    "material": "Glass",
+    "transparency": 0.15,
+    "collide": true
+   },
+   "Cores": {
+    "color": "#E7DEFF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "SignPanel": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SignFrame": {
+    "color": "#A99BFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "ZoneArch_Void",
+  "zone": "Void",
+  "kind": "Arch",
+  "height": 32.881454006409925,
+  "main": "Obelisks",
+  "signs": [
+   {
+    "part": "SignPanel",
+    "text": "THE VOID",
+    "sub": "Legendary + Mythic slimes",
+    "color": "#C77DFF",
+    "ppu": 16
+   }
+  ],
+  "lights": [
+   "ShardCores"
+  ],
+  "triangles": 500,
+  "size": [
+   93.94,
+   32.88,
+   5.94
+  ],
+  "looks": {
+   "Obelisks": {
+    "color": "#1A1024",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Runes": {
+    "color": "#B026FF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Shards": {
+    "color": "#5B21A8",
+    "material": "Glass",
+    "transparency": 0.25,
+    "collide": false
+   },
+   "ShardCores": {
+    "color": "#C77DFF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "SignPanel": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SignFrame": {
+    "color": "#9B30FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
    }
   }
  }

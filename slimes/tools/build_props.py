@@ -24,6 +24,7 @@ class Prop(Slime):
         super().__init__(name, zone, height)
         self.zone, self.height, self.main = zone, height, main
         self.signs, self.lights = [], []
+        self.kind = "Scatter" if zone in ("Meadow", "Swamp", "Lava", "Crystal", "Void") else "Landmark"
 
     def look(self, part, color, material="SmoothPlastic", transparency=0.0, collide=False):
         self.looks[part] = {"color": color, "material": material, "transparency": transparency,
@@ -463,19 +464,414 @@ def plaza_statue():
     return s
 
 
+# ---------------------------------------------------------------- zone cliffs
+# One 24 x 32 x 14 stud piece per zone. The front (-Z) is the rocky face that looks into the valley;
+# the sides are flat so pieces tile along a wall. CliffDresser.lua stretches them to fit your wall blocks.
+
+CW, CH, CD = 24.0, 32.0, 14.0
+
+
+def strata(s, rng, tones, layers=6, gap=0.0, glow_part=None, front_noise=1.3):
+    """Stacked rock layers with a jagged front edge, stepping back a little as they rise."""
+    heights = np.array([rng.uniform(0.8, 1.2) for _ in range(layers)])
+    heights = heights / heights.sum() * (CH - gap * (layers - 1))
+    y = 0.0
+    xs = np.linspace(-CW / 2, CW / 2, 13)
+    tops = []
+    for k, h in enumerate(heights):
+        inset = 0.55 * k + rng.uniform(-0.5, 0.5)
+        front = [(x, -CD / 2 + inset + (rng.uniform(-front_noise, front_noise) if 0 < i < len(xs) - 1 else 0.4))
+                 for i, x in enumerate(xs)]
+        poly = front + [(CW / 2, CD / 2), (-CW / 2, CD / 2)]
+        bot = [(x, y, z) for x, z in poly]
+        top = [(x, y + h, z + rng.uniform(0.0, 0.35)) for x, z in poly]
+        s.add(tones[k % len(tones)], prism(top[::-1], bot[::-1]))
+        if glow_part and k < layers - 1:
+            seam = [(x, z + 0.35) for x, z in front] + [(CW / 2, CD / 2 - 1), (-CW / 2, CD / 2 - 1)]
+            sb = [(x, y + h - 0.05, z) for x, z in seam]
+            st = [(x, y + h + gap + 0.05, z) for x, z in seam]
+            s.add(glow_part, prism(st[::-1], sb[::-1]))
+        tops.append((y + h, front))
+        y += h + gap
+    return tops
+
+
+def prism(top, bottom):
+    from meshkit import prism as _prism
+    return _prism(top, bottom)
+
+
+def cap_slab(s, part, top_y, front, thick, overhang, rng):
+    poly = [(x, z - overhang - rng.uniform(0, 0.4)) for x, z in front] + [(CW / 2, CD / 2), (-CW / 2, CD / 2)]
+    bot = [(x, top_y - 0.2, z) for x, z in poly]
+    top = [(x, top_y + thick, z + 0.2) for x, z in poly]
+    s.add(part, prism(top[::-1], bot[::-1]))
+
+
+def cliff_meadow():
+    s = Prop("Cliff_Meadow", "Meadow", CH + 2, "Rock")
+    s.kind = "Cliff"
+    rng = random.Random(101)
+    s.look("Rock", "#8C7B66", "Slate", collide=True)
+    s.look("RockLight", "#A8957C", "Slate", collide=True)
+    s.look("Grass", "#5CC24A", "Grass", collide=True)
+    s.look("GrassBlades", "#4CAE3E")
+    s.look("Centres", "#FFC93D")
+    s.look("PetalsPink", "#FF8FC4")
+    s.look("PetalsWhite", "#FFFFFF")
+    tops = strata(s, rng, ["Rock", "RockLight"])
+    top_y, front = tops[-1]
+    cap_slab(s, "Grass", top_y, front, 1.2, 0.8, rng)
+    # grass tufts hanging over the edge and flowers on top
+    for i in range(16):
+        x = rng.uniform(-CW / 2 + 1, CW / 2 - 1)
+        z = -CD / 2 + 3.2 + rng.uniform(-0.4, 0.6)
+        d = normalize([rng.uniform(-0.3, 0.3), 1, rng.uniform(-0.6, 0.1)])
+        s.add("GrassBlades", tf(cone(0.25, rng.uniform(1.0, 1.8), 4), R=rot_from_to(Y, d), t=(x, top_y + 1.0, z)))
+    for i in range(7):
+        x = rng.uniform(-CW / 2 + 1.5, CW / 2 - 1.5)
+        z = rng.uniform(-CD / 2 + 3, CD / 2 - 2)
+        p = np.array([x, top_y + 1.0, z])
+        s.add("GrassBlades", tube([p, p + Y * 0.7, p + Y * 1.4], 0.06, 4))
+        flower_head(p + Y * 1.45, s, "PetalsPink" if i % 2 else "PetalsWhite", "Centres", 0.45, 5)
+    return s
+
+
+def cliff_swamp():
+    s = Prop("Cliff_Swamp", "Swamp", CH + 1, "Rock")
+    s.kind = "Cliff"
+    rng = random.Random(102)
+    s.look("Rock", "#4A5A4C", "Slate", collide=True)
+    s.look("RockDark", "#3A4840", "Slate", collide=True)
+    s.look("Moss", "#5E8C3A", "Grass", collide=True)
+    s.look("HangingMoss", "#7E9A55")
+    s.look("Goo", "#8DBB5E")
+    s.look("Stems", "#E8DCC0")
+    s.look("Caps", "#C2552D")
+    s.look("Spots", "#FFF4E0")
+    tops = strata(s, rng, ["Rock", "RockDark"], layers=5)
+    top_y, front = tops[-1]
+    cap_slab(s, "Moss", top_y, front, 0.8, 1.0, rng)
+    for i in range(10):
+        x = rng.uniform(-CW / 2 + 1, CW / 2 - 1)
+        fz = np.interp(x, [f[0] for f in front], [f[1] for f in front]) - 1.0
+        ln = rng.uniform(3, 9)
+        strand = [[x + math.sin(t * 4 + i) * 0.25, top_y + 0.4 - t * ln, fz - 0.15] for t in np.linspace(0, 1, 7)]
+        s.add("HangingMoss", tube(strand, np.linspace(0.28, 0.06, 7), 5))
+    for i in range(4):
+        x = rng.uniform(-CW / 2 + 2, CW / 2 - 2)
+        ly, lf = tops[rng.randint(1, len(tops) - 2)]
+        fz = np.interp(x, [f[0] for f in lf], [f[1] for f in lf]) + 0.3
+        ys = np.linspace(ly, ly - rng.uniform(3, 6), 8)
+        prof = np.array([0.6, 0.5, 0.42, 0.42, 0.48, 0.6, 0.5, 0.0])
+        s.add("Goo", tube([[x, yy, fz - 0.2] for yy in ys], prof, 7))
+    for i in range(3):
+        x = rng.uniform(-CW / 2 + 2, CW / 2 - 2)
+        mushroom_into(s, np.array([x, top_y + 0.7, rng.uniform(-CD / 2 + 3, 0)]), rng.uniform(1.2, 2.2), rng)
+    return s
+
+
+def mushroom_into(s, p, k, rng):
+    s.add("Stems", tf(cylinder(0.25 * k, 0.9 * k, 10, r_top=0.2 * k), t=p))
+    cap = lathe([[(0, 0.55 * k), (0.45 * k, 0.45 * k), (0.7 * k, 0.12 * k), (0.72 * k, 0.0)],
+                 [(0.72 * k, 0.0), (0, 0.0)]], 12)
+    s.add("Caps", tf(cap, t=p + Y * 0.85 * k))
+    for j in range(3):
+        a = rng.uniform(0, 2 * math.pi)
+        local = np.array([0.4 * k * math.cos(a), 0.47 * k, 0.4 * k * math.sin(a)])
+        n = normalize([local[0], 0.6 * k, local[2]])
+        s.add("Spots", place(ellipsoid(0.12 * k, 0.12 * k, 0.04 * k, 6, 3), p + Y * 0.85 * k + local, n))
+
+
+def cliff_lava():
+    s = Prop("Cliff_Lava", "Lava", CH + 3, "Rock")
+    s.kind = "Cliff"
+    rng = random.Random(103)
+    s.look("Rock", "#2E2422", "Slate", collide=True)
+    s.look("RockLight", "#3D302C", "Slate", collide=True)
+    s.look("Magma", "#FF6A00", "Neon")
+    s.look("Spikes", "#1A1413", "Slate")
+    tops = strata(s, rng, ["Rock", "RockLight"], layers=6, gap=0.5, glow_part="Magma")
+    top_y, front = tops[-1]
+    for i in range(6):
+        x = -CW / 2 + 2 + i * (CW - 4) / 5 + rng.uniform(-1, 1)
+        z = rng.uniform(-CD / 2 + 3, CD / 2 - 3)
+        d = normalize([rng.uniform(-0.2, 0.2), 1, rng.uniform(-0.3, 0.1)])
+        s.add("Spikes", tf(cone(rng.uniform(0.8, 1.3), rng.uniform(2.5, 4.5), 5), R=rot_from_to(Y, d),
+                           t=(x, top_y - 0.2, z)))
+    # a lava fall down the face
+    x = rng.uniform(-4, 4)
+    path = [[x + math.sin(t * 3) * 0.6, top_y - t * (top_y - 0.5), np.interp(x, [f[0] for f in tops[-1 - int(t * 4)][1]],
+             [f[1] for f in tops[-1 - int(t * 4)][1]]) - 0.4] for t in np.linspace(0, 1, 10)]
+    s.add("Magma", tube(path, np.linspace(0.9, 1.3, 10), 7))
+    return s
+
+
+def cliff_crystal():
+    s = Prop("Cliff_Crystal", "Crystal", CH + 6, "Rock")
+    s.kind = "Cliff"
+    rng = random.Random(104)
+    s.look("Rock", "#6F7394", "Slate", collide=True)
+    s.look("RockLight", "#8A8FB3", "Slate", collide=True)
+    s.look("Snow", "#F4F8FF", "SmoothPlastic", collide=True)
+    s.look("Crystals", "#B9A7FF", "Glass", 0.15)
+    s.look("Cores", "#E7DEFF", "Neon")
+    tops = strata(s, rng, ["Rock", "RockLight"])
+    top_y, front = tops[-1]
+    cap_slab(s, "Snow", top_y, front, 0.7, 0.6, rng)
+
+    def crystal(p, d, h):
+        rw = 0.35 * h ** 0.8
+        R = rot_from_to(Y, d) @ rot(Y, rng.uniform(0, 60))
+        s.add("Crystals", tf(bipyramid(rw, h, rw * 1.6), R=R, t=p))
+        s.add("Cores", tf(bipyramid(rw * 0.4, h * 0.85, rw * 0.7), R=R, t=p))
+
+    for i in range(5):
+        x = rng.uniform(-CW / 2 + 2, CW / 2 - 2)
+        crystal(np.array([x, top_y + 0.3, rng.uniform(-CD / 2 + 3, CD / 2 - 3)]),
+                normalize([rng.uniform(-0.4, 0.4), 1, rng.uniform(-0.5, 0.2)]), rng.uniform(2.5, 5.5))
+    for i in range(3):
+        x = rng.uniform(-CW / 2 + 2, CW / 2 - 2)
+        ly, lf = tops[rng.randint(1, len(tops) - 2)]
+        fz = np.interp(x, [f[0] for f in lf], [f[1] for f in lf]) + 1.0
+        crystal(np.array([x, ly - 1.5, fz]), normalize([rng.uniform(-0.3, 0.3), 0.6, -1]), rng.uniform(2, 3.5))
+    return s
+
+
+def cliff_void():
+    s = Prop("Cliff_Void", "Void", CH + 9, "Rock")
+    s.kind = "Cliff"
+    rng = random.Random(105)
+    s.look("Rock", "#1C1426", "Slate", collide=True)
+    s.look("RockLight", "#271C35", "Slate", collide=True)
+    s.look("Veins", "#9B30FF", "Neon")
+    s.look("Floaters", "#271C35", "Slate")
+    s.look("FloaterGlow", "#C77DFF", "Neon")
+    tops = strata(s, rng, ["Rock", "RockLight"], layers=6, gap=0.35, glow_part="Veins")
+    top_y, front = tops[-1]
+    for i, (x, h, r) in enumerate(((-7, 4.5, 1.6), (1, 7.0, 1.2), (8, 5.2, 1.4))):
+        rk = rock(r, 300 + i, squash=0.9)
+        V = rk.V.copy()
+        V[:, 1] = V[:, 1] - V[:, 1].max() * 0.5
+        flip = Piece(np.vstack([V, V * np.array([1, -0.6, 1])]),
+                     np.vstack([rk.F, rk.F[:, ::-1] + len(V)]), True)
+        s.add("Floaters", tf(flip, t=(x, top_y + h, rng.uniform(-2, 2))))
+        s.add("FloaterGlow", tf(sphere(6, 4), s=0.25 * r, t=(x, top_y + h - r * 0.9, 0)))
+    return s
+
+
+# ---------------------------------------------------------------- zone arches
+# A themed arch per zone to replace the plain banners: 96 wide and about 30 tall, with a sign panel
+# that PropSetup fills with the zone name and the rarity line.
+
+AW = 96.0
+ZONE_TEXT = {
+    "Meadow": ("SUNNY MEADOW", "Common + Uncommon slimes", "#F2D03B"),
+    "Swamp": ("GLOOP SWAMP", "Uncommon + Rare slimes", "#7CE38B"),
+    "Lava": ("MAGMA PITS", "Rare + Epic slimes", "#FF9A3D"),
+    "Crystal": ("CRYSTAL PEAKS", "Epic + Legendary slimes", "#A99BFF"),
+    "Void": ("THE VOID", "Legendary + Mythic slimes", "#C77DFF"),
+}
+
+
+def arch_sign(s, zone, frame_color, y0=15.5, y1=24.5, w=62.0):
+    title, sub, accent = ZONE_TEXT[zone]
+    s.look("SignPanel", "#1E2440", collide=True)
+    s.look("SignFrame", frame_color, collide=True)
+    s.add("SignPanel", tf(box(w, y1 - y0, 1.0), t=(0, (y0 + y1) / 2, 0)))
+    b = 0.9
+    for P in ([(-w / 2 - b, y0 - b), (w / 2 + b, y0 - b), (w / 2 + b, y0), (-w / 2 - b, y0)],
+              [(-w / 2 - b, y1), (w / 2 + b, y1), (w / 2 + b, y1 + b), (-w / 2 - b, y1 + b)],
+              [(-w / 2 - b, y0), (-w / 2, y0), (-w / 2, y1), (-w / 2 - b, y1)],
+              [(w / 2, y0), (w / 2 + b, y0), (w / 2 + b, y1), (w / 2, y1)]):
+        s.add("SignFrame", extrude(P, 1.5))
+    s.signs.append({"part": "SignPanel", "text": title, "sub": sub, "color": accent, "ppu": 16})
+    return y0, y1, w
+
+
+def arch_meadow():
+    s = Prop("ZoneArch_Meadow", "Meadow", 30, "Posts")
+    s.kind = "Arch"
+    rng = random.Random(201)
+    s.look("Posts", "#8B5A2B", "Wood", collide=True)
+    s.look("Vines", "#3E9B3A")
+    s.look("Leaves", "#58B84A")
+    s.look("Centres", "#FFC93D")
+    s.look("PetalsPink", "#FF8FC4")
+    s.look("PetalsWhite", "#FFFFFF")
+    s.look("PetalsPurple", "#B48CFF")
+    y0, y1, w = arch_sign(s, "Meadow", "#C98A4B")
+    for side in (-1, 1):
+        x = side * (AW / 2 - 3)
+        s.add("Posts", tf(cylinder(3.0, 28.5, 14, r_top=2.6), t=(x, 0, 0)))
+        s.add("Posts", tf(cylinder(3.5, 1.4, 14), t=(x, 28.0, 0)))
+        path = [[x + 3.1 * math.cos(t * 9), t * 27 + 0.5, 3.1 * math.sin(t * 9)] for t in np.linspace(0, 1, 40)]
+        s.add("Vines", tube(path, 0.3, 6))
+        for i in range(6):
+            t = (i + 0.5) / 6
+            p = np.array([x + 3.4 * math.cos(t * 9), t * 27 + 0.5, 3.4 * math.sin(t * 9)])
+            flower_head(p, s, ["PetalsPink", "PetalsWhite", "PetalsPurple"][i % 3], "Centres", 0.8, 6,
+                        rot_from_to(Y, normalize([math.cos(t * 9), 0.4, math.sin(t * 9)])))
+    s.add("Posts", tube([[-AW / 2 + 3, 27.2, 0], [0, 28.6, 0], [AW / 2 - 3, 27.2, 0]], 1.5, 12))
+    for x in (-w / 2 + 6, w / 2 - 6):
+        s.add("Vines", tube([[x, 27.6, -0.2], [x, (y1 + 27.6) / 2, -0.2], [x, y1 + 0.5, -0.2]], 0.35, 6))
+    for i in range(14):
+        x = rng.uniform(-AW / 2 + 4, AW / 2 - 4)
+        lf = tf(extrude(leaf_polygon(2.2, 0.7, 6), 0.1), R=rot(Y, rng.uniform(0, 360)) @ rot(Z, rng.uniform(-30, 30)))
+        s.add("Leaves", tf(lf, t=(x, 28.2 + rng.uniform(-0.5, 1.2), rng.uniform(-1, 1))))
+    for i, x in enumerate(np.linspace(-AW / 2 + 8, AW / 2 - 8, 9)):
+        p = np.array([x, 29.6, -0.8])
+        flower_head(p, s, ["PetalsPink", "PetalsWhite", "PetalsPurple"][i % 3], "Centres", 0.9, 6, rot(X, -60))
+    return s
+
+
+def arch_swamp():
+    s = Prop("ZoneArch_Swamp", "Swamp", 30, "Logs")
+    s.kind = "Arch"
+    rng = random.Random(202)
+    s.look("Logs", "#5C4A3A", "Wood", collide=True)
+    s.look("Moss", "#5E8C3A", "Grass")
+    s.look("HangingMoss", "#7E9A55")
+    s.look("Stems", "#E8DCC0")
+    s.look("Caps", "#C2552D")
+    s.look("Spots", "#FFF4E0")
+    y0, y1, w = arch_sign(s, "Swamp", "#4F7363")
+    for side in (-1, 1):
+        x = side * (AW / 2 - 3)
+        path = [[x + math.sin(t * 7) * 0.9, t * 28.5, math.cos(t * 5) * 0.7] for t in np.linspace(0, 1, 16)]
+        s.add("Logs", tube(path, np.linspace(3.4, 2.4, 16), 10))
+        for a in (0, 120, 240):
+            d = np.array([math.cos(a * DEG), 0, math.sin(a * DEG)])
+            s.add("Logs", tube(bezier([[x, 1.5, 0] + d * 1.2, [x, 0.4, 0] + d * 3.0, [x, 0, 0] + d * 4.2], 5),
+                               np.linspace(1.0, 0.0, 5), 7))
+        s.add("Moss", tf(ellipsoid(2.6, 0.8, 2.6, 12, 6), t=(x, 28.4, 0)))
+        mushroom_into(s, np.array([x - side * 0.8, 28.8, 0.3]), 2.4, rng)
+        mushroom_into(s, np.array([x + side * 1.2, 28.6, -0.8]), 1.5, rng)
+    beam = [[x, 27.8 + 0.8 * math.sin(x * 0.11), 0.3 * math.sin(x * 0.07)] for x in np.linspace(-AW / 2 + 3, AW / 2 - 3, 24)]
+    s.add("Logs", tube(beam, 1.5, 10))
+    for x in np.linspace(-AW / 2 + 6, AW / 2 - 6, 26):
+        if abs(x) < w / 2 + 1:
+            ln = rng.uniform(0.8, 2.5)
+        else:
+            ln = rng.uniform(3, 8)
+        strand = [[x + math.sin(t * 5) * 0.2, 27.4 - t * ln, -1.1] for t in np.linspace(0, 1, 6)]
+        s.add("HangingMoss", tube(strand, np.linspace(0.3, 0.06, 6), 5))
+    for x in (-w / 2 + 6, w / 2 - 6):
+        s.add("Logs", tube([[x, 27.4, 0], [x, y1 + 0.6, 0]], 0.4, 6))
+    return s
+
+
+def arch_lava():
+    s = Prop("ZoneArch_Lava", "Lava", 30, "Basalt")
+    s.kind = "Arch"
+    rng = random.Random(203)
+    s.look("Basalt", "#2E2422", "Slate", collide=True)
+    s.look("BasaltLight", "#3D302C", "Slate", collide=True)
+    s.look("Magma", "#FF6A00", "Neon")
+    s.look("Horns", "#1A1413", "Slate")
+    y0, y1, w = arch_sign(s, "Lava", "#FF7A1A")
+    for side in (-1, 1):
+        x0 = side * (AW / 2 - 4)
+        for j, (dx, dz, r, h) in enumerate(((0, 0, 3.4, 27), (side * -3.4, 2.0, 2.3, 22), (side * 2.4, -2.6, 2.1, 18),
+                                              (side * -2.0, -3.2, 1.8, 14))):
+            y = 0.0
+            while y < h - 0.5:
+                seg = min(rng.uniform(3.5, 6), h - y)
+                s.add("Basalt" if (int(y) // 4) % 2 == 0 else "BasaltLight",
+                      tf(cylinder(r, seg - 0.25, 6), R=rot(Y, rng.uniform(-6, 6)), t=(x0 + dx, y, dz)))
+                s.add("Magma", tf(cylinder(r * 0.9, 0.3, 6), t=(x0 + dx, y + seg - 0.27, dz)))
+                y += seg
+        s.add("Horns", tube(bezier([[x0, 26.5, 0], [x0 + side * 2.5, 30, 0], [x0 + side * 1.0, 33.5, -0.5]], 9),
+                            np.linspace(1.4, 0.0, 9), 8))
+    s.add("Basalt", tf(box(AW - 6, 2.6, 3.2), t=(0, 27.3, 0)))
+    s.add("Magma", tf(box(AW - 8, 0.4, 3.4), t=(0, 26.1, 0)))
+    for x in (-w / 2 + 6, w / 2 - 6):
+        s.add("Basalt", tf(box(0.8, 26.0 - y1, 0.8), t=(x, (26.0 + y1) / 2, 0)))
+    for i in range(10):
+        x = rng.uniform(-AW / 2 + 8, AW / 2 - 8)
+        d = normalize([rng.uniform(-0.3, 0.3), 1, rng.uniform(-0.2, 0.2)])
+        s.add("Horns", tf(cone(rng.uniform(0.6, 1.0), rng.uniform(1.8, 3.2), 5), R=rot_from_to(Y, d), t=(x, 28.4, 0)))
+    s.lights.append("Magma")
+    return s
+
+
+def arch_crystal():
+    s = Prop("ZoneArch_Crystal", "Crystal", 30, "Ice")
+    s.kind = "Arch"
+    rng = random.Random(204)
+    s.look("Ice", "#CFE9FF", "Ice", collide=True)
+    s.look("Crystals", "#B9A7FF", "Glass", 0.15, collide=True)
+    s.look("Cores", "#E7DEFF", "Neon")
+    y0, y1, w = arch_sign(s, "Crystal", "#A99BFF")
+    for side in (-1, 1):
+        x0 = side * (AW / 2 - 4)
+        for dx, dz, h, lean in ((0, 0, 28, 0), (side * -3.4, 1.4, 19, -10), (side * 2.8, -1.8, 15, 14),
+                                (side * -1.4, -3.0, 11, -16)):
+            rw = 0.36 * h ** 0.75
+            R = rot(Z, lean * side) @ rot(Y, rng.uniform(0, 60))
+            s.add("Crystals", tf(bipyramid(rw, h * 0.82, h * 0.18), R=R, t=(x0 + dx, 0, dz)))
+            s.add("Cores", tf(bipyramid(rw * 0.4, h * 0.75, h * 0.12), R=R, t=(x0 + dx, 0, dz)))
+    s.add("Ice", tf(box(AW - 8, 2.2, 2.8), t=(0, 26.6, 0)))
+    for x in np.linspace(-AW / 2 + 8, AW / 2 - 8, 15):
+        ln = rng.uniform(1.0, 3.2)
+        s.add("Ice", tf(cone(0.45, ln, 5), R=rot(X, 180), t=(x, 25.6, rng.uniform(-0.8, 0.8))))
+    for x in (-w / 2 + 6, w / 2 - 6):
+        s.add("Ice", tf(box(0.7, 25.5 - y1, 0.7), t=(x, (25.5 + y1) / 2, 0)))
+    for i in range(8):
+        x = rng.uniform(-AW / 2 + 8, AW / 2 - 8)
+        h = rng.uniform(2, 4.5)
+        R = rot_from_to(Y, normalize([rng.uniform(-0.4, 0.4), 1, rng.uniform(-0.3, 0.3)]))
+        s.add("Crystals", tf(bipyramid(0.4 * h ** 0.7, h, 0.5 * h), R=R, t=(x, 27.4, 0)))
+    return s
+
+
+def arch_void():
+    s = Prop("ZoneArch_Void", "Void", 30, "Obelisks")
+    s.kind = "Arch"
+    rng = random.Random(205)
+    s.look("Obelisks", "#1A1024", "Slate", collide=True)
+    s.look("Runes", "#B026FF", "Neon")
+    s.look("Shards", "#5B21A8", "Glass", 0.25)
+    s.look("ShardCores", "#C77DFF", "Neon")
+    y0, y1, w = arch_sign(s, "Void", "#9B30FF")
+    for side in (-1, 1):
+        x0 = side * (AW / 2 - 4)
+        ob = lathe([[(0, 25), (2.8, 25)], [(2.8, 25), (4.2, 0)], [(4.2, 0), (0, 0)]], 4, flat=True)
+        s.add("Obelisks", tf(ob, R=rot(Y, 45), t=(x0, 0, 0)))
+        for k, y in enumerate(np.linspace(3, 21, 7)):
+            r = 4.2 - y / 25 * 1.4
+            size = 0.7 if k % 2 else 0.45
+            s.add("Runes", tf(box(size, size, 0.1), R=rot(Z, 45), t=(x0, y, -r * 0.7071 - 0.05)))
+        for j, (dy, a, h) in enumerate(((27.5, 0, 3.2), (31.0, 120, 2.0), (29.5, 240, 1.6))):
+            d = np.array([math.cos(a * DEG), 0, math.sin(a * DEG)]) * (0 if j == 0 else 2.0)
+            R = rot(normalize([rng.uniform(-1, 1), 0.2, rng.uniform(-1, 1)]), rng.uniform(5, 20))
+            p = np.array([x0, dy, 0]) + d
+            s.add("Shards", tf(bipyramid(h * 0.22, h * 0.45, h * 0.5, 4), R=R, t=p))
+            s.add("ShardCores", tf(bipyramid(h * 0.09, h * 0.4, h * 0.25, 4), R=R, t=p))
+    s.add("Obelisks", tf(box(AW - 10, 2.0, 2.6), t=(0, 26.0, 0)))
+    s.add("Runes", tf(box(AW - 12, 0.3, 2.8), t=(0, 25.1, 0)))
+    for x in (-w / 2 + 6, w / 2 - 6):
+        s.add("Obelisks", tf(box(0.7, 25.0 - y1, 0.7), t=(x, (25.0 + y1) / 2, 0)))
+    s.lights.append("ShardCores")
+    return s
+
+
+
 PROPS = [valley_gate, meadow_flowers, meadow_mushrooms, meadow_sunflower, swamp_dead_tree, swamp_reeds,
-         lava_spire, lava_vent, crystal_big, crystal_small, void_obelisk, void_shards, tree_a, tree_b, plaza_statue]
+         lava_spire, lava_vent, crystal_big, crystal_small, void_obelisk, void_shards, tree_a, tree_b, plaza_statue,
+         cliff_meadow, cliff_swamp, cliff_lava, cliff_crystal, cliff_void,
+         arch_meadow, arch_swamp, arch_lava, arch_crystal, arch_void]
 
 
 def write_lua(path, specs):
     lines = []
     for sp in specs:
         signs = ", ".join(
-            f'{{ Part = "{g["part"]}", Text = "{g["text"]}", Color = {lua_color(g["color"])}, '
+            f'{{ Part = "{g["part"]}", Text = "{g["text"]}", Sub = "{g.get("sub", "")}", Color = {lua_color(g["color"])}, '
             f'PixelsPerStud = {g["ppu"]}, FrontOnly = {"true" if g.get("front_only") else "false"} }}'
             for g in sp["signs"])
         lights = ", ".join(f'"{l}"' for l in sp["lights"])
-        lines.append(f'\t{sp["name"]} = {{ Zone = "{sp["zone"]}", Height = {sp["height"]:.4f}, '
+        lines.append(f'\t{sp["name"]} = {{ Zone = "{sp["zone"]}", Kind = "{sp["kind"]}", Height = {sp["height"]:.4f}, '
                      f'Main = "{sp["main"]}", Signs = {{ {signs} }}, Lights = {{ {lights} }}, Parts = {{')
         for part, lk in sp["looks"].items():
             lines.append(f'\t\t{part} = {{ {lua_color(lk["color"])}, Enum.Material.{lk["material"]}, '
@@ -504,7 +900,7 @@ def main():
         parts = {k: [Piece(p.V + shift, p.F, p.flat) for p in v] for k, v in s.parts.items()}
         tris = write_glb(os.path.join(out, s.name + ".glb"), s.name, parts, s.looks)
         size = hi - lo
-        specs.append({"name": s.name, "zone": s.zone, "height": float(size[1]), "main": s.main, "signs": s.signs,
+        specs.append({"name": s.name, "zone": s.zone, "kind": s.kind, "height": float(size[1]), "main": s.main, "signs": s.signs,
                       "lights": s.lights, "triangles": int(tris), "size": size.round(2).tolist(), "looks": s.looks})
         print(f"{s.name:20s} {tris:6d} tris  size {np.round(size, 1)}")
     with open(os.path.join(out, "props.json"), "w") as f:
