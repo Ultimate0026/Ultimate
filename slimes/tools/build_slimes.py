@@ -876,13 +876,13 @@ def write_lua(path, specs):
         f.write(template.replace("--@SPECS@", "\n".join(lines)))
 
 
-def main():
-    out_models = os.path.join(ROOT, "models")
+def export(builders, out_models, json_name, lua_name, max_tris):
+    """Write each model's .glb, a json summary and the Roblox setup script."""
     out_lua = os.path.join(ROOT, "roblox")
     os.makedirs(out_models, exist_ok=True)
     os.makedirs(out_lua, exist_ok=True)
     specs, problems = [], []
-    for build in SLIMES:
+    for build in builders:
         s = build()
         assert set(s.parts) == set(s.looks), (s.name, set(s.parts) ^ set(s.looks))
         allV = np.vstack([p.V for ps in s.parts.values() for p in ps])
@@ -890,19 +890,23 @@ def main():
         tris = write_glb(os.path.join(out_models, s.name + ".glb"), s.name, s.parts, s.looks)
         lo, hi = allV.min(0), allV.max(0)
         assert lo[1] > -1e-6, (s.name, "below ground", lo[1])
-        if tris >= 3000:
+        if tris >= max_tris:
             problems.append(f"{s.name} has {tris} triangles")
         spec = {"name": s.name, "rarity": s.rarity, "size": s.size, "face": s.face, "triangles": int(tris),
                 "bodyWidth": float(body[:, 0].max() - body[:, 0].min()),
                 "bounds": [lo.round(3).tolist(), hi.round(3).tolist()], "looks": s.looks}
         specs.append(spec)
-        print(f"{s.name:10s} {tris:5d} tris  body {spec['bodyWidth']:.2f} wide  "
+        print(f"{s.name:16s} {tris:5d} tris  body {spec['bodyWidth']:.2f} wide  "
               f"bounds {np.round(hi - lo, 2)}  bottom {lo[1]:.3f}")
-    with open(os.path.join(out_models, "slimes.json"), "w") as f:
+    with open(os.path.join(out_models, json_name), "w") as f:
         json.dump(specs, f, indent=1)
-    write_lua(os.path.join(out_lua, "SlimeSetup.lua"), specs)
+    write_lua(os.path.join(out_lua, lua_name), specs)
     if problems:
         raise SystemExit("\n".join(problems))
+
+
+def main():
+    export(SLIMES, os.path.join(ROOT, "models"), "slimes.json", "SlimeSetup.lua", 3000)
 
 
 if __name__ == "__main__":

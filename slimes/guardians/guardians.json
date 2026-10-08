@@ -1,0 +1,367 @@
+[
+ {
+  "name": "Guardian_Meadow",
+  "rarity": "Guardian",
+  "size": 9,
+  "face": "Eyes",
+  "triangles": 4578,
+  "bodyWidth": 8.99890943535736,
+  "bounds": [
+   [
+    -5.024,
+    0.0,
+    -4.609
+   ],
+   [
+    5.674,
+    9.108,
+    5.627
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#2F6B2E",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Pupils": {
+    "color": "#16161C",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Lids": {
+    "color": "#2F6B2E",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Brows": {
+    "color": "#173A16",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#2A1A1A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Teeth": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Vines": {
+    "color": "#1E4A1D",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Thorns": {
+    "color": "#C9B27A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Leaves": {
+    "color": "#4FA84A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Petals": {
+    "color": "#FF7BAC",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "FlowerCentre": {
+    "color": "#FFD23F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Stem": {
+    "color": "#3C8C3A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Guardian_Swamp",
+  "rarity": "Guardian",
+  "size": 10,
+  "face": "Eyes",
+  "triangles": 4920,
+  "bodyWidth": 9.988174213496693,
+  "bounds": [
+   [
+    -5.767,
+    0.0,
+    -5.767
+   ],
+   [
+    5.767,
+    8.254,
+    5.767
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#4F7363",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#F2EFA0",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Pupils": {
+    "color": "#16161C",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Lids": {
+    "color": "#4F7363",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Brows": {
+    "color": "#22362C",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#1E2A22",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Teeth": {
+    "color": "#F2EFD8",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Goo": {
+    "color": "#8DBB5E",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Puddle": {
+    "color": "#3C5A4A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "LilyPad": {
+    "color": "#3F8F3A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "LilyFlower": {
+    "color": "#FFB3D1",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "MushroomStems": {
+    "color": "#E8DCC0",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "MushroomCaps": {
+    "color": "#C2552D",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "MushroomSpots": {
+    "color": "#FFF4E0",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Guardian_Lava",
+  "rarity": "Guardian",
+  "size": 11,
+  "face": "Eyes",
+  "triangles": 3388,
+  "bodyWidth": 10.813984640035315,
+  "bounds": [
+   [
+    -5.377,
+    0.0,
+    -5.927
+   ],
+   [
+    5.437,
+    10.947,
+    6.002
+   ]
+  ],
+  "looks": {
+   "Core": {
+    "color": "#FF5A00",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Body": {
+    "color": "#2B211F",
+    "material": "Slate",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#FFE14D",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Lids": {
+    "color": "#2B211F",
+    "material": "Slate",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#FF8C1A",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Horns": {
+    "color": "#1A1413",
+    "material": "Slate",
+    "transparency": 0.0
+   },
+   "Spikes": {
+    "color": "#1A1413",
+    "material": "Slate",
+    "transparency": 0.0
+   },
+   "SpikeTips": {
+    "color": "#FF7A1A",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Guardian_Crystal",
+  "rarity": "Guardian",
+  "size": 12,
+  "face": "Eyes",
+  "triangles": 3184,
+  "bodyWidth": 11.998545913809812,
+  "bounds": [
+   [
+    -5.999,
+    0.0,
+    -6.146
+   ],
+   [
+    5.999,
+    13.169,
+    7.893
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#6C7FE6",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#8FF7FF",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Lids": {
+    "color": "#6C7FE6",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Brows": {
+    "color": "#262B6B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#262B6B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Teeth": {
+    "color": "#D9D0FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Crystals": {
+    "color": "#C3B6FF",
+    "material": "Glass",
+    "transparency": 0.15
+   },
+   "CrystalCores": {
+    "color": "#E7DEFF",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Guardian_Void",
+  "rarity": "Guardian",
+  "size": 14,
+  "face": "Eyes",
+  "triangles": 3368,
+  "bodyWidth": 13.998303566111446,
+  "bounds": [
+   [
+    -9.962,
+    0.0,
+    -9.322
+   ],
+   [
+    10.019,
+    12.439,
+    9.398
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#050508",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#B026FF",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Lids": {
+    "color": "#050508",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Brows": {
+    "color": "#3A0D5C",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#B026FF",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Shards": {
+    "color": "#9B30FF",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "ShardsDark": {
+    "color": "#2A0B45",
+    "material": "Glass",
+    "transparency": 0.1
+   },
+   "Orbs": {
+    "color": "#C77DFF",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
+ }
+]
