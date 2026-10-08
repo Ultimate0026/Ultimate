@@ -1,0 +1,721 @@
+[
+ {
+  "name": "ValleyGate",
+  "zone": "Gate",
+  "height": 30.392778365079312,
+  "main": "Arch",
+  "signs": [
+   {
+    "part": "SignPanel",
+    "text": "SLIME VALLEY",
+    "color": "#FFD54A",
+    "ppu": 20
+   }
+  ],
+  "lights": [],
+  "triangles": 8020,
+  "size": [
+   100.0,
+   30.39,
+   22.0
+  ],
+  "looks": {
+   "Arch": {
+    "color": "#8BEA4F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Drips": {
+    "color": "#8BEA4F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Mouth": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "SlimePink": {
+    "color": "#FF7BAC",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SlimeBlue": {
+    "color": "#5AB0FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SlimeYellow": {
+    "color": "#FFD54A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SlimePurple": {
+    "color": "#8E6CFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SlimeOrange": {
+    "color": "#FF9F43",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SlimeGreen": {
+    "color": "#6EE07A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SignPanel": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "SignFrame": {
+    "color": "#FF5C7A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Straps": {
+    "color": "#8BEA4F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Meadow_FlowerClump",
+  "zone": "Meadow",
+  "height": 3.8426302007675135,
+  "main": "Stems",
+  "signs": [],
+  "lights": [],
+  "triangles": 2656,
+  "size": [
+   5.54,
+   3.84,
+   5.86
+  ],
+  "looks": {
+   "Stems": {
+    "color": "#3E9B3A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Leaves": {
+    "color": "#58B84A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Grass": {
+    "color": "#4CA843",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Centres": {
+    "color": "#FFC93D",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "PetalsPink": {
+    "color": "#FF8FC4",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "PetalsWhite": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "PetalsPurple": {
+    "color": "#B48CFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "PetalsRed": {
+    "color": "#FF5A5A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Meadow_Mushrooms",
+  "zone": "Meadow",
+  "height": 6.027330181800304,
+  "main": "Stems",
+  "signs": [],
+  "lights": [],
+  "triangles": 1736,
+  "size": [
+   7.18,
+   6.03,
+   5.26
+  ],
+  "looks": {
+   "Stems": {
+    "color": "#F3E9D2",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "CapsRed": {
+    "color": "#E2453C",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "CapsOrange": {
+    "color": "#F28C28",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Spots": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Grass": {
+    "color": "#4CA843",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Meadow_Sunflower",
+  "zone": "Meadow",
+  "height": 10.593701305623355,
+  "main": "Stem",
+  "signs": [],
+  "lights": [],
+  "triangles": 1312,
+  "size": [
+   4.2,
+   10.59,
+   2.44
+  ],
+  "looks": {
+   "Stem": {
+    "color": "#3E9B3A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Leaves": {
+    "color": "#58B84A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Petals": {
+    "color": "#FFD23F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Seeds": {
+    "color": "#6B3E1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Swamp_DeadTree",
+  "zone": "Swamp",
+  "height": 11.501781302966155,
+  "main": "Trunk",
+  "signs": [],
+  "lights": [],
+  "triangles": 1670,
+  "size": [
+   4.94,
+   11.5,
+   4.14
+  ],
+  "looks": {
+   "Trunk": {
+    "color": "#6B5B4E",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Branches": {
+    "color": "#6B5B4E",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Moss": {
+    "color": "#7E9A55",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Swamp_Reeds",
+  "zone": "Swamp",
+  "height": 5.03533106430147,
+  "main": "Stalks",
+  "signs": [],
+  "lights": [],
+  "triangles": 820,
+  "size": [
+   4.2,
+   5.04,
+   3.37
+  ],
+  "looks": {
+   "Stalks": {
+    "color": "#6E8F3A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Blades": {
+    "color": "#86A84A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Cattails": {
+    "color": "#7A4B2A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Lava_Spire",
+  "zone": "Lava",
+  "height": 12.50238682779185,
+  "main": "Rock",
+  "signs": [],
+  "lights": [],
+  "triangles": 748,
+  "size": [
+   5.6,
+   12.5,
+   5.65
+  ],
+  "looks": {
+   "Rock": {
+    "color": "#3A2E2B",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Magma": {
+    "color": "#FF6A00",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Rubble": {
+    "color": "#2B2220",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Lava_Vent",
+  "zone": "Lava",
+  "height": 6.24,
+  "main": "Rock",
+  "signs": [],
+  "lights": [],
+  "triangles": 892,
+  "size": [
+   6.98,
+   6.24,
+   7.09
+  ],
+  "looks": {
+   "Rock": {
+    "color": "#3A2E2B",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Pool": {
+    "color": "#FF7A00",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Embers": {
+    "color": "#FFC23D",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Smoke": {
+    "color": "#9A8F8C",
+    "material": "SmoothPlastic",
+    "transparency": 0.45,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Crystal_Cluster",
+  "zone": "Crystal",
+  "height": 8.613240058941726,
+  "main": "Crystals",
+  "signs": [],
+  "lights": [],
+  "triangles": 416,
+  "size": [
+   5.47,
+   8.61,
+   6.11
+  ],
+  "looks": {
+   "Crystals": {
+    "color": "#B9A7FF",
+    "material": "Glass",
+    "transparency": 0.15,
+    "collide": true
+   },
+   "Cores": {
+    "color": "#E7DEFF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Base": {
+    "color": "#5E6178",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "Crystal_Shards",
+  "zone": "Crystal",
+  "height": 4.390165372561176,
+  "main": "Crystals",
+  "signs": [],
+  "lights": [],
+  "triangles": 416,
+  "size": [
+   2.84,
+   4.39,
+   3.21
+  ],
+  "looks": {
+   "Crystals": {
+    "color": "#8FE9FF",
+    "material": "Glass",
+    "transparency": 0.15,
+    "collide": true
+   },
+   "Cores": {
+    "color": "#E0FBFF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Base": {
+    "color": "#5E6178",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "Void_Obelisk",
+  "zone": "Void",
+  "height": 11.8,
+  "main": "Obelisk",
+  "signs": [],
+  "lights": [
+   "Capstone"
+  ],
+  "triangles": 344,
+  "size": [
+   4.6,
+   11.8,
+   4.6
+  ],
+  "looks": {
+   "Obelisk": {
+    "color": "#1A1024",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Runes": {
+    "color": "#B026FF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Capstone": {
+    "color": "#C77DFF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Steps": {
+    "color": "#120B1A",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "Void_Shards",
+  "zone": "Void",
+  "height": 6.5175661281715,
+  "main": "Shards",
+  "signs": [],
+  "lights": [],
+  "triangles": 960,
+  "size": [
+   5.1,
+   6.52,
+   5.01
+  ],
+  "looks": {
+   "Shards": {
+    "color": "#5B21A8",
+    "material": "Glass",
+    "transparency": 0.25,
+    "collide": false
+   },
+   "Cores": {
+    "color": "#C77DFF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "GlowRing": {
+    "color": "#B026FF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Rubble": {
+    "color": "#120B1A",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "Tree_A",
+  "zone": "Street",
+  "height": 20.646864045475382,
+  "main": "Trunk",
+  "signs": [],
+  "lights": [],
+  "triangles": 2608,
+  "size": [
+   14.62,
+   20.65,
+   13.49
+  ],
+  "looks": {
+   "Trunk": {
+    "color": "#8B5A2B",
+    "material": "Wood",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Leaves": {
+    "color": "#4CBF4F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "LeavesDark": {
+    "color": "#38A040",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "Tree_B",
+  "zone": "Street",
+  "height": 23.799999999999997,
+  "main": "Trunk",
+  "signs": [],
+  "lights": [],
+  "triangles": 448,
+  "size": [
+   15.2,
+   23.8,
+   14.46
+  ],
+  "looks": {
+   "Trunk": {
+    "color": "#7A4A24",
+    "material": "Wood",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Needles": {
+    "color": "#2E8B57",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "NeedlesLight": {
+    "color": "#3FA66A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "PlazaStatue",
+  "zone": "Plaza",
+  "height": 11.956037471815556,
+  "main": "Plinth",
+  "signs": [
+   {
+    "part": "Plaque",
+    "text": "KING SLIME",
+    "color": "#3B2A0A",
+    "ppu": 60,
+    "front_only": true
+   }
+  ],
+  "lights": [],
+  "triangles": 2988,
+  "size": [
+   9.5,
+   11.96,
+   9.5
+  ],
+  "looks": {
+   "Plinth": {
+    "color": "#EDE7DA",
+    "material": "Marble",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Trim": {
+    "color": "#D4A93A",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Plaque": {
+    "color": "#C99A2E",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Body": {
+    "color": "#E3B53B",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Eyes": {
+    "color": "#5A3E12",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "EyeShine": {
+    "color": "#FFF1C2",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Mouth": {
+    "color": "#5A3E12",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Cheeks": {
+    "color": "#E3B53B",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Crown": {
+    "color": "#C9921C",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "GemsRed": {
+    "color": "#E0115F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "GemsBlue": {
+    "color": "#2D6CDF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "GemsGreen": {
+    "color": "#1FAF5A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Cushion": {
+    "color": "#B01030",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ }
+]

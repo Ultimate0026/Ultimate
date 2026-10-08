@@ -72,6 +72,37 @@ What the base has, by the names your scripts can use:
 Colours are set at the top of `tools/build_base.py`. Change them and run
 `python3 slimes/tools/build_base.py` to get a new builder script.
 
+## Map props
+
+In `props/`, same conventions (studs, front faces −Z, pivot at the bottom centre).
+
+| Model | Where | Height (studs) | Triangles |
+|---|---|---|---|
+| ValleyGate | Valley entrance, 100 wide | 30.4 | 8,020 |
+| Meadow_FlowerClump | Meadow | 3.8 | 2,656 |
+| Meadow_Mushrooms | Meadow | 6.0 | 1,736 |
+| Meadow_Sunflower | Meadow | 10.6 | 1,312 |
+| Swamp_DeadTree | Swamp | 11.5 | 1,670 |
+| Swamp_Reeds | Swamp | 5.0 | 820 |
+| Lava_Spire | Lava | 12.5 | 748 |
+| Lava_Vent | Lava | 6.2 | 892 |
+| Crystal_Cluster | Crystal | 8.6 | 416 |
+| Crystal_Shards | Crystal | 4.4 | 416 |
+| Void_Obelisk | Void | 11.8 | 344 |
+| Void_Shards | Void | 6.5 | 960 |
+| Tree_A | Street | 20.6 | 2,608 |
+| Tree_B | Street | 23.8 | 448 |
+| PlazaStatue | Plaza | 12.0 | 2,988 |
+
+1. Import the `.glb` files, then run [`roblox/PropSetup.lua`](roblox/PropSetup.lua) in the Command Bar. It colours
+   and anchors every part and turns collisions on only for solid parts (trunks, rocks, pillars, the plinth), so
+   players don't snag on petals and reeds. It also writes "SLIME VALLEY" on the gate sign and "KING SLIME" on
+   the statue plaque, adds lights to glowing parts and scales each prop to its height.
+2. Place `ValleyGate`, the trees and `PlazaStatue` by hand.
+3. To dress a zone, keep the set-up zone props in ServerStorage, select that zone's floor part, set `ZONE` at the
+   top of [`roblox/PropScatter.lua`](roblox/PropScatter.lua) and run it. It keeps a lane down the middle clear for
+   running and puts the props in `Workspace > MapProps > <Zone>`. Running it again replaces that zone's props.
+
 ## Importing into Roblox Studio
 
 1. **File › Import 3D**, pick the `.glb` files. If the importer asks for a scale unit, choose **Stud**.
@@ -101,6 +132,7 @@ pip install numpy
 python3 slimes/tools/build_slimes.py
 python3 slimes/tools/build_guardians.py
 python3 slimes/tools/build_base.py
+python3 slimes/tools/build_props.py
 ```
 
 `tools/build_slimes.py` holds one function per slime. It writes the `.glb` files, `models/slimes.json` and
