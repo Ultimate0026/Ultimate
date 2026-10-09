@@ -1118,5 +1118,469 @@
     "transparency": 0.0
    }
   }
+ },
+ {
+  "name": "Gummy",
+  "rarity": "Legendary",
+  "size": 4.5,
+  "face": "Eyes",
+  "triangles": 2968,
+  "bodyWidth": 4.497562255593334,
+  "bounds": [
+   [
+    -2.249,
+    0.0,
+    -2.328
+   ],
+   [
+    2.249,
+    3.718,
+    2.249
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#FF3B5C",
+    "material": "SmoothPlastic",
+    "transparency": 0.25
+   },
+   "Core": {
+    "color": "#FF7A90",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Ears": {
+    "color": "#FF3B5C",
+    "material": "SmoothPlastic",
+    "transparency": 0.25
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#FFB3C1",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Sugar": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "CottonCandy",
+  "rarity": "Mythic",
+  "size": 5.2,
+  "face": "Eyes",
+  "triangles": 2924,
+  "bodyWidth": 5.197183050907853,
+  "bounds": [
+   [
+    -2.599,
+    0.0,
+    -2.712
+   ],
+   [
+    2.871,
+    5.974,
+    2.599
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#FFC2E2",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#FF8CC6",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Fluff": {
+    "color": "#FFB0DA",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "FluffBlue": {
+    "color": "#A8DDFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "FluffWhite": {
+    "color": "#FFF2FA",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Stick": {
+    "color": "#F7E7C6",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Sprinkles": {
+    "color": "#7CE3FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "SprinklesYellow": {
+    "color": "#FFE066",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Thunder",
+  "rarity": "Secret",
+  "size": 6.5,
+  "face": "Eyes",
+  "triangles": 2532,
+  "bodyWidth": 6.496478813634817,
+  "bounds": [
+   [
+    -3.983,
+    0.0,
+    -4.196
+   ],
+   [
+    4.008,
+    7.358,
+    4.196
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#5B6B8C",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#FFE14D",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#2A3350",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cloud": {
+    "color": "#D5DDEA",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "CloudDark": {
+    "color": "#9AA6BC",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Bolts": {
+    "color": "#FFE14D",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Sparks": {
+    "color": "#9FE8FF",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Phoenix",
+  "rarity": "Secret",
+  "size": 6.5,
+  "face": "Eyes",
+  "triangles": 2562,
+  "bodyWidth": 6.496478813634817,
+  "bounds": [
+   [
+    -4.081,
+    0.0,
+    -3.58
+   ],
+   [
+    4.081,
+    7.145,
+    5.069
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#FF6A2B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Belly": {
+    "color": "#FFC857",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#3A1200",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Beak": {
+    "color": "#FFD23F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Flames": {
+    "color": "#FF8A00",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "FlamesInner": {
+    "color": "#FFE14D",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Wings": {
+    "color": "#FF4A1C",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "WingTips": {
+    "color": "#FFD23F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Tail": {
+    "color": "#FF8A00",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Supernova",
+  "rarity": "Divine",
+  "size": 7,
+  "face": "Eyes",
+  "triangles": 2840,
+  "bodyWidth": 6.996207953145186,
+  "bounds": [
+   [
+    -4.235,
+    0.0,
+    -4.66
+   ],
+   [
+    4.235,
+    7.664,
+    4.66
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#FFE9A8",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#4A2A00",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#4A2A00",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#FF9E6B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Corona": {
+    "color": "#FFB020",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "RingPink": {
+    "color": "#FF5CC8",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Rays": {
+    "color": "#FFF4C2",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Stars": {
+    "color": "#FFFFFF",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "BlackHole",
+  "rarity": "Divine",
+  "size": 7,
+  "face": "Eyes",
+  "triangles": 2820,
+  "bodyWidth": 6.996207953145186,
+  "bounds": [
+   [
+    -5.961,
+    0.0,
+    -5.888
+   ],
+   [
+    5.961,
+    6.398,
+    5.888
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#050507",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#E9D2FF",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#B026FF",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "DiskInner": {
+    "color": "#FF8A3D",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "DiskOuter": {
+    "color": "#9B30FF",
+    "material": "Neon",
+    "transparency": 0.25
+   },
+   "PhotonRing": {
+    "color": "#FFE7C2",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Debris": {
+    "color": "#C77DFF",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
+ },
+ {
+  "name": "Omega",
+  "rarity": "Divine",
+  "size": 7,
+  "face": "Eyes",
+  "triangles": 2936,
+  "bodyWidth": 6.996207953145186,
+  "bounds": [
+   [
+    -5.137,
+    0.0,
+    -4.381
+   ],
+   [
+    5.137,
+    9.212,
+    4.381
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#F4F0FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#2A1F4A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#2A1F4A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Cheeks": {
+    "color": "#C9B8FF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Emblem": {
+    "color": "#FFD54A",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Halo": {
+    "color": "#FFD54A",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "WingsCyan": {
+    "color": "#8FF3FF",
+    "material": "Glass",
+    "transparency": 0.2
+   },
+   "WingsPink": {
+    "color": "#FF9EEA",
+    "material": "Glass",
+    "transparency": 0.2
+   },
+   "OrbitRing": {
+    "color": "#B9A7FF",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
  }
 ]

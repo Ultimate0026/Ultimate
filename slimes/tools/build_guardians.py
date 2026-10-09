@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds the five zone guardian models.
+"""Builds the zone guardian models.
 
     python3 slimes/tools/build_guardians.py
 
@@ -13,8 +13,9 @@ import random
 
 import numpy as np
 
-from build_slimes import (BACK, DEG, FRONT, ROOT, WHITE, Slime, curve, drip, export, leaf_polygon, X, Y, Z)
-from meshkit import (Body, box, cone, cylinder, ellipsoid, extrude, icosphere, lathe, normalize, place, prism, rot,
+from build_slimes import (BACK, DEG, FRONT, ROOT, WHITE, Slime, bolt_polygon, curve, drip, export, leaf_polygon,
+                          X, Y, Z)
+from meshkit import (Body, box, cone, star_polygon, cylinder, ellipsoid, extrude, icosphere, lathe, normalize, place, prism, rot,
                      rot_from_to, sphere, tf, torus, tube, bezier)
 
 
@@ -301,7 +302,144 @@ def void():
     return s
 
 
-GUARDIANS = [meadow, swamp, lava, crystal, void]
+def candy():
+    s = Slime("Guardian_Candy", "Guardian", 15)
+    W = 15.0
+    B = Body(W, 0.78 * W)
+    H = B.H
+    rng = random.Random(15)
+    body = "#FF6FB5"
+    s.look("Body", body)
+    s.add("Body", B.piece(36, 16))
+    angry_face(s, B, W, H, 0.5 * H, 0.17 * W, 0.075 * W, 0.075 * W, body, brow="#7A1F4F", mouth_color="#5A1235")
+    # dripping icing cap with sprinkles
+    s.look("Icing", "#FFF5FA")
+    yc = B.y_at_radius(0.36 * W)
+    ys = np.linspace(H, yc, 5)[1:]
+    outer = [(0.0, H + 0.02 * W)] + [(float(B.R(v)) + 0.02 * W, v) for v in ys]
+    inner = [(float(B.R(v)) - 0.02 * W, v) for v in ys[::-1]] + [(0.0, H - 0.02 * W)]
+    s.add("Icing", lathe([outer, [outer[-1], inner[0]], inner], 32))
+    for k in range(5):
+        th = (k * 72 + 36 + rng.uniform(-8, 8)) * DEG
+        if abs(((th / DEG) % 360) - 270) < 25:
+            continue
+        s.add("Icing", drip(B, th, yc + 0.01 * W, rng.uniform(0.08, 0.18) * H, 0.035 * W))
+    colors = {"SprinklesBlue": "#5AC8FF", "SprinklesYellow": "#FFE066", "SprinklesGreen": "#7CE38B",
+              "SprinklesPurple": "#B48CFF"}
+    for k, v in colors.items():
+        s.look(k, v)
+    keys = list(colors)
+    for i in range(20):
+        th = rng.uniform(0, 2 * math.pi)
+        yy = rng.uniform(yc + 0.02 * W, H * 0.985)
+        p, n = B.pt(th, yy, 0.025 * W)
+        d = normalize(np.cross(n, [rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-1, 1)]))
+        s.add(keys[i % 4], tube([p - d * 0.018 * W, p + d * 0.018 * W], 0.007 * W, 4))
+    # candy cane horns, striped
+    s.look("CaneRed", "#E3263B")
+    s.look("CaneWhite", "#FFFFFF")
+    for side in (-1, 1):
+        p, n = B.pt(FRONT + side * 42 * DEG, 0.88 * H)
+        out = normalize([p[0], 0, 0])
+        path = bezier([p - n * 0.03 * W, p + Y * 0.16 * W + out * 0.02 * W, p + Y * 0.26 * W + out * 0.08 * W,
+                       p + Y * 0.24 * W + out * 0.15 * W, p + Y * 0.18 * W + out * 0.16 * W], 18)
+        s.add("CaneWhite", tube(path, 0.028 * W, 6))
+        for j in range(1, len(path) - 1, 4):
+            s.add("CaneRed", tube([path[j], path[j + 1]], 0.03 * W, 6))
+    # gumdrops along the back
+    gum = {"GumdropRed": "#FF4D6D", "GumdropOrange": "#FF9F43", "GumdropGreen": "#5BD66B"}
+    for k, v in gum.items():
+        s.look(k, v)
+    for i, (th, yy) in enumerate(((90, 0.6), (60, 0.44), (120, 0.44), (90, 0.3))):
+        p, n = B.pt(th * DEG, yy * H, -0.01 * W)
+        d = lathe([[(0, 0.07 * W), (0.035 * W, 0.06 * W), (0.055 * W, 0.02 * W), (0.055 * W, 0.0)],
+                   [(0.055 * W, 0.0), (0, 0.0)]], 10)
+        s.add(list(gum)[i % 3], tf(d, R=rot_from_to(Y, n), t=p))
+    return s
+
+
+def storm():
+    s = Slime("Guardian_Storm", "Guardian", 16)
+    W = 16.0
+    B = Body(W, 0.78 * W)
+    H = B.H
+    rng = random.Random(16)
+    body = "#4A5A78"
+    s.look("Body", body)
+    s.add("Body", B.piece(40, 18))
+    angry_face(s, B, W, H, 0.5 * H, 0.17 * W, 0.075 * W, 0.065 * W, body, sclera="#FFF27A", pupil=None,
+               brow="#1E2638", glow=True, mouth_color="#1E2638")
+    s.look("Cloud", "#D5DDEA")
+    s.look("CloudDark", "#8C98B0")
+    pts = [(0, 1.0, 0.15)] + [(a, 0.86, 0.12) for a in range(0, 360, 45)] + [(a, 0.72, 0.1) for a in range(20, 360, 60)]
+    for k, (a, yy, r) in enumerate(pts):
+        if abs(a - 270) < 30 and yy < 0.8:
+            continue
+        p, n = B.pt(a * DEG, yy * H, 0.04 * W)
+        if k == 0:
+            p = np.array([0, H + 0.02 * W, 0.02 * W])
+        s.add("Cloud" if k % 3 else "CloudDark", tf(sphere(10, 6), s=(r * W, r * W * 0.75, r * W), t=p))
+    s.look("Bolts", "#FFE14D", "Neon")
+    for side, lean, size in ((-1, -24, 0.24), (1, 24, 0.24), (-1, -55, 0.16), (1, 55, 0.16)):
+        at = np.array([side * (0.26 if abs(lean) < 40 else 0.4) * W, H * (0.98 if abs(lean) < 40 else 0.82), 0.02 * W])
+        s.add("Bolts", tf(extrude(bolt_polygon(size * W), 0.03 * W), R=rot(Z, lean), t=at))
+    s.look("Sparks", "#9FE8FF", "Neon")
+    for i in range(8):
+        a = i * 45 + 10
+        p = (0.66 * W * math.cos(a * DEG), rng.uniform(0.2, 0.9) * H, 0.66 * W * math.sin(a * DEG))
+        s.add("Sparks", tf(lathe([[(0, 0.03 * W), (0.018 * W, 0)], [(0.018 * W, 0), (0, -0.03 * W)]], 4, flat=True),
+                           R=rot(Z, rng.uniform(0, 90)), t=p))
+    return s
+
+
+def cosmic():
+    s = Slime("Guardian_Cosmic", "Guardian", 18)
+    W = 18.0
+    B = Body(W, 0.8 * W)
+    H = B.H
+    rng = random.Random(18)
+    body = "#241A5C"
+    s.look("Body", body, transparency=0.12)
+    s.add("Body", B.piece(40, 18))
+    angry_face(s, B, W, H, 0.55 * H, 0.17 * W, 0.075 * W, 0.065 * W, body, sclera="#9FE8FF", pupil=None,
+               brow="#0E0A2A", glow=True, mouth_color="#C77DFF", mouth_glow=True, teeth="#E7F4FF")
+    s.look("Stars", "#FFF4B8", "Neon")
+    for i in range(18):
+        th = rng.uniform(0, 2 * math.pi)
+        yy = rng.uniform(0.15, 0.9) * H
+        if abs(((th / DEG) % 360) - 270) < 35 and 0.3 * H < yy < 0.75 * H:
+            continue
+        p, n = B.pt(th, yy, 0.004 * W)
+        size = rng.uniform(0.018, 0.035) * W
+        s.add("Stars", place(extrude(star_polygon(5, size, size * 0.45), 0.006 * W), p, n, rot(Z, rng.uniform(0, 72))))
+    # a planet ring around the body and little moons
+    s.look("Ring", "#F2C38B", transparency=0.15)
+    s.look("RingInner", "#C7A2FF", "Neon", transparency=0.2)
+    M = rot(X, -26) @ rot(Z, -10)
+    ring = lathe([[(0.6 * W, 0.006 * W), (0.8 * W, 0.0)], [(0.8 * W, 0.0), (0.6 * W, -0.006 * W)],
+                  [(0.6 * W, -0.006 * W), (0.6 * W, 0.006 * W)]], 56)
+    inner = lathe([[(0.54 * W, 0.004 * W), (0.59 * W, 0.0)], [(0.59 * W, 0.0), (0.54 * W, -0.004 * W)],
+                   [(0.54 * W, -0.004 * W), (0.54 * W, 0.004 * W)]], 56)
+    c = np.array([0, 0.48 * H, 0])
+    s.add("Ring", tf(ring, R=M, t=c))
+    s.add("RingInner", tf(inner, R=M, t=c))
+    moons = {"MoonGrey": "#B7BDD1", "MoonPink": "#FF9EC7", "MoonTeal": "#6EE0D0"}
+    for k, v in moons.items():
+        s.look(k, v)
+    for i, (a, r, yy) in enumerate(((40, 0.05, 1.05), (160, 0.035, 0.85), (300, 0.04, 0.95))):
+        s.add(list(moons)[i], tf(sphere(14, 10), s=r * W,
+                                 t=(0.62 * W * math.cos(a * DEG), yy * H, 0.62 * W * math.sin(a * DEG))))
+    s.look("Crown", "#FFD54A", "Neon")
+    for k in range(5):
+        a = (k - 2) * 18
+        p, n = B.pt(FRONT + a * DEG, 0.93 * H)
+        d = normalize(n * 0.4 + Y)
+        s.add("Crown", tf(extrude(star_polygon(4, 0.035 * W, 0.012 * W), 0.008 * W),
+                          R=rot_from_to(Z, normalize([d[0], 0, -1])), t=p + d * 0.06 * W))
+    return s
+
+
+GUARDIANS = [meadow, swamp, lava, crystal, void, candy, storm, cosmic]
 
 
 def main():

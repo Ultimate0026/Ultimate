@@ -1,6 +1,6 @@
 # Slime pet models
 
-20 slime pets for Roblox, from Common to Secret. Each slime is a `.glb` in `models/`. Every model:
+27 slime pets for Roblox, from Common to Divine. Each slime is a `.glb` in `models/`. Every model:
 
 - is modelled in **studs** (1 unit = 1 stud)
 - faces forward: the face looks down **−Z**, Roblox's LookVector
@@ -29,6 +29,13 @@
 | 18 | Void | Mythic | 5.2 | 2,296 |
 | 19 | King | Secret | 6.5 | 2,928 |
 | 20 | Glitch | Secret | 6.5 | 916 |
+| 21 | Gummy | Legendary | 4.5 | 2,968 |
+| 22 | CottonCandy | Mythic | 5.2 | 2,924 |
+| 23 | Thunder | Secret | 6.5 | 2,532 |
+| 24 | Phoenix | Secret | 6.5 | 2,562 |
+| 25 | Supernova | Divine | 7 | 2,840 |
+| 26 | BlackHole | Divine | 7 | 2,820 |
+| 27 | Omega | Divine | 7 | 2,936 |
 
 "Size" is the width of the slime's body. Hats, wings, tails and other extras stick out past it.
 
@@ -45,6 +52,9 @@ kid-friendly face.
 | Guardian_Lava | 11 | 3,388 | Cracked black rock over a glowing orange core, horns, jagged spikes |
 | Guardian_Crystal | 12 | 3,184 | Icy purple-blue, large crystal spikes along its back, glowing eyes |
 | Guardian_Void | 14 | 3,368 | Pure black, seven glowing purple eyes, floating shards and orbs |
+| Guardian_Candy | 15 | 4,712 | Sugar Rush: pink candy monster, dripping icing, sprinkles, candy-cane horns, gumdrops |
+| Guardian_Storm | 16 | 4,216 | Thunder Peaks: storm cloud top, lightning-bolt horns, glowing yellow eyes, sparks |
+| Guardian_Cosmic | 18 | 4,728 | Star Core: starry deep-space body, planet ring, orbiting moons, glowing eyes |
 
 Import them the same way as the slimes, then run [`roblox/GuardianSetup.lua`](roblox/GuardianSetup.lua)
 instead of `SlimeSetup.lua`. `Body` becomes the PrimaryPart, so you can move a guardian with

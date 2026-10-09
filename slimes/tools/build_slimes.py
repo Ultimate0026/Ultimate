@@ -848,9 +848,262 @@ def glitch():
         s.add(part, tf(box(1, 1, 1), s=sz * v, t=(x * W * 0.62, y * H, z * W * 0.5)))
     return s
 
+# ---------------------------------------------------------------- new zones: Sugar Rush, Thunder Peaks, Star Core
+
+def bolt_polygon(size):
+    P = [(0.1, 1.0), (0.62, 1.0), (0.4, 0.58), (0.72, 0.58), (0.12, -0.25), (0.3, 0.36), (0.0, 0.36)]
+    return [((x - 0.36) * size, (y - 0.4) * size) for x, y in P]
+
+
+def flame(h, r, n=8):
+    return lathe([[(0, h), (r * 0.35, h * 0.62), (r, h * 0.28), (r * 0.85, h * 0.08), (0, 0)]], n)
+
+
+def gummy():
+    s = Slime("Gummy", "Legendary", 4.5)
+    W = 4.5
+    B = Body(W, 0.8 * W)
+    H = B.H
+    rng = random.Random(41)
+    s.look("Body", "#FF3B5C", transparency=0.25)
+    s.add("Body", B.piece())
+    s.look("Core", "#FF7A90")
+    s.add("Core", Body(0.78 * W, 0.74 * H).piece(24, 10))
+    s.look("Ears", "#FF3B5C", transparency=0.25)
+    for side in (-1, 1):
+        p, n = B.pt(FRONT + side * 62 * DEG, 0.9 * H)
+        s.add("Ears", tf(ellipsoid(0.09 * W, 0.09 * W, 0.06 * W, 12, 8), t=p + n * 0.02 * W))
+    eyes(s, B, 0.56 * H, 0.16 * W, 0.066 * W, 0.09 * W)
+    smile(s, B, 0.4 * H, 0.08 * W, 0.045 * W, 0.02 * W)
+    cheeks(s, B, 0.44 * H, 0.27 * W, W, "#FFB3C1")
+    s.look("Sugar", "#FFFFFF")
+    for i in range(26):
+        th = rng.uniform(0, 2 * math.pi)
+        yy = rng.uniform(0.72, 0.98) * H
+        if abs(((th / DEG) % 360) - 270) < 30 and yy < 0.82 * H:
+            continue
+        p, n = B.pt(th, yy, 0.01 * W)
+        R = rot(normalize([rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-1, 1)]), rng.uniform(0, 90))
+        s.add("Sugar", tf(box(0.035 * W, 0.035 * W, 0.035 * W), R=R, t=p))
+    return s
+
+
+def cotton_candy():
+    s = Slime("CottonCandy", "Mythic", 5.2)
+    W = 5.2
+    B = Body(W, 0.8 * W)
+    H = B.H
+    rng = random.Random(52)
+    s.look("Body", "#FFC2E2")
+    s.add("Body", B.piece())
+    eyes(s, B, 0.5 * H, 0.16 * W, 0.064 * W, 0.088 * W)
+    smile(s, B, 0.35 * H, 0.08 * W, 0.045 * W, 0.019 * W)
+    cheeks(s, B, 0.39 * H, 0.27 * W, W, "#FF8CC6")
+    s.look("Fluff", "#FFB0DA")
+    s.look("FluffBlue", "#A8DDFF")
+    s.look("FluffWhite", "#FFF2FA")
+    parts = ["Fluff", "FluffBlue", "FluffWhite"]
+    puffs = 0
+    for k in range(20):
+        th = k * 137.5 * DEG
+        yy = (0.66 + 0.34 * math.sqrt((k + 0.5) / 20)) * H
+        yy = min(yy, H * 0.99)
+        if abs(((th / DEG) % 360) - 270) < 34 and yy < 0.76 * H:
+            continue
+        p, n = B.pt(th, yy, 0.02 * W)
+        r = rng.uniform(0.11, 0.16) * W
+        s.add(parts[puffs % 3], tf(sphere(7, 4), s=(r, r * 0.85, r), t=p))
+        puffs += 1
+    s.add("Fluff", tf(sphere(10, 6), s=(0.17 * W, 0.15 * W, 0.17 * W), t=(0, H + 0.06 * W, 0.02 * W)))
+    s.look("Stick", "#F7E7C6")
+    s.add("Stick", tube([[0.06 * W, H + 0.1 * W, 0.05 * W], [0.14 * W, H + 0.34 * W, 0.12 * W]], 0.022 * W, 8))
+    s.look("Sprinkles", "#7CE3FF")
+    s.look("SprinklesYellow", "#FFE066")
+    for i in range(10):
+        th = rng.uniform(0, 2 * math.pi)
+        yy = rng.uniform(0.25, 0.6) * H
+        if abs(((th / DEG) % 360) - 270) < 40:
+            continue
+        p, n = B.pt(th, yy, 0.004 * W)
+        d = normalize(np.cross(n, [rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-1, 1)]))
+        s.add("Sprinkles" if i % 2 else "SprinklesYellow",
+              tube([p - d * 0.03 * W, p + d * 0.03 * W], 0.012 * W, 4))
+    return s
+
+
+def thunder():
+    s = Slime("Thunder", "Secret", 6.5)
+    W = 6.5
+    B = Body(W, 0.8 * W)
+    H = B.H
+    rng = random.Random(65)
+    s.look("Body", "#5B6B8C")
+    s.add("Body", B.piece())
+    eyes(s, B, 0.53 * H, 0.16 * W, 0.07 * W, 0.075 * W, color="#FFE14D", shine=False, tilt=12, material="Neon")
+    smile(s, B, 0.37 * H, 0.08 * W, 0.035 * W, 0.019 * W, color="#2A3350")
+    s.look("Cloud", "#D5DDEA")
+    s.look("CloudDark", "#9AA6BC")
+    for k, (th, yy, r) in enumerate(((0, 0.97, 0.2), (40, 0.88, 0.16), (100, 0.9, 0.17), (160, 0.88, 0.16),
+                                     (220, 0.9, 0.15), (300, 0.9, 0.16), (70, 0.78, 0.13), (130, 0.76, 0.13),
+                                     (20, 0.76, 0.12), (200, 0.77, 0.12))):
+        p, n = B.pt(th * DEG, yy * H, 0.03 * W)
+        if k == 0:
+            p = np.array([0, H + 0.02 * W, 0.02 * W])
+        s.add("Cloud" if k % 3 else "CloudDark", tf(sphere(9, 6), s=(r * W, r * W * 0.8, r * W), t=p))
+    s.look("Bolts", "#FFE14D", "Neon")
+    for side, lean in ((-1, -22), (1, 22), (0, 0)):
+        size = 0.28 * W if side else 0.22 * W
+        at = np.array([side * 0.24 * W, H + (0.08 if side else 0.2) * W, 0.04 * W])
+        s.add("Bolts", tf(extrude(bolt_polygon(size), 0.035 * W), R=rot(Z, lean), t=at))
+    s.look("Sparks", "#9FE8FF", "Neon")
+    for i in range(6):
+        a = i * 60 + 20
+        s.add("Sparks", tf(bipyramid_small(0.035 * W), R=rot(Z, rng.uniform(0, 90)),
+                           t=(0.62 * W * math.cos(a * DEG), rng.uniform(0.3, 0.9) * H, 0.62 * W * math.sin(a * DEG))))
+    return s
+
+
+def bipyramid_small(r):
+    return lathe([[(0, r * 1.6), (r, 0)], [(r, 0), (0, -r * 1.6)]], 4, flat=True)
+
+
+def phoenix():
+    s = Slime("Phoenix", "Secret", 6.5)
+    W = 6.5
+    B = Body(W, 0.8 * W)
+    H = B.H
+    s.look("Body", "#FF6A2B")
+    s.add("Body", B.piece())
+    s.look("Belly", "#FFC857")
+    s.add("Belly", B.on_face(ellipsoid(0.2 * W, 0.13 * W, 0.03 * W, 16, 8), 0, 0.17 * H))
+    eyes(s, B, 0.56 * H, 0.16 * W, 0.064 * W, 0.088 * W, color="#3A1200")
+    s.look("Beak", "#FFD23F")
+    s.add("Beak", B.on_face(tf(cone(0.045 * W, 0.08 * W, 10), R=rot(X, 90)), 0, 0.44 * H, 0.0))
+    s.look("Flames", "#FF8A00", "Neon")
+    s.look("FlamesInner", "#FFE14D", "Neon")
+    for k, (dx, dz, h, lean) in enumerate(((0, 0.02, 0.36, 0), (-0.09, 0.05, 0.26, -24), (0.09, 0.05, 0.26, 24),
+                                          (-0.05, 0.12, 0.2, -12), (0.05, 0.12, 0.2, 12))):
+        base = np.array([dx * W, H - 0.05 * W, dz * W])
+        R = rot(Z, -lean) @ rot(X, 14)
+        s.add("Flames", tf(flame(h * W, 0.07 * W), R=R, t=base))
+        s.add("FlamesInner", tf(flame(h * W * 0.6, 0.04 * W), R=R, t=base + R @ Y * 0.02 * W - Z * 0.005 * W))
+    s.look("Wings", "#FF4A1C")
+    s.look("WingTips", "#FFD23F")
+    feathers = [(0, 0.15), (0.2, 0.62), (0.55, 0.85), (1.0, 0.9), (0.9, 0.62), (0.98, 0.5), (0.78, 0.4), (0.86, 0.26),
+                (0.62, 0.22), (0.66, 0.06), (0.42, 0.1), (0.36, -0.06), (0.16, 0.02)]
+    for side in (-1, 1):
+        p, n = B.pt(BACK - side * 55 * DEG, 0.55 * H)
+        R = wing_frame(BACK - side * 72 * DEG, 20)
+        s.add("Wings", tf(wing(feathers, 0.42 * W, 0.4 * W, 0.035 * W), R=R, t=p - n * 0.06 * W))
+        tip = [(x * 0.42 * W, y * 0.4 * W) for x, y in [(0.62, 0.8), (1.0, 0.9), (0.9, 0.62), (0.98, 0.5), (0.7, 0.62)]]
+        s.add("WingTips", tf(extrude(tip, 0.045 * W), R=R, t=p - n * 0.06 * W))
+    s.look("Tail", "#FF8A00", "Neon")
+    for k, a in enumerate((-30, 0, 30)):
+        d = rot(Y, a) @ np.array([0, 0.3, 1.0])
+        base, nb = B.pt(BACK, 0.22 * H, -0.02 * W)
+        path = bezier([base, base + d * 0.15 * W, base + d * 0.3 * W + Y * 0.12 * W], 8)
+        s.add("Tail", tube(path, np.linspace(0.05 * W, 0.0, 8), 7))
+    return s
+
+
+def supernova():
+    s = Slime("Supernova", "Divine", 7)
+    W = 7.0
+    B = Body(W, 0.8 * W)
+    H = B.H
+    s.look("Body", "#FFE9A8")
+    s.add("Body", B.piece())
+    eyes(s, B, 0.55 * H, 0.16 * W, 0.064 * W, 0.088 * W, color="#4A2A00")
+    smile(s, B, 0.39 * H, 0.08 * W, 0.045 * W, 0.019 * W, color="#4A2A00")
+    cheeks(s, B, 0.43 * H, 0.27 * W, W, "#FF9E6B")
+    s.look("Corona", "#FFB020", "Neon")
+    s.add("Corona", tf(torus(0.58 * W, 0.025 * W, 36, 6), R=rot(X, 14), t=(0, 0.46 * H, 0)))
+    s.look("RingPink", "#FF5CC8", "Neon")
+    s.add("RingPink", tf(torus(0.66 * W, 0.016 * W, 36, 5), R=rot(Z, 28) @ rot(X, -10), t=(0, 0.5 * H, 0)))
+    s.look("Rays", "#FFF4C2", "Neon")
+    c = np.array([0, 0.62 * H, 0.3 * W])
+    for k, a in enumerate(range(-15, 200, 30)):
+        d = np.array([math.cos(a * DEG), math.sin(a * DEG), 0])
+        ln = (0.26 if k % 2 else 0.17) * W
+        s.add("Rays", tf(cone(0.045 * W, ln, 6), R=rot_from_to(Y, d), t=c + d * 0.36 * W))
+    s.look("Stars", "#FFFFFF", "Neon")
+    for k, (a, yy) in enumerate(((30, 1.05), (150, 1.1), (250, 0.85), (330, 0.95))):
+        st = extrude(star_polygon(4, 0.06 * W, 0.02 * W), 0.01 * W)
+        s.add("Stars", tf(st, t=(0.5 * W * math.cos(a * DEG), yy * H, 0.5 * W * math.sin(a * DEG) - 0.05 * W)))
+    return s
+
+
+def black_hole():
+    s = Slime("BlackHole", "Divine", 7)
+    W = 7.0
+    B = Body(W, 0.8 * W)
+    H = B.H
+    s.look("Body", "#050507")
+    s.add("Body", B.piece())
+    eyes(s, B, 0.58 * H, 0.16 * W, 0.075 * W, 0.06 * W, color="#E9D2FF", shine=False, tilt=10, material="Neon")
+    s.look("Mouth", "#B026FF", "Neon")
+    smile(s, B, 0.42 * H, 0.06 * W, 0.03 * W, 0.016 * W, color="#B026FF")
+    s.looks["Mouth"]["material"] = "Neon"
+    M = rot(X, 12) @ rot(Z, -8)
+    centre = np.array([0, 0.42 * H, 0])
+    disk_in = lathe([[(0.52 * W, 0.012 * W), (0.66 * W, 0.0)], [(0.66 * W, 0.0), (0.52 * W, -0.012 * W)],
+                     [(0.52 * W, -0.012 * W), (0.52 * W, 0.012 * W)]], 48)
+    disk_out = lathe([[(0.66 * W, 0.008 * W), (0.86 * W, 0.0)], [(0.86 * W, 0.0), (0.66 * W, -0.008 * W)],
+                      [(0.66 * W, -0.008 * W), (0.66 * W, 0.008 * W)]], 48)
+    s.look("DiskInner", "#FF8A3D", "Neon")
+    s.look("DiskOuter", "#9B30FF", "Neon", transparency=0.25)
+    s.add("DiskInner", tf(disk_in, R=M, t=centre))
+    s.add("DiskOuter", tf(disk_out, R=M, t=centre))
+    s.look("PhotonRing", "#FFE7C2", "Neon")
+    s.add("PhotonRing", tf(torus(0.42 * W, 0.014 * W, 40, 6), R=rot(X, 90), t=(0, 0.6 * H, 0.1 * W)))
+    s.look("Debris", "#C77DFF", "Neon")
+    for k in range(7):
+        a = k * 51.4 * DEG
+        p = centre + M @ np.array([0.76 * W * math.cos(a), 0.03 * W, 0.76 * W * math.sin(a)])
+        s.add("Debris", tf(sphere(6, 4), s=0.025 * W, t=p))
+    return s
+
+
+def omega_symbol(size):
+    """Path for the Greek capital omega, in the XY plane."""
+    pts = [(-0.55, 0.0), (-0.28, 0.0)] + [(0.45 * math.cos(math.radians(a)), 0.48 + 0.45 * math.sin(math.radians(a)))
+                                          for a in np.linspace(235, -55, 20)] + [(0.28, 0.0), (0.55, 0.0)]
+    return [(x * size, y * size, 0) for x, y in pts]
+
+
+def omega():
+    s = Slime("Omega", "Divine", 7)
+    W = 7.0
+    B = Body(W, 0.8 * W)
+    H = B.H
+    s.look("Body", "#F4F0FF")
+    s.add("Body", B.piece())
+    eyes(s, B, 0.55 * H, 0.16 * W, 0.066 * W, 0.09 * W, color="#2A1F4A")
+    smile(s, B, 0.39 * H, 0.08 * W, 0.04 * W, 0.019 * W, color="#2A1F4A")
+    cheeks(s, B, 0.43 * H, 0.27 * W, W, "#C9B8FF")
+    s.look("Emblem", "#FFD54A", "Neon")
+    path = np.array(omega_symbol(0.26 * W)) + np.array([0, H + 0.14 * W, 0])
+    s.add("Emblem", tube(path, 0.025 * W, 6))
+    s.look("Halo", "#FFD54A", "Neon")
+    s.add("Halo", tf(torus(0.24 * W, 0.016 * W, 32, 5), R=rot(X, 90), t=(0, H + 0.26 * W, 0.12 * W)))
+    s.look("WingsCyan", "#8FF3FF", "Glass", 0.2)
+    s.look("WingsPink", "#FF9EEA", "Glass", 0.2)
+    wing_poly = [(0, 0.1), (0.25, 0.55), (0.6, 0.8), (1.0, 0.85), (0.8, 0.55), (0.92, 0.35), (0.6, 0.3), (0.62, 0.1),
+                 (0.3, 0.05)]
+    for side in (-1, 1):
+        for k, (yy, up, span, part) in enumerate(((0.62, 28, 0.5, "WingsCyan"), (0.4, -6, 0.38, "WingsPink"))):
+            p, n = B.pt(BACK - side * 52 * DEG, yy * H)
+            R = wing_frame(BACK - side * 74 * DEG, up)
+            s.add(part, tf(wing(wing_poly, span * W, span * 0.8 * W, 0.025 * W), R=R, t=p - n * 0.05 * W))
+    s.look("OrbitRing", "#B9A7FF", "Neon")
+    s.add("OrbitRing", tf(torus(0.62 * W, 0.012 * W, 36, 5), R=rot(X, -8) @ rot(Z, 10), t=(0, 0.3 * H, 0)))
+    return s
+
+
 
 SLIMES = [lil_green, blue_blob, pinky, mudsy, bubblegum, lemon_drop, minty, top_hat, ninja, lava, frost,
-          royal, ghost, devil, angel, galaxy, dragon, void, king, glitch]
+          royal, ghost, devil, angel, galaxy, dragon, void, king, glitch, gummy, cotton_candy,
+          thunder, phoenix, supernova, black_hole, omega]
 
 
 # ---------------------------------------------------------------- outputs
