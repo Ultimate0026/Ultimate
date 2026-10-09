@@ -19,7 +19,7 @@
 ]]
 
 local SPECS = {
-	ValleyGate = { Zone = "Gate", Kind = "Landmark", Height = 30.3928, Main = "Arch", Signs = { { Part = "SignPanel", Text = "SLIME VALLEY", Sub = "", Color = Color3.fromRGB(255, 213, 74), PixelsPerStud = 20, FrontOnly = false } }, Lights = {  }, Parts = {
+	ValleyGate = { Zone = "Gate", Kind = "Landmark", Height = 30.3928, Main = "Arch", Signs = { { Part = "SignPanel", Text = "SLIME VALLEY", Sub = "", Body = "", Color = Color3.fromRGB(255, 213, 74), PixelsPerStud = 20, FrontOnly = false } }, Lights = {  }, Parts = {
 		Arch = { Color3.fromRGB(139, 234, 79), Enum.Material.SmoothPlastic, 0, true },
 		Drips = { Color3.fromRGB(139, 234, 79), Enum.Material.SmoothPlastic, 0, false },
 		Eyes = { Color3.fromRGB(27, 27, 31), Enum.Material.SmoothPlastic, 0, false },
@@ -111,7 +111,7 @@ local SPECS = {
 		Needles = { Color3.fromRGB(46, 139, 87), Enum.Material.SmoothPlastic, 0, true },
 		NeedlesLight = { Color3.fromRGB(63, 166, 106), Enum.Material.SmoothPlastic, 0, true },
 	} },
-	PlazaStatue = { Zone = "Plaza", Kind = "Landmark", Height = 11.9560, Main = "Plinth", Signs = { { Part = "Plaque", Text = "KING SLIME", Sub = "", Color = Color3.fromRGB(59, 42, 10), PixelsPerStud = 60, FrontOnly = true } }, Lights = {  }, Parts = {
+	PlazaStatue = { Zone = "Plaza", Kind = "Landmark", Height = 11.9560, Main = "Plinth", Signs = { { Part = "Plaque", Text = "KING SLIME", Sub = "", Body = "", Color = Color3.fromRGB(59, 42, 10), PixelsPerStud = 60, FrontOnly = true } }, Lights = {  }, Parts = {
 		Plinth = { Color3.fromRGB(237, 231, 218), Enum.Material.Marble, 0, true },
 		Trim = { Color3.fromRGB(212, 169, 58), Enum.Material.Metal, 0, true },
 		Plaque = { Color3.fromRGB(201, 154, 46), Enum.Material.Metal, 0, false },
@@ -165,7 +165,7 @@ local SPECS = {
 		Floaters = { Color3.fromRGB(39, 28, 53), Enum.Material.Slate, 0, false },
 		FloaterGlow = { Color3.fromRGB(199, 125, 255), Enum.Material.Neon, 0, false },
 	} },
-	ZoneArch_Meadow = { Zone = "Meadow", Kind = "Arch", Height = 31.0019, Main = "Posts", Signs = { { Part = "SignPanel", Text = "SUNNY MEADOW", Sub = "Common + Uncommon slimes", Color = Color3.fromRGB(242, 208, 59), PixelsPerStud = 16, FrontOnly = false } }, Lights = {  }, Parts = {
+	ZoneArch_Meadow = { Zone = "Meadow", Kind = "Arch", Height = 31.0019, Main = "Posts", Signs = { { Part = "SignPanel", Text = "SUNNY MEADOW", Sub = "Common + Uncommon slimes", Body = "", Color = Color3.fromRGB(242, 208, 59), PixelsPerStud = 16, FrontOnly = false } }, Lights = {  }, Parts = {
 		Posts = { Color3.fromRGB(139, 90, 43), Enum.Material.Wood, 0, true },
 		Vines = { Color3.fromRGB(62, 155, 58), Enum.Material.SmoothPlastic, 0, false },
 		Leaves = { Color3.fromRGB(88, 184, 74), Enum.Material.SmoothPlastic, 0, false },
@@ -176,7 +176,7 @@ local SPECS = {
 		SignPanel = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
 		SignFrame = { Color3.fromRGB(201, 138, 75), Enum.Material.SmoothPlastic, 0, true },
 	} },
-	ZoneArch_Swamp = { Zone = "Swamp", Kind = "Arch", Height = 32.8684, Main = "Logs", Signs = { { Part = "SignPanel", Text = "GLOOP SWAMP", Sub = "Uncommon + Rare slimes", Color = Color3.fromRGB(124, 227, 139), PixelsPerStud = 16, FrontOnly = false } }, Lights = {  }, Parts = {
+	ZoneArch_Swamp = { Zone = "Swamp", Kind = "Arch", Height = 32.8684, Main = "Logs", Signs = { { Part = "SignPanel", Text = "GLOOP SWAMP", Sub = "Uncommon + Rare slimes", Body = "", Color = Color3.fromRGB(124, 227, 139), PixelsPerStud = 16, FrontOnly = false } }, Lights = {  }, Parts = {
 		Logs = { Color3.fromRGB(92, 74, 58), Enum.Material.Wood, 0, true },
 		Moss = { Color3.fromRGB(94, 140, 58), Enum.Material.Grass, 0, false },
 		HangingMoss = { Color3.fromRGB(126, 154, 85), Enum.Material.SmoothPlastic, 0, false },
@@ -186,7 +186,7 @@ local SPECS = {
 		SignPanel = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
 		SignFrame = { Color3.fromRGB(79, 115, 99), Enum.Material.SmoothPlastic, 0, true },
 	} },
-	ZoneArch_Lava = { Zone = "Lava", Kind = "Arch", Height = 33.5000, Main = "Basalt", Signs = { { Part = "SignPanel", Text = "MAGMA PITS", Sub = "Rare + Epic slimes", Color = Color3.fromRGB(255, 154, 61), PixelsPerStud = 16, FrontOnly = false } }, Lights = { "Magma" }, Parts = {
+	ZoneArch_Lava = { Zone = "Lava", Kind = "Arch", Height = 33.5000, Main = "Basalt", Signs = { { Part = "SignPanel", Text = "MAGMA PITS", Sub = "Rare + Epic slimes", Body = "", Color = Color3.fromRGB(255, 154, 61), PixelsPerStud = 16, FrontOnly = false } }, Lights = { "Magma" }, Parts = {
 		Basalt = { Color3.fromRGB(46, 36, 34), Enum.Material.Slate, 0, true },
 		BasaltLight = { Color3.fromRGB(61, 48, 44), Enum.Material.Slate, 0, true },
 		Magma = { Color3.fromRGB(255, 106, 0), Enum.Material.Neon, 0, false },
@@ -194,20 +194,96 @@ local SPECS = {
 		SignPanel = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
 		SignFrame = { Color3.fromRGB(255, 122, 26), Enum.Material.SmoothPlastic, 0, true },
 	} },
-	ZoneArch_Crystal = { Zone = "Crystal", Kind = "Arch", Height = 36.9475, Main = "Ice", Signs = { { Part = "SignPanel", Text = "CRYSTAL PEAKS", Sub = "Epic + Legendary slimes", Color = Color3.fromRGB(169, 155, 255), PixelsPerStud = 16, FrontOnly = false } }, Lights = {  }, Parts = {
+	ZoneArch_Crystal = { Zone = "Crystal", Kind = "Arch", Height = 36.9475, Main = "Ice", Signs = { { Part = "SignPanel", Text = "CRYSTAL PEAKS", Sub = "Epic + Legendary slimes", Body = "", Color = Color3.fromRGB(169, 155, 255), PixelsPerStud = 16, FrontOnly = false } }, Lights = {  }, Parts = {
 		Ice = { Color3.fromRGB(207, 233, 255), Enum.Material.Ice, 0, true },
 		Crystals = { Color3.fromRGB(185, 167, 255), Enum.Material.Glass, 0.15, true },
 		Cores = { Color3.fromRGB(231, 222, 255), Enum.Material.Neon, 0, false },
 		SignPanel = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
 		SignFrame = { Color3.fromRGB(169, 155, 255), Enum.Material.SmoothPlastic, 0, true },
 	} },
-	ZoneArch_Void = { Zone = "Void", Kind = "Arch", Height = 32.8815, Main = "Obelisks", Signs = { { Part = "SignPanel", Text = "THE VOID", Sub = "Legendary + Mythic slimes", Color = Color3.fromRGB(199, 125, 255), PixelsPerStud = 16, FrontOnly = false } }, Lights = { "ShardCores" }, Parts = {
+	ZoneArch_Void = { Zone = "Void", Kind = "Arch", Height = 32.8815, Main = "Obelisks", Signs = { { Part = "SignPanel", Text = "THE VOID", Sub = "Legendary + Mythic slimes", Body = "", Color = Color3.fromRGB(199, 125, 255), PixelsPerStud = 16, FrontOnly = false } }, Lights = { "ShardCores" }, Parts = {
 		Obelisks = { Color3.fromRGB(26, 16, 36), Enum.Material.Slate, 0, true },
 		Runes = { Color3.fromRGB(176, 38, 255), Enum.Material.Neon, 0, false },
 		Shards = { Color3.fromRGB(91, 33, 168), Enum.Material.Glass, 0.25, false },
 		ShardCores = { Color3.fromRGB(199, 125, 255), Enum.Material.Neon, 0, false },
 		SignPanel = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
 		SignFrame = { Color3.fromRGB(155, 48, 255), Enum.Material.SmoothPlastic, 0, true },
+	} },
+	Hub_Leaderboard = { Zone = "Hub", Kind = "Landmark", Height = 15.7330, Main = "Posts", Signs = { { Part = "Header", Text = "RICHEST SLIME LORDS", Sub = "", Body = "", Color = Color3.fromRGB(255, 213, 74), PixelsPerStud = 30, FrontOnly = true } }, Lights = {  }, Parts = {
+		Posts = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0, true },
+		Frame = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0, true },
+		Screen = { Color3.fromRGB(20, 25, 50), Enum.Material.SmoothPlastic, 0, true },
+		Header = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		Feet = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		Crown = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0, false },
+		CrownGems = { Color3.fromRGB(224, 17, 95), Enum.Material.Neon, 0, false },
+		Coins = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0, false },
+		CoinCaps = { Color3.fromRGB(255, 226, 122), Enum.Material.Neon, 0, false },
+	} },
+	Hub_HowToPlay = { Zone = "Hub", Kind = "Landmark", Height = 17.0500, Main = "Posts", Signs = { { Part = "Header", Text = "HOW TO PLAY", Sub = "", Body = "", Color = Color3.fromRGB(79, 209, 232), PixelsPerStud = 30, FrontOnly = true }, { Part = "Screen", Text = "", Sub = "", Body = "1. Run into SLIME VALLEY\n2. GRAB a slime, sprint home!\n3. The Guardian chases you...\n4. Slimes earn cash in your base\n5. Same slimes MERGE and GROW\n6. Upgrade SPEED, go deeper\n7. LOCK your base (60s)\n8. STEAL from unlocked bases\n9. SLAP thieves to stop them\nFriends in server = +10% cash", Color = Color3.fromRGB(255, 255, 255), PixelsPerStud = 30, FrontOnly = true } }, Lights = {  }, Parts = {
+		Posts = { Color3.fromRGB(79, 209, 232), Enum.Material.SmoothPlastic, 0, true },
+		Frame = { Color3.fromRGB(79, 209, 232), Enum.Material.SmoothPlastic, 0, true },
+		Screen = { Color3.fromRGB(20, 25, 50), Enum.Material.SmoothPlastic, 0, true },
+		Header = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		Feet = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		Mascot = { Color3.fromRGB(105, 210, 75), Enum.Material.SmoothPlastic, 0, false },
+		MascotEyes = { Color3.fromRGB(27, 27, 31), Enum.Material.SmoothPlastic, 0, false },
+		MascotShine = { Color3.fromRGB(255, 255, 255), Enum.Material.SmoothPlastic, 0, false },
+		MascotMouth = { Color3.fromRGB(27, 27, 31), Enum.Material.SmoothPlastic, 0, false },
+		Bubble = { Color3.fromRGB(255, 255, 255), Enum.Material.SmoothPlastic, 0, false },
+		QuestionMark = { Color3.fromRGB(79, 209, 232), Enum.Material.Neon, 0, false },
+	} },
+	Hub_BossShop = { Zone = "Hub", Kind = "Landmark", Height = 11.1000, Main = "Counter", Signs = { { Part = "Header", Text = "BOSS SHOP", Sub = "Spend your Boss Tokens", Body = "", Color = Color3.fromRGB(255, 92, 122), PixelsPerStud = 40, FrontOnly = true } }, Lights = {  }, Parts = {
+		Counter = { Color3.fromRGB(179, 19, 46), Enum.Material.SmoothPlastic, 0, true },
+		CounterTop = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0, true },
+		Posts = { Color3.fromRGB(58, 34, 48), Enum.Material.Wood, 0, true },
+		AwningRed = { Color3.fromRGB(227, 38, 59), Enum.Material.SmoothPlastic, 0, false },
+		AwningWhite = { Color3.fromRGB(255, 244, 244), Enum.Material.SmoothPlastic, 0, false },
+		Header = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		Frame = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0, true },
+		Tokens = { Color3.fromRGB(155, 48, 255), Enum.Material.Neon, 0, false },
+		TokenRims = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0, false },
+		Chest = { Color3.fromRGB(122, 74, 36), Enum.Material.Wood, 0, false },
+		ChestTrim = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0, false },
+	} },
+	Hub_FuseMachine = { Zone = "Hub", Kind = "Landmark", Height = 12.2000, Main = "Base", Signs = { { Part = "Header", Text = "FUSE MACHINE", Sub = "3 slimes in, 1 rarer slime out", Body = "", Color = Color3.fromRGB(180, 140, 255), PixelsPerStud = 40, FrontOnly = true } }, Lights = { "Core" }, Parts = {
+		Base = { Color3.fromRGB(58, 42, 107), Enum.Material.SmoothPlastic, 0, true },
+		Trim = { Color3.fromRGB(79, 209, 232), Enum.Material.Neon, 0, false },
+		Metal = { Color3.fromRGB(138, 147, 184), Enum.Material.Metal, 0, true },
+		Orb = { Color3.fromRGB(207, 239, 255), Enum.Material.Glass, 0.45, true },
+		Core = { Color3.fromRGB(255, 107, 230), Enum.Material.Neon, 0, false },
+		Ring = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0, false },
+		Tubes = { Color3.fromRGB(159, 232, 255), Enum.Material.Glass, 0.35, false },
+		Hoppers = { Color3.fromRGB(94, 74, 168), Enum.Material.SmoothPlastic, 0, true },
+		HopperGlow = { Color3.fromRGB(124, 255, 158), Enum.Material.Neon, 0, false },
+		OutputPad = { Color3.fromRGB(124, 255, 158), Enum.Material.Neon, 0, false },
+		Header = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		Frame = { Color3.fromRGB(180, 140, 255), Enum.Material.SmoothPlastic, 0, true },
+	} },
+	Hub_OverlordArena = { Zone = "Hub", Kind = "Landmark", Height = 21.8000, Main = "Floor", Signs = { { Part = "Header", Text = "OVERLORD ARENA", Sub = "", Body = "", Color = Color3.fromRGB(255, 92, 122), PixelsPerStud = 30, FrontOnly = true }, { Part = "TimerScreen", Text = "OVERLORD\nARRIVES IN --:--", Sub = "", Body = "", Color = Color3.fromRGB(255, 255, 255), PixelsPerStud = 30, FrontOnly = true } }, Lights = { "Flames" }, Parts = {
+		Floor = { Color3.fromRGB(43, 43, 54), Enum.Material.Slate, 0, true },
+		InnerFloor = { Color3.fromRGB(58, 58, 72), Enum.Material.Slate, 0, true },
+		Emblem = { Color3.fromRGB(255, 45, 85), Enum.Material.Neon, 0, false },
+		Wall = { Color3.fromRGB(42, 37, 48), Enum.Material.Slate, 0, true },
+		WallGlow = { Color3.fromRGB(255, 45, 85), Enum.Material.Neon, 0, false },
+		Pillars = { Color3.fromRGB(30, 27, 36), Enum.Material.Slate, 0, true },
+		Bands = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0, false },
+		Bowls = { Color3.fromRGB(58, 52, 64), Enum.Material.Metal, 0, false },
+		Flames = { Color3.fromRGB(255, 122, 26), Enum.Material.Neon, 0, false },
+		FlamesInner = { Color3.fromRGB(255, 225, 77), Enum.Material.Neon, 0, false },
+		Gate = { Color3.fromRGB(30, 27, 36), Enum.Material.Slate, 0, true },
+		GateGlow = { Color3.fromRGB(255, 45, 85), Enum.Material.Neon, 0, false },
+		Header = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, true },
+		TimerScreen = { Color3.fromRGB(20, 25, 50), Enum.Material.SmoothPlastic, 0, true },
+		Frame = { Color3.fromRGB(255, 45, 85), Enum.Material.SmoothPlastic, 0, true },
+		Path = { Color3.fromRGB(52, 50, 63), Enum.Material.Slate, 0, true },
+	} },
+	Hub_OverlordPedestal = { Zone = "Hub", Kind = "Landmark", Height = 2.9212, Main = "Pedestal", Signs = { { Part = "Plaque", Text = "OVERLORD", Sub = "", Body = "", Color = Color3.fromRGB(124, 255, 158), PixelsPerStud = 60, FrontOnly = true } }, Lights = {  }, Parts = {
+		Pedestal = { Color3.fromRGB(74, 42, 140), Enum.Material.SmoothPlastic, 0, true },
+		PedestalTop = { Color3.fromRGB(107, 69, 184), Enum.Material.SmoothPlastic, 0, true },
+		Trim = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0, true },
+		Glow = { Color3.fromRGB(124, 255, 158), Enum.Material.Neon, 0, false },
+		Plaque = { Color3.fromRGB(30, 36, 64), Enum.Material.SmoothPlastic, 0, false },
 	} },
 }
 
@@ -269,7 +345,22 @@ local function addSign(part, sign)
 			stroke.Parent = label
 			label.Parent = gui
 		end
-		if hasSub then
+		if sign.Body ~= "" then
+			-- a list of lines (How to Play): left-aligned, filling the panel
+			local body = Instance.new("TextLabel")
+			body.Name = "BodyLabel"
+			body.BackgroundTransparency = 1
+			body.AnchorPoint = Vector2.new(0.5, 0.5)
+			body.Position = UDim2.fromScale(0.5, 0.5)
+			body.Size = UDim2.fromScale(0.9, 0.88)
+			body.Font = Enum.Font.FredokaOne
+			body.TextScaled = true
+			body.TextWrapped = true
+			body.TextXAlignment = Enum.TextXAlignment.Left
+			body.Text = sign.Body
+			body.TextColor3 = sign.Color
+			body.Parent = gui
+		elseif hasSub then
 			addLabel("Label", sign.Text, sign.Color, 0.38, 0.52)
 			addLabel("SubLabel", sign.Sub, Color3.new(1, 1, 1), 0.8, 0.26)
 		else

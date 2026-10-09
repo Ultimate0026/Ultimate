@@ -1,6 +1,6 @@
 # Slime pet models
 
-27 slime pets for Roblox, from Common to Divine. Each slime is a `.glb` in `models/`. Every model:
+28 slime pets for Roblox, from Common to Divine. Each slime is a `.glb` in `models/`. Every model:
 
 - is modelled in **studs** (1 unit = 1 stud)
 - faces forward: the face looks down **−Z**, Roblox's LookVector
@@ -36,6 +36,7 @@
 | 25 | Supernova | Divine | 7 | 2,840 |
 | 26 | BlackHole | Divine | 7 | 2,820 |
 | 27 | Omega | Divine | 7 | 2,936 |
+| 28 | Overlord | Secret (Boss Shop) | 6.5 | 2,828 |
 
 "Size" is the width of the slime's body. Hats, wings, tails and other extras stick out past it.
 
@@ -55,6 +56,7 @@ kid-friendly face.
 | Guardian_Candy | 15 | 4,712 | Sugar Rush: pink candy monster, dripping icing, sprinkles, candy-cane horns, gumdrops |
 | Guardian_Storm | 16 | 4,216 | Thunder Peaks: storm cloud top, lightning-bolt horns, glowing yellow eyes, sparks |
 | Guardian_Cosmic | 18 | 4,728 | Star Core: starry deep-space body, planet ring, orbiting moons, glowing eyes |
+| Guardian_Boss | 20 | 4,332 | The Slime Overlord boss: spiked crown, cape, gold shoulder spikes, glowing red eyes, power orbs |
 
 Import them the same way as the slimes, then run [`roblox/GuardianSetup.lua`](roblox/GuardianSetup.lua)
 instead of `SlimeSetup.lua`. `Body` becomes the PrimaryPart, so you can move a guardian with
@@ -121,6 +123,20 @@ Steps in Studio (all scripts go in the Command Bar):
 
 Everything placed by the dressers goes into `Workspace > MapProps > <Zone>`. Running a dresser again replaces what
 it placed before.
+
+## Hub
+
+Also in `props/`, set up by the same `PropSetup.lua`. Each sign panel gets its text from PropSetup; the panels
+your game writes on are named so your scripts can find them.
+
+| Model | What it is | Your scripts use |
+|---|---|---|
+| Hub_Leaderboard | Gold-framed board with a crown and coin piles, header "RICHEST SLIME LORDS" | Put your leaderboard SurfaceGui on `Screen` |
+| Hub_HowToPlay | Cyan board with a slime mascot; the 9 steps are already on it | `Screen.SignGuiFront.BodyLabel` holds the text |
+| Hub_BossShop | Market stall with a striped awning, token stacks and a treasure chest | Put your ProximityPrompt on `Counter` |
+| Hub_FuseMachine | Three hoppers feeding a glowing orb, output pad at the front | `Base` for the prompt, `OutputPad` for the result |
+| Hub_OverlordArena | 53-stud arena with torch pillars and a gate | `TimerScreen.SignGuiFront.Label` for the "OVERLORD ARRIVES IN" countdown |
+| Hub_OverlordPedestal | Display stand for the Overlord with a glowing ring and nameplate | Stand the Overlord on top (2.9 studs up) |
 
 ## Importing into Roblox Studio
 

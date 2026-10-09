@@ -269,6 +269,19 @@ local SPECS = {
 		WingsPink = { Color3.fromRGB(255, 158, 234), Enum.Material.Glass, 0.2 },
 		OrbitRing = { Color3.fromRGB(185, 167, 255), Enum.Material.Neon, 0 },
 	} },
+	Overlord = { Rarity = "Secret", Size = 6.5, BodyWidth = 6.4992, Face = "Eyes", Parts = {
+		Body = { Color3.fromRGB(76, 203, 110), Enum.Material.SmoothPlastic, 0 },
+		Eyes = { Color3.fromRGB(27, 27, 31), Enum.Material.SmoothPlastic, 0 },
+		EyeShine = { Color3.fromRGB(255, 255, 255), Enum.Material.SmoothPlastic, 0 },
+		Brows = { Color3.fromRGB(31, 94, 51), Enum.Material.SmoothPlastic, 0 },
+		Mouth = { Color3.fromRGB(23, 63, 36), Enum.Material.SmoothPlastic, 0 },
+		Fang = { Color3.fromRGB(255, 255, 255), Enum.Material.SmoothPlastic, 0 },
+		Crown = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0 },
+		Gems = { Color3.fromRGB(155, 48, 255), Enum.Material.Neon, 0 },
+		Cape = { Color3.fromRGB(91, 30, 140), Enum.Material.SmoothPlastic, 0 },
+		Collar = { Color3.fromRGB(46, 15, 74), Enum.Material.SmoothPlastic, 0 },
+		Clasp = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0 },
+	} },
 }
 
 local function partKey(parts, name)

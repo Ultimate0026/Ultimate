@@ -1324,5 +1324,565 @@
     "collide": true
    }
   }
+ },
+ {
+  "name": "Hub_Leaderboard",
+  "zone": "Hub",
+  "kind": "Landmark",
+  "height": 15.732999999999999,
+  "main": "Posts",
+  "signs": [
+   {
+    "part": "Header",
+    "text": "RICHEST SLIME LORDS",
+    "sub": "",
+    "color": "#FFD54A",
+    "ppu": 30,
+    "front_only": true
+   }
+  ],
+  "lights": [],
+  "triangles": 2868,
+  "size": [
+   17.8,
+   15.73,
+   4.55
+  ],
+  "looks": {
+   "Posts": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Frame": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Screen": {
+    "color": "#141932",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Header": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Feet": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Crown": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "CrownGems": {
+    "color": "#E0115F",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Coins": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "CoinCaps": {
+    "color": "#FFE27A",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Hub_HowToPlay",
+  "zone": "Hub",
+  "kind": "Landmark",
+  "height": 17.05,
+  "main": "Posts",
+  "signs": [
+   {
+    "part": "Header",
+    "text": "HOW TO PLAY",
+    "sub": "",
+    "color": "#4FD1E8",
+    "ppu": 30,
+    "front_only": true
+   },
+   {
+    "part": "Screen",
+    "text": "",
+    "body": "1. Run into SLIME VALLEY\n2. GRAB a slime, sprint home!\n3. The Guardian chases you...\n4. Slimes earn cash in your base\n5. Same slimes MERGE and GROW\n6. Upgrade SPEED, go deeper\n7. LOCK your base (60s)\n8. STEAL from unlocked bases\n9. SLAP thieves to stop them\nFriends in server = +10% cash",
+    "color": "#FFFFFF",
+    "ppu": 30,
+    "front_only": true
+   }
+  ],
+  "lights": [],
+  "triangles": 1872,
+  "size": [
+   17.8,
+   17.05,
+   3.26
+  ],
+  "looks": {
+   "Posts": {
+    "color": "#4FD1E8",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Frame": {
+    "color": "#4FD1E8",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Screen": {
+    "color": "#141932",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Header": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Feet": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Mascot": {
+    "color": "#69D24B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "MascotEyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "MascotShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "MascotMouth": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Bubble": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "QuestionMark": {
+    "color": "#4FD1E8",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Hub_BossShop",
+  "zone": "Hub",
+  "kind": "Landmark",
+  "height": 11.1,
+  "main": "Counter",
+  "signs": [
+   {
+    "part": "Header",
+    "text": "BOSS SHOP",
+    "sub": "Spend your Boss Tokens",
+    "color": "#FF5C7A",
+    "ppu": 40,
+    "front_only": true
+   }
+  ],
+  "lights": [],
+  "triangles": 2316,
+  "size": [
+   10.6,
+   11.1,
+   5.36
+  ],
+  "looks": {
+   "Counter": {
+    "color": "#B3132E",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "CounterTop": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Posts": {
+    "color": "#3A2230",
+    "material": "Wood",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "AwningRed": {
+    "color": "#E3263B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "AwningWhite": {
+    "color": "#FFF4F4",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Header": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Frame": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Tokens": {
+    "color": "#9B30FF",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "TokenRims": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Chest": {
+    "color": "#7A4A24",
+    "material": "Wood",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "ChestTrim": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
+ },
+ {
+  "name": "Hub_FuseMachine",
+  "zone": "Hub",
+  "kind": "Landmark",
+  "height": 12.2,
+  "main": "Base",
+  "signs": [
+   {
+    "part": "Header",
+    "text": "FUSE MACHINE",
+    "sub": "3 slimes in, 1 rarer slime out",
+    "color": "#B48CFF",
+    "ppu": 40,
+    "front_only": true
+   }
+  ],
+  "lights": [
+   "Core"
+  ],
+  "triangles": 4032,
+  "size": [
+   8.25,
+   12.2,
+   8.5
+  ],
+  "looks": {
+   "Base": {
+    "color": "#3A2A6B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Trim": {
+    "color": "#4FD1E8",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Metal": {
+    "color": "#8A93B8",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Orb": {
+    "color": "#CFEFFF",
+    "material": "Glass",
+    "transparency": 0.45,
+    "collide": true
+   },
+   "Core": {
+    "color": "#FF6BE6",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Ring": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Tubes": {
+    "color": "#9FE8FF",
+    "material": "Glass",
+    "transparency": 0.35,
+    "collide": false
+   },
+   "Hoppers": {
+    "color": "#5E4AA8",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "HopperGlow": {
+    "color": "#7CFF9E",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "OutputPad": {
+    "color": "#7CFF9E",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Header": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Frame": {
+    "color": "#B48CFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "Hub_OverlordArena",
+  "zone": "Hub",
+  "kind": "Landmark",
+  "height": 21.8,
+  "main": "Floor",
+  "signs": [
+   {
+    "part": "Header",
+    "text": "OVERLORD ARENA",
+    "sub": "",
+    "color": "#FF5C7A",
+    "ppu": 30,
+    "front_only": true
+   },
+   {
+    "part": "TimerScreen",
+    "text": "OVERLORD\nARRIVES IN --:--",
+    "sub": "",
+    "color": "#FFFFFF",
+    "ppu": 30,
+    "front_only": true
+   }
+  ],
+  "lights": [
+   "Flames"
+  ],
+  "triangles": 4364,
+  "size": [
+   53.83,
+   21.8,
+   66.95
+  ],
+  "looks": {
+   "Floor": {
+    "color": "#2B2B36",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "InnerFloor": {
+    "color": "#3A3A48",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Emblem": {
+    "color": "#FF2D55",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Wall": {
+    "color": "#2A2530",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "WallGlow": {
+    "color": "#FF2D55",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Pillars": {
+    "color": "#1E1B24",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Bands": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Bowls": {
+    "color": "#3A3440",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Flames": {
+    "color": "#FF7A1A",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "FlamesInner": {
+    "color": "#FFE14D",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Gate": {
+    "color": "#1E1B24",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "GateGlow": {
+    "color": "#FF2D55",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Header": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "TimerScreen": {
+    "color": "#141932",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Frame": {
+    "color": "#FF2D55",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Path": {
+    "color": "#34323F",
+    "material": "Slate",
+    "transparency": 0.0,
+    "collide": true
+   }
+  }
+ },
+ {
+  "name": "Hub_OverlordPedestal",
+  "zone": "Hub",
+  "kind": "Landmark",
+  "height": 2.9212435565298214,
+  "main": "Pedestal",
+  "signs": [
+   {
+    "part": "Plaque",
+    "text": "OVERLORD",
+    "sub": "",
+    "color": "#7CFF9E",
+    "ppu": 60,
+    "front_only": true
+   }
+  ],
+  "lights": [],
+  "triangles": 2060,
+  "size": [
+   9.48,
+   2.92,
+   9.48
+  ],
+  "looks": {
+   "Pedestal": {
+    "color": "#4A2A8C",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "PedestalTop": {
+    "color": "#6B45B8",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Trim": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0,
+    "collide": true
+   },
+   "Glow": {
+    "color": "#7CFF9E",
+    "material": "Neon",
+    "transparency": 0.0,
+    "collide": false
+   },
+   "Plaque": {
+    "color": "#1E2440",
+    "material": "SmoothPlastic",
+    "transparency": 0.0,
+    "collide": false
+   }
+  }
  }
 ]

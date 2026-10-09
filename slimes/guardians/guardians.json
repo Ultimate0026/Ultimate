@@ -629,5 +629,92 @@
     "transparency": 0.0
    }
   }
+ },
+ {
+  "name": "Guardian_Boss",
+  "rarity": "Guardian",
+  "size": 20,
+  "face": "Eyes",
+  "triangles": 4332,
+  "bodyWidth": 19.966938465683256,
+  "bounds": [
+   [
+    -13.289,
+    0.0,
+    -11.514
+   ],
+   [
+    13.004,
+    19.285,
+    13.763
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#2E9E5B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#FF4040",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Lids": {
+    "color": "#2E9E5B",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Brows": {
+    "color": "#123D24",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#123D24",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Teeth": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Crown": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0
+   },
+   "Gems": {
+    "color": "#FF2D55",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Cape": {
+    "color": "#4A1673",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Collar": {
+    "color": "#2A0B45",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Pauldrons": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0
+   },
+   "Spikes": {
+    "color": "#2A2A33",
+    "material": "Metal",
+    "transparency": 0.0
+   },
+   "Orbs": {
+    "color": "#7CFF9E",
+    "material": "Neon",
+    "transparency": 0.0
+   }
+  }
  }
 ]

@@ -124,6 +124,21 @@ local SPECS = {
 		MoonTeal = { Color3.fromRGB(110, 224, 208), Enum.Material.SmoothPlastic, 0 },
 		Crown = { Color3.fromRGB(255, 213, 74), Enum.Material.Neon, 0 },
 	} },
+	Guardian_Boss = { Rarity = "Guardian", Size = 20, BodyWidth = 19.9669, Face = "Eyes", Parts = {
+		Body = { Color3.fromRGB(46, 158, 91), Enum.Material.SmoothPlastic, 0 },
+		Eyes = { Color3.fromRGB(255, 64, 64), Enum.Material.Neon, 0 },
+		Lids = { Color3.fromRGB(46, 158, 91), Enum.Material.SmoothPlastic, 0 },
+		Brows = { Color3.fromRGB(18, 61, 36), Enum.Material.SmoothPlastic, 0 },
+		Mouth = { Color3.fromRGB(18, 61, 36), Enum.Material.SmoothPlastic, 0 },
+		Teeth = { Color3.fromRGB(255, 255, 255), Enum.Material.SmoothPlastic, 0 },
+		Crown = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0 },
+		Gems = { Color3.fromRGB(255, 45, 85), Enum.Material.Neon, 0 },
+		Cape = { Color3.fromRGB(74, 22, 115), Enum.Material.SmoothPlastic, 0 },
+		Collar = { Color3.fromRGB(42, 11, 69), Enum.Material.SmoothPlastic, 0 },
+		Pauldrons = { Color3.fromRGB(242, 194, 48), Enum.Material.Metal, 0 },
+		Spikes = { Color3.fromRGB(42, 42, 51), Enum.Material.Metal, 0 },
+		Orbs = { Color3.fromRGB(124, 255, 158), Enum.Material.Neon, 0 },
+	} },
 }
 
 local function partKey(parts, name)

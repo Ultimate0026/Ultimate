@@ -1101,9 +1101,70 @@ def omega():
 
 
 
+# ---------------------------------------------------------------- the Overlord
+
+def cape(s, part, B, W, H, y0f=0.04, y1f=0.8, flare=0.09, spread=85, nu=14, nv=7):
+    """A cape over the back of a body, flaring toward the ground."""
+    y0, y1 = y0f * H, y1f * H
+    loops = []
+    for th in np.linspace((90 - spread) * DEG, (90 + spread) * DEG, nu):
+        outer, inner = [], []
+        for yy in np.linspace(y1, y0, nv):
+            f = ((y1 - yy) / (y1 - y0)) ** 1.6
+            o = 0.03 * W + flare * W * f
+            outer.append(B.pt(th, yy, o)[0])
+            inner.append(B.pt(th, yy, o - 0.025 * W)[0])
+        loop = np.array(outer + inner[::-1])
+        loop[:, 1] = np.maximum(loop[:, 1], 0.0)
+        loops.append(loop)
+    V, F = ring_mesh(loops, cap="strip")
+    s.add(part, closed(V, F))
+    return y1
+
+
+def overlord():
+    s = Slime("Overlord", "Secret", 6.5)
+    W = 6.5
+    B = Body(W, 0.8 * W)
+    H = B.H
+    body = "#4CCB6E"
+    s.look("Body", body)
+    s.add("Body", B.piece(28, 12))
+    # smug half-lidded eyes, raised brow, smirk with one fang
+    eyes(s, B, 0.54 * H, 0.16 * W, 0.066 * W, 0.08 * W)
+    s.look("Brows", "#1F5E33")
+    curve(s, "Brows", B, [(-0.24 * W, 0.66 * H), (-0.16 * W, 0.69 * H), (-0.08 * W, 0.67 * H)], 0.018 * W, out=0.03 * W, k=6)
+    curve(s, "Brows", B, [(0.08 * W, 0.65 * H), (0.16 * W, 0.66 * H), (0.24 * W, 0.7 * H)], 0.018 * W, out=0.03 * W, k=6)
+    s.look("Mouth", "#173F24")
+    curve(s, "Mouth", B, [(-0.08 * W, 0.4 * H), (0.0, 0.37 * H), (0.08 * W, 0.38 * H), (0.12 * W, 0.43 * H)], 0.019 * W, k=10)
+    s.look("Fang", WHITE)
+    s.add("Fang", B.on_face(cone(0.02 * W, 0.05 * W, 8), 0.06 * W, 0.37 * H, 0.01 * W, rot(Z, 180)))
+    # tall spiked crown
+    s.look("Crown", "#F2C230", "Metal")
+    s.look("Gems", "#9B30FF", "Neon")
+    tmp = Slime("tmp", "", 0)
+    rc = 0.2 * W
+    crown(tmp, "Crown", ["Gems"], rc, 0.08 * W, 5, 0.16 * W, 0.045 * W, 0.02 * W)
+    at = np.array([0, B.y_at_radius(rc) - 0.03 * W, 0])
+    M = rot(Z, -8)
+    for part, pieces in tmp.parts.items():
+        for p in pieces:
+            s.add(part, tf(p, R=M, t=at))
+    s.look("Cape", "#5B1E8C")
+    y1 = cape(s, "Cape", B, W, H, y1f=0.74, flare=0.08)
+    s.look("Collar", "#2E0F4A")
+    path = [B.pt(th, y1, 0.045 * W)[0] + Y * 0.03 * W * math.sin(th) for th in np.linspace(0, 180 * DEG, 11)]
+    s.add("Collar", tube(path, 0.045 * W, 6))
+    s.look("Clasp", "#F2C230", "Metal")
+    for th in (8 * DEG, 172 * DEG):
+        s.add("Clasp", tf(sphere(8, 4), s=0.04 * W, t=B.pt(th, y1, 0.07 * W)[0]))
+    return s
+
+
+
 SLIMES = [lil_green, blue_blob, pinky, mudsy, bubblegum, lemon_drop, minty, top_hat, ninja, lava, frost,
           royal, ghost, devil, angel, galaxy, dragon, void, king, glitch, gummy, cotton_candy,
-          thunder, phoenix, supernova, black_hole, omega]
+          thunder, phoenix, supernova, black_hole, omega, overlord]
 
 
 # ---------------------------------------------------------------- outputs

@@ -80,7 +80,22 @@ local function addSign(part, sign)
 			stroke.Parent = label
 			label.Parent = gui
 		end
-		if hasSub then
+		if sign.Body ~= "" then
+			-- a list of lines (How to Play): left-aligned, filling the panel
+			local body = Instance.new("TextLabel")
+			body.Name = "BodyLabel"
+			body.BackgroundTransparency = 1
+			body.AnchorPoint = Vector2.new(0.5, 0.5)
+			body.Position = UDim2.fromScale(0.5, 0.5)
+			body.Size = UDim2.fromScale(0.9, 0.88)
+			body.Font = Enum.Font.FredokaOne
+			body.TextScaled = true
+			body.TextWrapped = true
+			body.TextXAlignment = Enum.TextXAlignment.Left
+			body.Text = sign.Body
+			body.TextColor3 = sign.Color
+			body.Parent = gui
+		elseif hasSub then
 			addLabel("Label", sign.Text, sign.Color, 0.38, 0.52)
 			addLabel("SubLabel", sign.Sub, Color3.new(1, 1, 1), 0.8, 0.26)
 		else

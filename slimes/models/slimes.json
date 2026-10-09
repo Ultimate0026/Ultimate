@@ -1582,5 +1582,82 @@
     "transparency": 0.0
    }
   }
+ },
+ {
+  "name": "Overlord",
+  "rarity": "Secret",
+  "size": 6.5,
+  "face": "Eyes",
+  "triangles": 2828,
+  "bodyWidth": 6.499212369980315,
+  "bounds": [
+   [
+    -3.809,
+    0.0,
+    -3.33
+   ],
+   [
+    3.809,
+    6.483,
+    3.798
+   ]
+  ],
+  "looks": {
+   "Body": {
+    "color": "#4CCB6E",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Eyes": {
+    "color": "#1B1B1F",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "EyeShine": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Brows": {
+    "color": "#1F5E33",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Mouth": {
+    "color": "#173F24",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Fang": {
+    "color": "#FFFFFF",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Crown": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0
+   },
+   "Gems": {
+    "color": "#9B30FF",
+    "material": "Neon",
+    "transparency": 0.0
+   },
+   "Cape": {
+    "color": "#5B1E8C",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Collar": {
+    "color": "#2E0F4A",
+    "material": "SmoothPlastic",
+    "transparency": 0.0
+   },
+   "Clasp": {
+    "color": "#F2C230",
+    "material": "Metal",
+    "transparency": 0.0
+   }
+  }
  }
 ]

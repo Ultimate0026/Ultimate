@@ -13,7 +13,8 @@ import random
 
 import numpy as np
 
-from build_slimes import (DEG, INK, ROOT, WHITE, Slime, eyes, king, leaf_polygon, lua_color, smile, X, Y, Z)
+from build_slimes import (DEG, FRONT, INK, ROOT, WHITE, Slime, crown, eyes, flame, king, leaf_polygon, lua_color, smile, X, Y,
+                          Z)
 from build_guardians import bipyramid
 from meshkit import (Body, bezier, box, closed, cone, cylinder, ellipsoid, extrude, icosphere, lathe, normalize,
                      place, ring_band, rot, rot_from_to, sphere, tf, torus, tube, write_glb, Piece)
@@ -857,17 +858,311 @@ def arch_void():
 
 
 
+# ---------------------------------------------------------------- hub: boards, shop, fuse machine, arena, pedestal
+# Sign parts are flat panels; PropSetup puts the text on their front with a SurfaceGui. Panels named
+# "Screen" or "TimerScreen" are left for your game scripts to write on.
+
+NAVY, NAVY_DARK = "#1E2440", "#141932"
+
+
+def frame_bars(s, part, x0, x1, y0, y1, z, b, depth):
+    for P in ([(x0 - b, y0 - b), (x1 + b, y0 - b), (x1 + b, y0), (x0 - b, y0)],
+              [(x0 - b, y1), (x1 + b, y1), (x1 + b, y1 + b), (x0 - b, y1 + b)],
+              [(x0 - b, y0), (x0, y0), (x0, y1), (x0 - b, y1)],
+              [(x1, y0), (x1 + b, y0), (x1 + b, y1), (x1, y1)]):
+        s.add(part, tf(extrude(P, depth), t=(0, 0, z)))
+
+
+def info_board(name, accent, frame_color, frame_mat, title, sub="", body="", topper=None):
+    s = Prop(name, "Hub", 15, "Posts")
+    s.kind = "Landmark"
+    s.look("Posts", frame_color, frame_mat, collide=True)
+    s.look("Frame", frame_color, frame_mat, collide=True)
+    s.look("Screen", NAVY_DARK, collide=True)
+    s.look("Header", NAVY, collide=True)
+    s.look("Feet", NAVY, collide=True)
+    w, sy0, sy1, hy1 = 14.0, 2.4, 10.6, 13.2
+    for side in (-1, 1):
+        x = side * (w / 2 + 0.9)
+        s.add("Posts", tf(cylinder(0.55, hy1 + 0.4, 14), t=(x, 0, 0.2)))
+        s.add("Feet", tf(box(2.0, 0.6, 2.4), t=(x, 0.3, 0.2)))
+    s.add("Screen", tf(box(w, sy1 - sy0, 0.6), t=(0, (sy0 + sy1) / 2, 0)))
+    s.add("Header", tf(box(w, hy1 - sy1 - 0.4, 0.8), t=(0, (sy1 + 0.4 + hy1) / 2, -0.1)))
+    frame_bars(s, "Frame", -w / 2, w / 2, sy0, sy1, -0.1, 0.45, 1.0)
+    frame_bars(s, "Frame", -w / 2, w / 2, sy1 + 0.4, hy1, -0.2, 0.45, 1.2)
+    s.signs.append({"part": "Header", "text": title, "sub": sub, "color": accent, "ppu": 30, "front_only": True})
+    if body:
+        s.signs.append({"part": "Screen", "text": "", "body": body, "color": "#FFFFFF", "ppu": 30, "front_only": True})
+    if topper:
+        topper(s, w, hy1)
+    return s
+
+
+def leaderboard():
+    def topper(s, w, top):
+        s.look("Crown", "#F2C230", "Metal")
+        s.look("CrownGems", "#E0115F", "Neon")
+        tmp = Slime("tmp", "", 0)
+        crown(tmp, "Crown", ["CrownGems"], 1.5, 0.7, 5, 1.2, 0.5, 0.18)
+        for part, pieces in tmp.parts.items():
+            for p in pieces:
+                s.add(part, tf(p, t=(0, top + 0.45, 0)))
+        s.look("Coins", "#F2C230", "Metal")
+        s.look("CoinCaps", "#FFE27A", "Neon")
+        for side in (-1, 1):
+            s.add("Coins", tf(sphere(14, 10), s=0.75, t=(side * (w / 2 + 0.9), top + 0.9, 0.2)))
+            for k, (dx, dz, n) in enumerate(((1.6, -1.2, 5), (2.6, -0.4, 3), (1.2, -2.4, 2))):
+                for j in range(n):
+                    s.add("Coins", tf(cylinder(0.55, 0.22, 14), t=(side * (w / 2 - dx), 0.24 * j, dz)))
+                s.add("CoinCaps", tf(cylinder(0.5, 0.04, 14), t=(side * (w / 2 - dx), 0.24 * n - 0.01, dz)))
+    return info_board("Hub_Leaderboard", "#FFD54A", "#F2C230", "Metal", "RICHEST SLIME LORDS", topper=topper)
+
+
+HOW_TO_PLAY = ("1. Run into SLIME VALLEY\n2. GRAB a slime, sprint home!\n3. The Guardian chases you...\n"
+               "4. Slimes earn cash in your base\n5. Same slimes MERGE and GROW\n6. Upgrade SPEED, go deeper\n"
+               "7. LOCK your base (60s)\n8. STEAL from unlocked bases\n9. SLAP thieves to stop them\n"
+               "Friends in server = +10% cash")
+
+
+def how_to_play():
+    def topper(s, w, top):
+        tmp = Slime("tmp", "", 0)
+        B = Body(3.2, 2.6)
+        tmp.look("Body", "#69D24B")
+        tmp.add("Body", B.piece(24, 10))
+        eyes(tmp, B, 0.55 * B.H, 0.16 * 3.2, 0.07 * 3.2, 0.1 * 3.2)
+        smile(tmp, B, 0.4 * B.H, 0.1 * 3.2, 0.055 * 3.2, 0.022 * 3.2)
+        tmp.looks["Mascot"] = tmp.looks.pop("Body")
+        tmp.parts["Mascot"] = tmp.parts.pop("Body")
+        tmp.looks["MascotEyes"] = tmp.looks.pop("Eyes")
+        tmp.parts["MascotEyes"] = tmp.parts.pop("Eyes")
+        tmp.looks["MascotShine"] = tmp.looks.pop("EyeShine")
+        tmp.parts["MascotShine"] = tmp.parts.pop("EyeShine")
+        tmp.looks["MascotMouth"] = tmp.looks.pop("Mouth")
+        tmp.parts["MascotMouth"] = tmp.parts.pop("Mouth")
+        s.merge(tmp, R=rot(Z, -8), t=(w / 2 - 1.6, top + 0.35, 0))
+        s.look("Bubble", "#FFFFFF")
+        s.look("QuestionMark", "#4FD1E8", "Neon")
+        s.add("Bubble", tf(ellipsoid(1.0, 0.85, 0.3, 16, 8), t=(w / 2 - 3.6, top + 3.0, 0)))
+        q = bezier([[-0.3, 0.35, 0], [-0.25, 0.75, 0], [0.35, 0.7, 0], [0.3, 0.25, 0], [0.0, 0.1, 0], [0.0, -0.15, 0]], 10)
+        s.add("QuestionMark", tube(q + np.array([w / 2 - 3.6, top + 3.0, -0.32]), 0.09, 6))
+        s.add("QuestionMark", tf(sphere(8, 4), s=0.11, t=(w / 2 - 3.6, top + 2.62, -0.32)))
+    return info_board("Hub_HowToPlay", "#4FD1E8", "#4FD1E8", "SmoothPlastic", "HOW TO PLAY", body=HOW_TO_PLAY,
+                      topper=topper)
+
+
+def boss_shop():
+    s = Prop("Hub_BossShop", "Hub", 11, "Counter")
+    s.kind = "Landmark"
+    s.look("Counter", "#B3132E", collide=True)
+    s.look("CounterTop", "#F2C230", "Metal", collide=True)
+    s.look("Posts", "#3A2230", "Wood", collide=True)
+    s.look("AwningRed", "#E3263B")
+    s.look("AwningWhite", "#FFF4F4")
+    s.look("Header", NAVY, collide=True)
+    s.look("Frame", "#F2C230", "Metal", collide=True)
+    s.look("Tokens", "#9B30FF", "Neon")
+    s.look("TokenRims", "#F2C230", "Metal")
+    s.look("Chest", "#7A4A24", "Wood")
+    s.look("ChestTrim", "#F2C230", "Metal")
+    W_, D_ = 10.0, 4.0
+    s.add("Counter", tf(box(W_ - 0.6, 3.2, D_ - 0.6), t=(0, 1.6, 0)))
+    s.add("CounterTop", tf(box(W_, 0.4, D_), t=(0, 3.4, 0)))
+    for x in (-3, 0, 3):
+        p = np.array([x, 1.7, -D_ / 2 + 0.28])
+        s.add("TokenRims", tf(cylinder(0.85, 0.18, 20), R=rot(X, 90), t=p + Z * 0.0))
+        s.add("Tokens", tf(cylinder(0.65, 0.2, 20), R=rot(X, 90), t=p - Z * 0.02))
+    for sx in (-1, 1):
+        for sz in (-1, 1):
+            s.add("Posts", tf(cylinder(0.22, 7.6 if sz < 0 else 8.6, 10), t=(sx * (W_ / 2 - 0.3), 0, sz * (D_ / 2 - 0.3))))
+    # striped awning sloping toward the front, scalloped edge
+    n = 10
+    sw = (W_ + 0.6) / n
+    tilt = 16
+    for k in range(n):
+        x = -W_ / 2 - 0.3 + sw * (k + 0.5)
+        part = "AwningRed" if k % 2 == 0 else "AwningWhite"
+        s.add(part, tf(box(sw, 0.16, D_ + 1.4), R=rot(X, -tilt), t=(x, 8.1, -0.3)))
+        s.add(part, tf(cylinder(sw / 2, 0.16, 12), R=rot(X, 90 - tilt), t=(x, 8.1 - (D_ + 1.4) / 2 * math.sin(tilt * DEG) - 0.05,
+                                                                          -0.3 - (D_ + 1.4) / 2 * math.cos(tilt * DEG))))
+    # sign on top
+    s.add("Header", tf(box(8.4, 1.9, 0.5), t=(0, 9.9, 1.2)))
+    frame_bars(s, "Frame", -4.2, 4.2, 8.95, 10.85, 1.1, 0.25, 0.7)
+    s.signs.append({"part": "Header", "text": "BOSS SHOP", "sub": "Spend your Boss Tokens", "color": "#FF5C7A", "ppu": 40,
+                    "front_only": True})
+    # treasure chest and token stacks on the counter
+    s.add("Chest", tf(box(2.0, 1.0, 1.3), t=(-2.6, 4.1, 0.4)))
+    s.add("Chest", tf(cylinder(0.65, 2.0, 12), R=rot(Z, 90), t=(-1.6, 4.6, 0.4)))
+    for x in (-3.55, -1.65):
+        s.add("ChestTrim", tf(box(0.14, 1.75, 1.36), t=(x + 0.0, 4.4, 0.4)))
+    s.add("ChestTrim", tf(box(0.4, 0.5, 0.1), t=(-2.6, 4.45, -0.27)))
+    for k, (x, z, nstack) in enumerate(((2.0, -0.2, 6), (3.2, 0.5, 4), (1.2, 0.8, 3))):
+        for j in range(nstack):
+            s.add("TokenRims", tf(cylinder(0.5, 0.2, 14), t=(x, 3.6 + 0.2 * j, z)))
+        s.add("Tokens", tf(cylinder(0.4, 0.04, 14), t=(x, 3.6 + 0.2 * nstack, z)))
+    return s
+
+
+def fuse_machine():
+    s = Prop("Hub_FuseMachine", "Hub", 11, "Base")
+    s.kind = "Landmark"
+    s.look("Base", "#3A2A6B", collide=True)
+    s.look("Trim", "#4FD1E8", "Neon")
+    s.look("Metal", "#8A93B8", "Metal", collide=True)
+    s.look("Orb", "#CFEFFF", "Glass", 0.45, collide=True)
+    s.look("Core", "#FF6BE6", "Neon")
+    s.look("Ring", "#F2C230", "Metal")
+    s.look("Tubes", "#9FE8FF", "Glass", 0.35)
+    s.look("Hoppers", "#5E4AA8", collide=True)
+    s.look("HopperGlow", "#7CFF9E", "Neon")
+    s.look("OutputPad", "#7CFF9E", "Neon")
+    s.look("Header", NAVY, collide=True)
+    s.look("Frame", "#B48CFF", collide=True)
+    s.add("Base", tf(box(8.0, 1.0, 6.0), t=(0, 0.5, 0)))
+    for dx, dz, sx, sz in ((0, -3.0, 8.2, 0.25), (0, 3.0, 8.2, 0.25), (-4.0, 0, 0.25, 6.2), (4.0, 0, 0.25, 6.2)):
+        s.add("Trim", tf(box(sx, 0.25, sz), t=(dx, 0.98, dz)))
+    s.add("Metal", lathe([[(0, 3.0), (1.3, 3.0)], [(1.3, 3.0), (1.8, 1.0)], [(1.8, 1.0), (0, 1.0)]], 16))
+    c = np.array([0, 5.0, 0.3])
+    s.add("Orb", tf(sphere(24, 16), s=2.0, t=c))
+    s.add("Core", tf(sphere(14, 10), s=0.95, t=c))
+    s.add("Ring", tf(torus(2.15, 0.16, 32, 8), R=rot(Z, 18) @ rot(X, 70), t=c))
+    s.add("Ring", tf(torus(2.25, 0.12, 32, 6), R=rot(Z, -30) @ rot(X, 100), t=c))
+    # three hoppers feed slimes into the orb
+    for k, (x, z) in enumerate(((-2.8, 1.8), (0, 2.6), (2.8, 1.8))):
+        top = np.array([x, 9.0, z])
+        s.add("Hoppers", tf(lathe([[(0.0, 1.4), (1.0, 1.4)], [(1.0, 1.4), (0.35, 0.0)], [(0.35, 0.0), (0, 0)]], 14),
+                            t=top - Y * 1.4))
+        s.add("HopperGlow", tf(torus(1.0, 0.1, 24, 6), t=top))
+        path = bezier([top - Y * 1.4, top - Y * 2.4, c + np.array([x * 0.3, 2.6, 0.6]), c + np.array([x * 0.2, 1.7, 0.4])], 12)
+        s.add("Tubes", tube(path, 0.32, 10))
+        s.add("Metal", tf(cylinder(0.12, 9.0, 8), t=(x * 1.08, 0, z + 0.5)))
+    # output chute and pad at the front
+    s.add("Metal", tf(box(1.6, 0.25, 2.6), R=rot(X, 22), t=(0, 2.4, -2.0)))
+    s.add("OutputPad", tf(cylinder(1.2, 0.2, 24), t=(0, 1.0, -3.6)))
+    # sign on a frame above
+    s.add("Header", tf(box(7.0, 1.9, 0.5), t=(0, 11.0, 1.6)))
+    frame_bars(s, "Frame", -3.5, 3.5, 10.05, 11.95, 1.5, 0.25, 0.7)
+    for x in (-3.9, 3.9):
+        s.add("Frame", tf(box(0.3, 10.2, 0.3), t=(x, 5.3, 1.6)))
+    s.signs.append({"part": "Header", "text": "FUSE MACHINE", "sub": "3 slimes in, 1 rarer slime out", "color": "#B48CFF",
+                    "ppu": 40, "front_only": True})
+    s.lights.append("Core")
+    return s
+
+
+def overlord_arena():
+    s = Prop("Hub_OverlordArena", "Hub", 21, "Floor")
+    s.kind = "Landmark"
+    s.look("Floor", "#2B2B36", "Slate", collide=True)
+    s.look("InnerFloor", "#3A3A48", "Slate", collide=True)
+    s.look("Emblem", "#FF2D55", "Neon")
+    s.look("Wall", "#2A2530", "Slate", collide=True)
+    s.look("WallGlow", "#FF2D55", "Neon")
+    s.look("Pillars", "#1E1B24", "Slate", collide=True)
+    s.look("Bands", "#F2C230", "Metal")
+    s.look("Bowls", "#3A3440", "Metal")
+    s.look("Flames", "#FF7A1A", "Neon")
+    s.look("FlamesInner", "#FFE14D", "Neon")
+    s.look("Gate", "#1E1B24", "Slate", collide=True)
+    s.look("GateGlow", "#FF2D55", "Neon")
+    s.look("Header", NAVY, collide=True)
+    s.look("TimerScreen", NAVY_DARK, collide=True)
+    s.look("Frame", "#FF2D55", collide=True)
+    s.look("Path", "#34323F", "Slate", collide=True)
+    R_ = 26.0
+    s.add("Floor", cylinder(R_, 0.6, 64))
+    s.add("InnerFloor", cylinder(13.5, 0.7, 48))
+    s.add("Emblem", tf(torus(14.0, 0.28, 64, 6), R=np.eye(3), t=(0, 0.62, 0)))
+    s.add("Emblem", tf(torus(7.0, 0.2, 48, 6), t=(0, 0.72, 0)))
+    for k in range(6):
+        a = k * 60 * DEG
+        s.add("Emblem", tf(box(0.4, 0.1, 6.4), R=rot(Y, k * 60), t=(10.4 * math.sin(a), 0.72, 10.4 * math.cos(a))))
+    gap = 15 * DEG
+    segs = 36
+    for k in range(segs):
+        a0 = FRONT + gap + k * (2 * math.pi - 2 * gap) / segs
+        a1 = a0 + (2 * math.pi - 2 * gap) / segs
+        am = (a0 + a1) / 2
+        ln = 2 * R_ * math.sin((a1 - a0) / 2) + 0.3
+        p = np.array([(R_ - 0.7) * math.cos(am), 0, (R_ - 0.7) * math.sin(am)])
+        Rr = rot(Y, -math.degrees(am) + 90)
+        s.add("Wall", tf(box(ln, 2.8, 1.4), R=Rr, t=p + Y * 2.0))
+        s.add("WallGlow", tf(box(ln, 0.2, 1.5), R=Rr, t=p + Y * 3.45))
+    rng = random.Random(77)
+    for k in range(8):
+        a = FRONT + (k + 0.5) * 2 * math.pi / 8
+        if abs(math.degrees(a - FRONT) % 360) < 25 or abs(math.degrees(a - FRONT) % 360) > 335:
+            continue
+        p = np.array([(R_ + 1.6) * math.cos(a), 0, (R_ + 1.6) * math.sin(a)])
+        pil = lathe([[(0, 13.0), (0.95, 13.0)], [(0.95, 13.0), (1.45, 0.0)], [(1.45, 0.0), (0, 0.0)]], 6, flat=True)
+        s.add("Pillars", tf(pil, R=rot(Y, k * 7), t=p))
+        for yb in (3.0, 9.0):
+            s.add("Bands", tf(cylinder(1.45 - yb / 13 * 0.5 + 0.12, 0.45, 6), R=rot(Y, k * 7), t=p + Y * yb))
+        s.add("Bowls", tf(lathe([[(0, 0.2), (1.1, 1.0)], [(1.1, 1.0), (0.85, 1.05)], [(0.85, 1.05), (0, 0.5)]], 12),
+                          t=p + Y * 12.8))
+        s.add("Flames", tf(flame(2.6, 0.75, 8), R=rot(Y, rng.uniform(0, 90)), t=p + Y * 13.3))
+        s.add("FlamesInner", tf(flame(1.5, 0.42, 8), t=p + Y * 13.35))
+    # entrance gate with the arena name and the countdown screen
+    gz = -R_ - 1.0
+    for side in (-1, 1):
+        x = side * 8.5
+        s.add("Gate", tf(box(2.6, 17.5, 2.6), t=(x, 8.75, gz)))
+        s.add("GateGlow", tf(box(0.3, 15.0, 2.7), t=(x - side * 0.9, 8.5, gz)))
+        s.add("Gate", tf(cone(1.5, 2.6, 4), R=rot(Y, 45), t=(x, 17.5, gz)))
+        s.add("Flames", tf(flame(2.2, 0.6, 8), t=(x, 19.6, gz)))
+    s.add("Header", tf(box(18.0, 3.0, 0.8), t=(0, 16.0, gz - 0.2)))
+    frame_bars(s, "Frame", -9.0, 9.0, 14.5, 17.5, gz - 0.3, 0.4, 1.2)
+    s.add("TimerScreen", tf(box(13.0, 4.6, 0.6), t=(0, 11.4, gz - 0.1)))
+    frame_bars(s, "Frame", -6.5, 6.5, 9.1, 13.7, gz - 0.2, 0.35, 1.0)
+    for x in (-5.0, 5.0):
+        s.add("Gate", tf(box(0.3, 0.8, 0.3), t=(x, 14.1, gz - 0.1)))
+    s.signs.append({"part": "Header", "text": "OVERLORD ARENA", "sub": "", "color": "#FF5C7A", "ppu": 30, "front_only": True})
+    s.signs.append({"part": "TimerScreen", "text": "OVERLORD\nARRIVES IN --:--", "sub": "", "color": "#FFFFFF", "ppu": 30,
+                    "front_only": True})
+    # walkway out of the entrance
+    s.add("Path", tf(box(11.0, 0.5, 14.0), t=(0, 0.25, gz - 6.0)))
+    for x in (-5.6, 5.6):
+        s.add("GateGlow", tf(box(0.3, 0.15, 14.0), t=(x, 0.52, gz - 6.0)))
+    s.lights.append("Flames")
+    return s
+
+
+def overlord_pedestal():
+    s = Prop("Hub_OverlordPedestal", "Hub", 3.4, "Pedestal")
+    s.kind = "Landmark"
+    s.look("Pedestal", "#4A2A8C", collide=True)
+    s.look("PedestalTop", "#6B45B8", collide=True)
+    s.look("Trim", "#F2C230", "Metal", collide=True)
+    s.look("Glow", "#7CFF9E", "Neon")
+    s.look("Plaque", NAVY)
+    s.add("Pedestal", cylinder(4.6, 1.2, 40))
+    s.add("Trim", tf(torus(4.6, 0.14, 48, 6), t=(0, 1.2, 0)))
+    s.add("PedestalTop", tf(cylinder(3.7, 1.6, 40, r_top=3.5), t=(0, 1.2, 0)))
+    s.add("Glow", tf(torus(3.62, 0.12, 48, 6), t=(0, 2.0, 0)))
+    s.add("Trim", tf(torus(3.5, 0.14, 48, 6), t=(0, 2.8, 0)))
+    s.add("Plaque", tf(box(3.6, 0.9, 0.12), R=rot(X, -12), t=(0, 0.62, -4.55)))
+    s.signs.append({"part": "Plaque", "text": "OVERLORD", "sub": "", "color": "#7CFF9E", "ppu": 60, "front_only": True})
+    return s
+
+
+
 PROPS = [valley_gate, meadow_flowers, meadow_mushrooms, meadow_sunflower, swamp_dead_tree, swamp_reeds,
          lava_spire, lava_vent, crystal_big, crystal_small, void_obelisk, void_shards, tree_a, tree_b, plaza_statue,
          cliff_meadow, cliff_swamp, cliff_lava, cliff_crystal, cliff_void,
-         arch_meadow, arch_swamp, arch_lava, arch_crystal, arch_void]
+         arch_meadow, arch_swamp, arch_lava, arch_crystal, arch_void,
+         leaderboard, how_to_play, boss_shop, fuse_machine, overlord_arena, overlord_pedestal]
+
+
+def lua_str(text):
+    return '"' + text.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n') + '"'
 
 
 def write_lua(path, specs):
     lines = []
     for sp in specs:
         signs = ", ".join(
-            f'{{ Part = "{g["part"]}", Text = "{g["text"]}", Sub = "{g.get("sub", "")}", Color = {lua_color(g["color"])}, '
+            f'{{ Part = "{g["part"]}", Text = {lua_str(g["text"])}, Sub = {lua_str(g.get("sub", ""))}, '
+            f'Body = {lua_str(g.get("body", ""))}, Color = {lua_color(g["color"])}, '
             f'PixelsPerStud = {g["ppu"]}, FrontOnly = {"true" if g.get("front_only") else "false"} }}'
             for g in sp["signs"])
         lights = ", ".join(f'"{l}"' for l in sp["lights"])

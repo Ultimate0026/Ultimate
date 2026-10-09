@@ -13,7 +13,8 @@ import random
 
 import numpy as np
 
-from build_slimes import (BACK, DEG, FRONT, ROOT, WHITE, Slime, bolt_polygon, curve, drip, export, leaf_polygon,
+from build_slimes import (BACK, DEG, FRONT, ROOT, WHITE, Slime, bolt_polygon, cape, crown, curve, drip, export,
+                          leaf_polygon,
                           X, Y, Z)
 from meshkit import (Body, box, cone, star_polygon, cylinder, ellipsoid, extrude, icosphere, lathe, normalize, place, prism, rot,
                      rot_from_to, sphere, tf, torus, tube, bezier)
@@ -439,7 +440,55 @@ def cosmic():
     return s
 
 
-GUARDIANS = [meadow, swamp, lava, crystal, void, candy, storm, cosmic]
+def boss():
+    s = Slime("Guardian_Boss", "Guardian", 20)
+    W = 20.0
+    B = Body(W, 0.8 * W)
+    H = B.H
+    rng = random.Random(20)
+    body = "#2E9E5B"
+    s.look("Body", body)
+    s.add("Body", B.piece(36, 16))
+    angry_face(s, B, W, H, 0.53 * H, 0.17 * W, 0.075 * W, 0.06 * W, body, sclera="#FF4040", pupil=None,
+               brow="#123D24", glow=True, mouth_color="#123D24")
+    # huge spiked crown
+    s.look("Crown", "#F2C230", "Metal")
+    s.look("Gems", "#FF2D55", "Neon")
+    tmp = Slime("tmp", "", 0)
+    rc = 0.24 * W
+    crown(tmp, "Crown", ["Gems"], rc, 0.07 * W, 7, 0.17 * W, 0.05 * W, 0.016 * W)
+    at = np.array([0, B.y_at_radius(rc) - 0.025 * W, 0])
+    for part, pieces in tmp.parts.items():
+        for p in pieces:
+            s.add(part, tf(p, R=rot(X, 4), t=at))
+    # royal cape and collar
+    s.look("Cape", "#4A1673")
+    y1 = cape(s, "Cape", B, W, H, y1f=0.72, flare=0.1, nu=12, nv=6)
+    s.look("Collar", "#2A0B45")
+    path = [B.pt(th, y1, 0.04 * W)[0] + Y * 0.035 * W * math.sin(th) for th in np.linspace(-10 * DEG, 190 * DEG, 12)]
+    s.add("Collar", tube(path, 0.035 * W, 6))
+    # gold shoulder plates with spikes
+    s.look("Pauldrons", "#F2C230", "Metal")
+    s.look("Spikes", "#2A2A33", "Metal")
+    for side in (-1, 1):
+        th = (0 if side > 0 else 180) * DEG
+        p, n = B.pt(th, 0.6 * H, -0.01 * W)
+        R = rot_from_to(Y, n)
+        dome = lathe([[(0, 0.06 * W), (0.08 * W, 0.045 * W), (0.12 * W, 0.0)], [(0.12 * W, 0.0), (0, 0.0)]], 16)
+        s.add("Pauldrons", tf(dome, R=R, t=p))
+        for k in (-1, 0, 1):
+            d = normalize(n + Y * 0.6 + np.cross(Y, n) * 0.5 * k)
+            s.add("Spikes", tf(cone(0.022 * W, 0.08 * W, 6), R=rot_from_to(Y, d), t=p + n * 0.04 * W + d * 0.01 * W))
+    # power orbs circling the boss
+    s.look("Orbs", "#7CFF9E", "Neon")
+    for k in range(5):
+        a = k * 72 + 20
+        s.add("Orbs", tf(sphere(10, 6), s=0.03 * W,
+                         t=(0.66 * W * math.cos(a * DEG), (0.35 + 0.12 * (k % 3)) * H, 0.66 * W * math.sin(a * DEG))))
+    return s
+
+
+GUARDIANS = [meadow, swamp, lava, crystal, void, candy, storm, cosmic, boss]
 
 
 def main():
